@@ -19,6 +19,7 @@
 #include "Actors/Mario.h"
 #include "Actors/Block.h"
 #include "Actors/Spawner.h"
+#include "Actors/Table.h"
 #include "Components/DrawComponents/DrawComponent.h"
 #include "Components/ColliderComponents/AABBColliderComponent.h"
 
@@ -76,6 +77,10 @@ void Game::InitializeActors()
     // auto block = new Block(this, "../Assets/Sprites/Blocks/BlockA.png");
     // block->SetPosition(Vector2(5 * TILE_SIZE, 5 * TILE_SIZE));
 
+    int table_width = 300;
+    int table_height = 150;
+    auto table = new Table(this, table_width, table_height);
+    table->SetPosition(Vector2(100.0, 100.0));
 
     // TODO 7.1 (~1 linha): Utilize a função LoadLevel para carregar o primeiro nível (Level1.txt) do jogo.
     //  Note que a classe Game tem constantes LEVEL_WIDTH e LEVEL_HEIGHT que definem a largura e altura
