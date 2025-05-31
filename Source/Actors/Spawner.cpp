@@ -5,7 +5,7 @@
 #include "Spawner.h"
 #include "../Game.h"
 #include "Mario.h"
-#include "Goomba.h"
+// #include "Goomba.h"
 
 Spawner::Spawner(Game* game, float spawnDistance)
         :Actor(game)

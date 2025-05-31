@@ -17,7 +17,7 @@ Block::Block(Game* game, const std::string &texturePath)
 
     // TODO 2 (1 linha): Crie o `DrawSpriteComponent` com textura `texturePath` (passada com parâmetro) e
     //  dimensões `(GAME::TILE_SIZE,GAME::TILE_SIZE)`.
-    new DrawSpriteComponent(this, texturePath, Game::TILE_SIZE, Game::TILE_SIZE);
+    // new DrawSpriteComponent(this, texturePath, Game::TILE_SIZE, Game::TILE_SIZE);
 
     // --------------
     // TODO - PARTE 3
@@ -25,6 +25,6 @@ Block::Block(Game* game, const std::string &texturePath)
 
     // TODO 6 (1 linha): Crie o `AABBColliderComponent` com dimensões `(0,0,GAME::TILE_SIZE, GAME::TILE_SIZE)`
     //  e tipo de colisão `ColliderLayer::Blocks`. Marque o collider como estático.
-    new AABBColliderComponent(this, 0,0,Game::TILE_SIZE, Game::TILE_SIZE, ColliderLayer::Blocks, true);
+    // new AABBColliderComponent(this, 0,0,Game::TILE_SIZE, Game::TILE_SIZE, ColliderLayer::Blocks, true);
 
 }

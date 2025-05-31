@@ -38,7 +38,8 @@ void DrawSpriteComponent::Draw(SDL_Renderer *renderer)
     //  esquerda. A orientação do sprite (esquerda ou direita) depende da rotação do objeto dono do sprite.
     //  Se a rotação for zero, o sprite deve ser desenhado virado à direita. Se for igual a MAth::Pi, deve
     //  ser desenhado à esquerda.
-    const auto relative_pos =  mOwner->GetPosition() - mOwner->GetGame()->GetCameraPos();
+    // const auto relative_pos =  mOwner->GetPosition() - mOwner->GetGame()->GetCameraPos();
+    const auto relative_pos =  mOwner->GetPosition();
     const SDL_Rect destRect = {static_cast<int>(relative_pos.x), static_cast<int>(relative_pos.y), mWidth, mHeight};
     const SDL_RendererFlip flip = mOwner->GetRotation() == Math::Pi ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     SDL_RenderCopyEx(renderer, mSpriteSheetSurface, nullptr, &destRect, 0.0, nullptr, flip );

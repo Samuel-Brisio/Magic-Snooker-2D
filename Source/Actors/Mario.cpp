@@ -23,7 +23,7 @@ Mario::Mario(Game* game, const float forwardSpeed, const float jumpSpeed)
     // TODO 3 (~1 linha): Até que você termine a implementação do componente de animação `DrawAnimatedComponent`,
     //  utilize o componente para desenho de sprites estáticos `DrawSpriteComponent`. Crie um desses
     //  componentes com a textura `Assets/Sprites/Mario/Idle.png` e dimensões (Game::TILE_SIZE, Game::TILE_SIZE).
-    new DrawSpriteComponent(this, "../Assets/Sprites/Mario/Idle.png", Game::TILE_SIZE, Game::TILE_SIZE);
+    // new DrawSpriteComponent(this, "../Assets/Sprites/Mario/Idle.png", Game::TILE_SIZE, Game::TILE_SIZE);
 
     // --------------
     // TODO - PARTES 2 e 3
@@ -45,13 +45,13 @@ Mario::Mario(Game* game, const float forwardSpeed, const float jumpSpeed)
     //  (0,0,Game::TILE_SIZE - 4.0f, Game::TILE_SIZE) e o tipo ColliderLayer::Player da AABB. Se quiser desenhar
     //  a AABB do Mario para testar as colisões, crie um componente `DrawPolygonComponent` com os vértices da AABB.
     //  Armazene o ponteiro desse componente no atributo `mColliderComponent` da classe Mario.
-    new AABBColliderComponent(this, 0, 0, Game::TILE_SIZE - 4.0f, Game::TILE_SIZE, ColliderLayer::Player, false);
-    std::vector<Vector2> vertices;
-    vertices.push_back(Vector2(0, 0));
-    vertices.push_back(Vector2(Game::TILE_SIZE, 0));
-    vertices.push_back(Vector2(Game::TILE_SIZE, Game::TILE_SIZE));
-    vertices.push_back(Vector2(0, Game::TILE_SIZE));
-    new DrawPolygonComponent(this, vertices);
+    // new AABBColliderComponent(this, 0, 0, Game::TILE_SIZE - 4.0f, Game::TILE_SIZE, ColliderLayer::Player, false);
+    // std::vector<Vector2> vertices;
+    // vertices.push_back(Vector2(0, 0));
+    // vertices.push_back(Vector2(Game::TILE_SIZE, 0));
+    // vertices.push_back(Vector2(Game::TILE_SIZE, Game::TILE_SIZE));
+    // vertices.push_back(Vector2(0, Game::TILE_SIZE));
+    // new DrawPolygonComponent(this, vertices);
 
     // --------------
     // TODO - PARTE 4
@@ -129,10 +129,10 @@ void Mario::OnUpdate(float deltaTime)
     //  limite sua posição horizontal para ser sempre maior ou igual a posição horizontal da câmera.
     // auto acc = mRigidBodyComponent->GetAcceleration();
     // auto vel = mRigidBodyComponent->GetVelocity();
-    if (mPosition.x < GetGame()->GetCameraPos().x) {
-
-        mPosition.x = GetGame()->GetCameraPos().x ;
-    }
+    // if (mPosition.x < GetGame()->GetCameraPos().x) {
+    //
+    //     mPosition.x = GetGame()->GetCameraPos().x ;
+    // }
 
     // --------------
     // TODO - PARTE 5
