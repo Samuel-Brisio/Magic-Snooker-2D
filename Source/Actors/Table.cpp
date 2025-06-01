@@ -4,7 +4,6 @@
 
 #include "Table.h"
 
-
 Table::Table(Game *game, const int width, const int height)
     : Actor(game), mWidth(width), mHeight(height)
 {

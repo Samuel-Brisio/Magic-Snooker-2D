@@ -52,6 +52,8 @@ add_executable(${PROJECT_NAME}
         Source/Actors/ColorBall.h
         Source/Actors/Table.cpp
         Source/Actors/Table.h
+        Source/Actors/Background.cpp
+        Source/Actors/Background.h
 )
 
 # Diretórios de inclusão e bibliotecas a linkar
