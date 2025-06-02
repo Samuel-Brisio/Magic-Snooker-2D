@@ -13,7 +13,7 @@
 
 class Table: public Actor {
 public:
-    explicit Table(Game* game, int width, int height);
+    explicit Table(Game* game, int width, int height, int table_x_offset, int table_y_offset);
     // void OnUpdate(float deltaTime) override;
 
 private:

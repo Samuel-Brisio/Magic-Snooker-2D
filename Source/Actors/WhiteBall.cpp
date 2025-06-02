@@ -3,3 +3,9 @@
 //
 
 #include "WhiteBall.h"
+
+WhiteBall::WhiteBall(Game *game, float size, float weight)
+    : Ball(game, size, weight, BallColor::White)
+{
+
+}

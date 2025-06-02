@@ -21,6 +21,7 @@
 #include "Actors/Spawner.h"
 #include "Actors/Table.h"
 #include "Actors/Background.h"
+#include "Actors/InvisibleCollider.h"
 #include "Components/DrawComponents/DrawComponent.h"
 #include "Components/ColliderComponents/AABBColliderComponent.h"
 
@@ -84,8 +85,15 @@ void Game::InitializeActors()
     int table_width = mWindowWidth - 20;
     int table_height = table_width * 0.55;
 
-    auto table = new Table(this, table_width, table_height);
-    table->SetPosition(Vector2(10.0, 50.0));
+    int const table_y_offset = 50;
+    int const table_x_offset = 10;
+
+    auto table = new Table(this, table_width, table_height, table_x_offset, table_y_offset);
+
+    table->SetPosition(Vector2(table_x_offset, table_y_offset));
+
+
+
 
     // TODO 7.1 (~1 linha): Utilize a função LoadLevel para carregar o primeiro nível (Level1.txt) do jogo.
     //  Note que a classe Game tem constantes LEVEL_WIDTH e LEVEL_HEIGHT que definem a largura e altura

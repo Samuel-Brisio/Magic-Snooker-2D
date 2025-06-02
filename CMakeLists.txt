@@ -54,6 +54,8 @@ add_executable(${PROJECT_NAME}
         Source/Actors/Table.h
         Source/Actors/Background.cpp
         Source/Actors/Background.h
+        Source/Actors/InvisibleCollider.cpp
+        Source/Actors/InvisibleCollider.h
 )
 
 # Diretórios de inclusão e bibliotecas a linkar
