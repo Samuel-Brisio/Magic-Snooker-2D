@@ -7,13 +7,13 @@ set(PROJECT_NAME "tp3-smb")
 project(${PROJECT_NAME})
 
 find_package(SDL2 2.32.2 EXACT REQUIRED)
-
+find_package(SDL2_image REQUIRED)
 
 # Caminhos manuais para SDL2_image instalado em /opt/SDL2
-set(SDL2_IMAGE_INCLUDE_DIR "/opt/SDL2/include/SDL2")
-set(SDL2_IMAGE_LIBRARY "/opt/SDL2/lib/libSDL2_image.so")
+#set(SDL2_IMAGE_INCLUDE_DIR "/opt/SDL2/include/SDL2")
+#set(SDL2_IMAGE_LIBRARY "/opt/SDL2/lib/libSDL2_image.so")
 
-#find_package(SDL2_image REQUIRED)
+
 
 add_executable(${PROJECT_NAME}
         Source/Main.cpp
@@ -59,9 +59,11 @@ add_executable(${PROJECT_NAME}
 )
 
 # Diretórios de inclusão e bibliotecas a linkar
-target_include_directories(${PROJECT_NAME} PRIVATE
-        ${SDL2_INCLUDE_DIRS}
-        ${SDL2_IMAGE_INCLUDE_DIR}
-)
+#target_include_directories(${PROJECT_NAME} PRIVATE
+#        ${SDL2_INCLUDE_DIRS}
+#        ${SDL2_IMAGE_INCLUDE_DIR}
+#)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2 ${SDL2_IMAGE_LIBRARY})
+#target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2 ${SDL2_IMAGE_LIBRARY})
+target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2 SDL2_image::SDL2_image)
+
