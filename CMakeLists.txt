@@ -56,6 +56,8 @@ add_executable(${PROJECT_NAME}
         Source/Actors/Background.h
         Source/Actors/InvisibleCollider.cpp
         Source/Actors/InvisibleCollider.h
+        Source/Components/DrawComponents/DrawCircleComponent.cpp
+        Source/Components/DrawComponents/DrawCircleComponent.h
 )
 
 # Diretórios de inclusão e bibliotecas a linkar

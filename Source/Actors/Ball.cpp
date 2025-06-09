@@ -4,8 +4,18 @@
 
 #include "Ball.h"
 
-Ball::Ball(Game *game, float size, float weight, BallColor color)
-    : Actor(game), mSize(size), mWeight(weight), mColor(color)
-{
+#include "../Components/ColliderComponents/CircleColliderComponent.h"
+#include "../Components/DrawComponents/DrawCircleComponent.h"
 
+Ball::Ball(Game *game, float radius, float weight, BallColor color)
+    : Actor(game)
+    ,mRadius(radius)
+    ,mWeight(weight)
+    ,mColor(color)
+{
+    mRigidBodyComponent = new RigidBodyComponent(this, weight);
+
+    mColliderComponent = new CircleColliderComponent(this, mRadius);
+
+    mDrawComponent = new DrawCircleComponent(this, 20, mRadius);
 }
