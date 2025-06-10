@@ -92,9 +92,8 @@ void Game::InitializeActors()
     auto table = new Table(this, table_width, table_height, table_x_offset, table_y_offset);
     table->SetPosition(Vector2(table_x_offset, table_y_offset));
 
-    auto ball = new Ball(this, 16, 4);
+    auto ball = new Ball(this, 16, 0.5);
     ball->SetPosition(Vector2(table_x_offset + table_width/2, table_y_offset + table_height/2));
-
 
 
 

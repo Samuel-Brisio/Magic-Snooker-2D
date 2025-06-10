@@ -33,3 +33,23 @@ bool CircleColliderComponent::Intersect(const CircleColliderComponent& c) const
 
     return distSq <= radiiSq;
 }
+
+bool CircleColliderComponent::Intersect(const AABBColliderComponent* b) const {
+    Vector2 min = b->GetMin();
+    Vector2 max = b->GetMax();
+
+    Vector2 center = GetCenter();
+    float radius = mRadius;
+
+    // Find the closest point on the AABB to the circle
+    float closestX = std::max(min.x, std::min(center.x, max.x));
+    float closestY = std::max(min.y, std::min(center.y, max.y));
+
+    // Calculate the distance between the circle's center and this closest point
+    float distanceX = center.x - closestX;
+    float distanceY = center.y - closestY;
+
+    // If the distance is less than the circle's radius, an intersection occurs
+    float distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
+    return distanceSquared < (radius * radius);
+}

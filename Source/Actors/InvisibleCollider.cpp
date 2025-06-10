@@ -15,6 +15,7 @@ InvisibleCollider::InvisibleCollider(Game *game, std::vector<Vector2> &vertices)
 
     // Desenho o bloco de colisão
     mDrawComponent = new DrawPolygonComponent(this, vertices);
+
 }
 
 void InvisibleCollider::OnUpdate(float deltaTime) {

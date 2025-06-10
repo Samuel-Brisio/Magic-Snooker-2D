@@ -17,7 +17,7 @@ class Ball : public Actor
 {
 public:
     explicit Ball(Game* game, float radius = 32.0f, float weight = 2.0f, BallColor color = BallColor::White);
-    // void OnUpdate(float deltaTime) override;
+    void OnUpdate(float deltaTime) override;
 
 private:
     float mRadius;

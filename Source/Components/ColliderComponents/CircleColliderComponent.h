@@ -7,6 +7,8 @@
 #include "../../Math.h"
 #include <vector>
 
+#include "AABBColliderComponent.h"
+
 class CircleColliderComponent : public Component
 {
 public:
@@ -18,6 +20,7 @@ public:
     const Vector2& GetCenter() const;
 
     bool Intersect(const CircleColliderComponent& b) const;
+    bool Intersect(const AABBColliderComponent* b) const;
 
 private:
     float mRadius;

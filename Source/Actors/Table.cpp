@@ -13,6 +13,7 @@ Table::Table(Game *game, const int width, const int height, int table_x_offset, 
 
 
     // Bloco de Colisão da parte superior
+    SDL_Rect topPos = {1, 2, 3 , 4};
     float top_pos = mHeight * 0.07 + table_y_offset;
     float bottom_pos = mHeight * 0.11 + table_y_offset;
     std::vector<Vector2> vertices_top;
