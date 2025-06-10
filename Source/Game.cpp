@@ -85,15 +85,13 @@ void Game::InitializeActors()
 
     int table_width = mWindowWidth - 20;
     int table_height = table_width * 0.55;
+    SDL_Rect tablePos = {10, 50, table_width, table_height};
 
-    int const table_y_offset = 50;
-    int const table_x_offset = 10;
-
-    auto table = new Table(this, table_width, table_height, table_x_offset, table_y_offset);
-    table->SetPosition(Vector2(table_x_offset, table_y_offset));
+    auto table = new Table(this, tablePos);
+    table->SetPosition(Vector2(tablePos.x, tablePos.y));
 
     auto ball = new Ball(this, 16, 0.5);
-    ball->SetPosition(Vector2(table_x_offset + table_width/2, table_y_offset + table_height/2));
+    ball->SetPosition(Vector2(tablePos.x + table_width/2, tablePos.y + table_height/2));
 
 
 

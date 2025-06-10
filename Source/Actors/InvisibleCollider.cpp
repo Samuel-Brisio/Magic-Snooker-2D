@@ -4,16 +4,24 @@
 
 #include "InvisibleCollider.h"
 
-InvisibleCollider::InvisibleCollider(Game *game, std::vector<Vector2> &vertices) :
+InvisibleCollider::InvisibleCollider(Game *game, SDL_Rect position) :
     Actor(game)
 {
-    mVertices = &vertices;
+
+    SetPosition(Vector2(position.x + position.w/2, position.y + position.h/2));
 
     // Cria o colider para a mesa
     mRigidBodyComponent = new RigidBodyComponent(this, 1.0, 5.0);
     mRigidBodyComponent->SetApplyGravity(false);
+    mColliderComponent = new AABBColliderComponent(this, -position.w/2, -position.h/2, position.w, position.h,
+        ColliderLayer::Blocks);
 
     // Desenho o bloco de colisão
+    std::vector<Vector2> vertices;
+    vertices.emplace_back(Vector2(position.x, position.y));
+    vertices.emplace_back(Vector2(position.x, position.y + position.h));
+    vertices.emplace_back(Vector2(position.x + position.w, position.y + position.h));
+    vertices.emplace_back(Vector2( position.x + position.w,  position.y));
     mDrawComponent = new DrawPolygonComponent(this, vertices);
 
 }

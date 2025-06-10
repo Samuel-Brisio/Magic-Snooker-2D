@@ -13,7 +13,7 @@
 
 class InvisibleCollider : public Actor {
 public:
-    explicit InvisibleCollider(Game* game, std::vector<Vector2> &vertices);
+    explicit InvisibleCollider(Game* game, SDL_Rect position);
     void OnUpdate(float deltaTime) override;
 private:
     std::vector<Vector2> *mVertices;

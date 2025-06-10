@@ -33,8 +33,6 @@ Vector2 AABBColliderComponent::GetMin() const
     //  define a posição da AABB com relação a posição do objeto dono do componente. Portanto,
     //  basta somar a posição do objeto dono do componente a esse deslocamento.
     return mOwner->GetPosition() + mOffset;
-
-
 }
 
 Vector2 AABBColliderComponent::GetMax() const

@@ -13,12 +13,10 @@
 
 class Table: public Actor {
 public:
-    explicit Table(Game* game, int width, int height, int table_x_offset, int table_y_offset);
+    explicit Table(Game* game, SDL_Rect position);
     // void OnUpdate(float deltaTime) override;
 
 private:
-    int mWidth;
-    int mHeight;
     DrawSpriteComponent* mDrawComponent;
 };
 
