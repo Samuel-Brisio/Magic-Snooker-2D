@@ -73,16 +73,11 @@ bool Game::Initialize()
 
 void Game::InitializeActors()
 {
-    // --------------
-    // TODO - PARTE 1
-    // --------------
-    //
-    // auto block = new Block(this, "../Assets/Sprites/Blocks/BlockA.png");
-    // block->SetPosition(Vector2(5 * TILE_SIZE, 5 * TILE_SIZE));
+    // Background
     auto bg = new Background(this, mWindowWidth, mWindowHeight);
     bg->SetPosition(Vector2(0.0, 0.0));
 
-
+    // Initialize Table
     int table_width = mWindowWidth - 20;
     int table_height = table_width * 0.55;
     SDL_Rect tablePos = {10, 50, table_width, table_height};
@@ -90,24 +85,28 @@ void Game::InitializeActors()
     auto table = new Table(this, tablePos);
     table->SetPosition(Vector2(tablePos.x, tablePos.y));
 
-    auto ball = new Ball(this, 16, 0.5);
-    ball->SetPosition(Vector2(tablePos.x + table_width/2, tablePos.y + table_height/2));
 
+    // Initialize Balls setup
+    int ballRadius = 16;
+    Vector2 initialBallPosition = Vector2(300, 300);
+    Vector2 currentBallPosition = initialBallPosition;
 
+    for (int col = 1; col <= ballRadius; col++) {
+        for (int row = col; row < 5; row++) {
+            auto ball = new Ball(this, ballRadius, 0.5);
+            ball->SetPosition(currentBallPosition);
+            currentBallPosition.y += 2*ballRadius;
+        }
+        currentBallPosition = initialBallPosition;
+        currentBallPosition.x += 2*col*ballRadius;
+        currentBallPosition.y += col*ballRadius;
+    }
 
-    // TODO 7.1 (~1 linha): Utilize a função LoadLevel para carregar o primeiro nível (Level1.txt) do jogo.
-    //  Note que a classe Game tem constantes LEVEL_WIDTH e LEVEL_HEIGHT que definem a largura e altura
-    // auto matrix = LoadLevel("Assets/Levels/Level1-1/level1-1.csv", Game::LEVEL_WIDTH, Game::LEVEL_HEIGHT);
-    // for (int i = 0; i <  Game::LEVEL_HEIGHT; ++i) {
-    //     for (int j = 0; j < Game::LEVEL_WIDTH; ++j) {
-    //         std::cout << matrix[i][j] << " ";
-    //     }
-    //     std::cout << std::endl;
-    // }
+    // Initialize White ball
+    auto ball = new Ball(this, ballRadius, 0.5);
+    ball->SetPosition(Vector2(500, 500));
+    ball->GetComponent<RigidBodyComponent>()->ApplyForce(Vector2(-500, -700));
 
-    // TODO 7.2 (~4 linhas): Verifique se a matriz de tiles foi carregada corretamente. Se não, retorne.
-    //  Se foi, chame a função BuildLevel passando a matriz de tiles, a largura e altura do nível.
-    // BuildLevel(matrix, Game::LEVEL_WIDTH, Game::LEVEL_HEIGHT);
 
 }
 

@@ -16,12 +16,9 @@ Ball::Ball(Game *game, float radius, float weight, BallColor color)
 {
     mRigidBodyComponent = new RigidBodyComponent(this, weight, 0.1);
 
-    //@todo: remove initial force
-    mRigidBodyComponent->ApplyForce(Vector2(900, 900));
-
     mColliderComponent = new CircleColliderComponent(this, mRadius);
 
-    mDrawComponent = new DrawCircleComponent(this, 20, mRadius);
+    mDrawComponent = new DrawCircleComponent(this, 20, mRadius, 100);
 }
 void Ball::OnUpdate(float deltaTime) {
     auto colliders = mGame->GetColliders();

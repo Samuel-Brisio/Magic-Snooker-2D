@@ -10,7 +10,7 @@ Table::Table(Game *game, SDL_Rect position)
     : Actor(game)
 {
     mDrawComponent = new DrawSpriteComponent(this, "../Assets/Sprites/Table/table_cut.png",
-        position.w,position.h);
+        position.w,position.h, 2);
     
     // Top Collision Block
     SDL_Rect topRect = {position.x, position.y, position.w, int(position.h * 0.11)};
