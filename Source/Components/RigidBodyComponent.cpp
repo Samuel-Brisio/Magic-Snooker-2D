@@ -8,9 +8,8 @@
 #include "RigidBodyComponent.h"
 #include "ColliderComponents/AABBColliderComponent.h"
 
-const float MAX_SPEED_X = 750.0f;
-const float MAX_SPEED_Y = 750.0f;
-const float GRAVITY = 2000.0f;
+const float MAX_SPEED_X = 900.0f;
+const float MAX_SPEED_Y = 900.0f;
 
 RigidBodyComponent::RigidBodyComponent(class Actor* owner, float mass, float friction, bool applyGravity, int updateOrder)
         :Component(owner, updateOrder)
@@ -29,14 +28,10 @@ void RigidBodyComponent::ApplyForce(const Vector2 &force) {
 
 void RigidBodyComponent::Update(float deltaTime)
 {
-    // Apply gravity acceleration
-    if(mApplyGravity) {
-        ApplyForce(Vector2::UnitY * GRAVITY);
-    }
-
     // Apply friction
-    if(Math::Abs(mVelocity.x) > 0.05f) {
-        ApplyForce(Vector2::UnitX * -mFrictionCoefficient * mVelocity.x);
+    if(Math::Abs(mVelocity.x) + Math::Abs(mVelocity.y) > 2*0.5f) {
+        Vector2 friction = mVelocity * -mFrictionCoefficient;
+        ApplyForce(friction);
     }
 
     // Euler Integration
@@ -47,6 +42,9 @@ void RigidBodyComponent::Update(float deltaTime)
 
     if(Math::NearZero(mVelocity.x, 1.0f)) {
         mVelocity.x = 0.f;
+    }
+    if(Math::NearZero(mVelocity.y, 1.0f)) {
+        mVelocity.y = 0.f;
     }
 
     auto collider = mOwner->GetComponent<AABBColliderComponent>();

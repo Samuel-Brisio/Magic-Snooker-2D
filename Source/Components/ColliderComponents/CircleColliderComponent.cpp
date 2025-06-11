@@ -53,3 +53,38 @@ bool CircleColliderComponent::Intersect(const AABBColliderComponent* b) const {
     float distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
     return distanceSquared < (radius * radius);
 }
+
+void CircleColliderComponent::SolveCollision(const AABBColliderComponent* collider) {
+    RigidBodyComponent* ownerRigidBody = mOwner->GetComponent<RigidBodyComponent>();
+
+    Vector2 velocity = ownerRigidBody->GetVelocity();
+    Vector2 center = this->GetCenter();
+    float radius = this->GetRadius();
+
+    Vector2 min = collider->GetMin();
+    Vector2 max = collider->GetMax();
+
+    // 1. Find the closest point on the AABB to the ball's center
+    float closestX = std::max(min.x, std::min(center.x, max.x));
+    float closestY = std::max(min.y, std::min(center.y, max.y));
+
+    // 2. Calculate collision normal (direction from closest point to center)
+    Vector2 collisionNormal = Vector2::Normalize(Vector2(center.x - closestX, center.y - closestY));
+
+
+    // 3. Bounce the ball based on collision normal (reflect velocity)
+    float dotProduct = velocity.x * collisionNormal.x + velocity.y * collisionNormal.y;
+    Vector2 reflectedVelocity = velocity - 2.0f * dotProduct * collisionNormal;
+
+    // 4. Apply restitution (optional: adds bounciness)
+    float restitution = 0.8f; // Adjust for desired bounce effect
+    reflectedVelocity *= restitution;
+
+    // 5. Update velocity
+    ownerRigidBody->SetVelocity(reflectedVelocity);
+
+    // 6. Optional: Move the ball outside the collider to prevent sticking
+    Vector2 penetration = collisionNormal * (radius - (center - Vector2(closestX, closestY)).Length());
+    Vector2 newPosition = center + penetration;
+    mOwner->SetPosition(newPosition);
+}

@@ -14,23 +14,21 @@ Ball::Ball(Game *game, float radius, float weight, BallColor color)
     ,mWeight(weight)
     ,mColor(color)
 {
-    mRigidBodyComponent = new RigidBodyComponent(this, weight);
+    mRigidBodyComponent = new RigidBodyComponent(this, weight, 0.1);
 
     //@todo: remove initial force
-    mRigidBodyComponent->ApplyForce(Vector2(160, 320));
+    mRigidBodyComponent->ApplyForce(Vector2(900, 900));
 
     mColliderComponent = new CircleColliderComponent(this, mRadius);
 
     mDrawComponent = new DrawCircleComponent(this, 20, mRadius);
 }
-
 void Ball::OnUpdate(float deltaTime) {
-    // verificar se houve colisão com a mesa
-    auto coliders = mGame->GetColliders();
+    auto colliders = mGame->GetColliders();
 
-    for (auto collider : coliders) {
+    for (auto collider : colliders) {
         bool isCollision = mColliderComponent->Intersect(collider);
 
-        if (isCollision) SDL_Log("Collision detected");
+        if (isCollision) mColliderComponent->SolveCollision(collider);
     }
 }

@@ -22,6 +22,8 @@ public:
     bool Intersect(const CircleColliderComponent& b) const;
     bool Intersect(const AABBColliderComponent* b) const;
 
+    void SolveCollision(const AABBColliderComponent* b);
+
 private:
     float mRadius;
 };
