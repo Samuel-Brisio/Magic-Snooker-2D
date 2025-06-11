@@ -95,7 +95,7 @@ void Game::InitializeActors()
         for (int row = col; row < 5; row++) {
             auto ball = new Ball(this, ballRadius, 0.5);
             ball->SetPosition(currentBallPosition);
-            currentBallPosition.y += 2*ballRadius;
+            currentBallPosition.y += 2*ballRadius + 1;
         }
         currentBallPosition = initialBallPosition;
         currentBallPosition.x += 2*col*ballRadius;
@@ -384,15 +384,25 @@ void Game::RemoveDrawable(class DrawComponent *drawable)
     mDrawables.erase(iter);
 }
 
-void Game::AddCollider(class AABBColliderComponent* collider)
+void Game::AddAABBCollider(class AABBColliderComponent* collider)
 {
-    mColliders.emplace_back(collider);
+    mAABBColliders.emplace_back(collider);
 }
 
-void Game::RemoveCollider(AABBColliderComponent* collider)
+void Game::RemoveAABBCollider(AABBColliderComponent* collider)
 {
-    auto iter = std::find(mColliders.begin(), mColliders.end(), collider);
-    mColliders.erase(iter);
+    auto iter = std::find(mAABBColliders.begin(), mAABBColliders.end(), collider);
+    mAABBColliders.erase(iter);
+}
+void Game::AddCircleCollider(class CircleColliderComponent* collider)
+{
+    mCircleColliders.emplace_back(collider);
+}
+
+void Game::RemoveCircleCollider(CircleColliderComponent* collider)
+{
+    auto iter = std::find(mCircleColliders.begin(), mCircleColliders.end(), collider);
+    mCircleColliders.erase(iter);
 }
 
 void Game::GenerateOutput()

@@ -15,12 +15,12 @@ AABBColliderComponent::AABBColliderComponent(class Actor* owner, int dx, int dy,
         ,mHeight(h)
         ,mLayer(layer)
 {
-    mOwner->GetGame()->AddCollider(this);
+    mOwner->GetGame()->AddAABBCollider(this);
 }
 
 AABBColliderComponent::~AABBColliderComponent()
 {
-    mOwner->GetGame()->RemoveCollider(this);
+    mOwner->GetGame()->RemoveAABBCollider(this);
 }
 
 Vector2 AABBColliderComponent::GetMin() const
@@ -109,7 +109,7 @@ float AABBColliderComponent::DetectHorizontalCollision(RigidBodyComponent *rigid
     // --------------
     if (mIsStatic) return false;
 
-    auto colliders = mOwner->GetGame()->GetColliders();
+    auto colliders = mOwner->GetGame()->GetAABBColliders();
 
     // TODO 4.1: Percorra todos os colliders e verifique se o objeto dono do componente
     //  está colidindo com algum deles. Antes dessa verificação, verifique se o collider está habilitado
@@ -142,7 +142,7 @@ float AABBColliderComponent::DetectVertialCollision(RigidBodyComponent *rigidBod
     // --------------
     if (mIsStatic) return false;
 
-    auto colliders = mOwner->GetGame()->GetColliders();
+    auto colliders = mOwner->GetGame()->GetAABBColliders();
 
     // TODO 4.2: Percorra todos os colliders e verifique se o objeto dono do componente
     //  está colidindo com algum deles. Antes dessa verificação, verifique se o collider está habilitado

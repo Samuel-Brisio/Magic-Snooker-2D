@@ -21,11 +21,21 @@ Ball::Ball(Game *game, float radius, float weight, BallColor color)
     mDrawComponent = new DrawCircleComponent(this, 20, mRadius, 100);
 }
 void Ball::OnUpdate(float deltaTime) {
-    auto colliders = mGame->GetColliders();
+    auto aabbColiders = mGame->GetAABBColliders();
 
-    for (auto collider : colliders) {
+    for (auto collider : aabbColiders) {
         bool isCollision = mColliderComponent->Intersect(collider);
 
         if (isCollision) mColliderComponent->SolveCollision(collider);
+    }
+
+    auto circleColiders = mGame->GetCircleColliders();
+
+    for (auto collider : circleColiders) {
+        if (collider != mColliderComponent) {
+            bool isCollision = mColliderComponent->Intersect(collider);
+
+            if (isCollision) SDL_Log("Ball-Ball Collision");
+        }
     }
 }

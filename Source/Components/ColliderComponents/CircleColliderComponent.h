@@ -13,13 +13,14 @@ class CircleColliderComponent : public Component
 {
 public:
     CircleColliderComponent(class Actor* owner, float radius, int updateOrder = 10);
+    ~CircleColliderComponent() override;
 
     void SetRadius(float radius) { mRadius = radius; }
     float GetRadius() const;
 
     const Vector2& GetCenter() const;
 
-    bool Intersect(const CircleColliderComponent& b) const;
+    bool Intersect(const CircleColliderComponent* b) const;
     bool Intersect(const AABBColliderComponent* b) const;
 
     void SolveCollision(const AABBColliderComponent* b);

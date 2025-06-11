@@ -3,12 +3,18 @@
 //
 
 #include "CircleColliderComponent.h"
+
+#include "../../Game.h"
 #include "../../Actors/Actor.h"
 
 CircleColliderComponent::CircleColliderComponent(class Actor* owner, const float radius, const int updateOrder)
         :Component(owner, updateOrder)
         ,mRadius(radius) {
+    mOwner->GetGame()->AddCircleCollider(this);
+}
 
+CircleColliderComponent::~CircleColliderComponent() {
+    mOwner->GetGame()->RemoveCircleCollider(this);
 }
 
 const Vector2& CircleColliderComponent::GetCenter() const
@@ -21,14 +27,14 @@ float CircleColliderComponent::GetRadius() const
     return mOwner->GetScale() * mRadius;
 }
 
-bool CircleColliderComponent::Intersect(const CircleColliderComponent& c) const
+bool CircleColliderComponent::Intersect(const CircleColliderComponent* c) const
 {
     // Calculate amount squared
-    Vector2 diff = GetCenter() - c.GetCenter();
+    Vector2 diff = GetCenter() - c->GetCenter();
     float distSq = diff.LengthSq();
 
     // Calculate sum of radii squared
-    float radiiSq = GetRadius() + c.GetRadius();
+    float radiiSq = GetRadius() + c->GetRadius();
     radiiSq *= radiiSq;
 
     return distSq <= radiiSq;
