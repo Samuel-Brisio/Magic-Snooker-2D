@@ -103,7 +103,7 @@ void Game::InitializeActors()
     }
 
     // Initialize White ball
-    auto ball = new Ball(this, ballRadius, 0.5);
+    auto ball = new Ball(this, ballRadius, 0.5, BallColor::White);
     ball->SetPosition(Vector2(600, 350));
     ball->GetComponent<RigidBodyComponent>()->ApplyForce(Vector2(-8000, 0));
 

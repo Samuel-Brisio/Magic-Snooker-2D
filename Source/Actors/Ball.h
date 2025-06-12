@@ -16,7 +16,7 @@ enum class BallColor
 class Ball : public Actor
 {
 public:
-    explicit Ball(Game* game, float radius = 32.0f, float weight = 2.0f, BallColor color = BallColor::White);
+    explicit Ball(Game* game, float radius = 32.0f, float weight = 2.0f, BallColor color = BallColor::Blue);
     void OnUpdate(float deltaTime) override;
 
 private:
@@ -26,6 +26,7 @@ private:
     bool mIsMoving;
 
     class RigidBodyComponent* mRigidBodyComponent;
-    class DrawCircleComponent* mDrawComponent;
+    class DrawCircleComponent* mDrawCircleComponent;
+    class DrawSpriteComponent* mDrawSpriteComponent;
     class CircleColliderComponent* mColliderComponent;
 };

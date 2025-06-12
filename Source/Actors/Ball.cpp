@@ -7,6 +7,7 @@
 #include "../Game.h"
 #include "../Components/ColliderComponents/CircleColliderComponent.h"
 #include "../Components/DrawComponents/DrawCircleComponent.h"
+#include "../Components/DrawComponents/DrawSpriteComponent.h"
 
 Ball::Ball(Game *game, float radius, float weight, BallColor color)
     : Actor(game)
@@ -18,7 +19,22 @@ Ball::Ball(Game *game, float radius, float weight, BallColor color)
 
     mColliderComponent = new CircleColliderComponent(this, mRadius);
 
-    mDrawComponent = new DrawCircleComponent(this, 20, mRadius, 100);
+    mDrawCircleComponent = new DrawCircleComponent(this, 20, mRadius, 100);
+
+    Vector2 drawPositionOffset(-radius, -radius);
+
+    if (color == BallColor::White) {
+        mDrawSpriteComponent = new DrawSpriteComponent(this, "../Assets/Sprites/WhiteBall/WhiteBall.png",
+        32, 32, 200, drawPositionOffset);
+    }
+    else if (color == BallColor::Red) {
+        mDrawSpriteComponent = new DrawSpriteComponent(this, "../Assets/Sprites/WhiteBall/WhiteBall.png",
+        32, 32, 200, drawPositionOffset);
+    }
+    else if (color == BallColor::Blue) {
+        mDrawSpriteComponent = new DrawSpriteComponent(this, "../Assets/Sprites/WhiteBall/WhiteBall.png",
+        32, 32, 200, drawPositionOffset);
+    }
 }
 void Ball::OnUpdate(float deltaTime) {
     auto aabbColiders = mGame->GetAABBColliders();
