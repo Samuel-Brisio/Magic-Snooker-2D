@@ -94,3 +94,49 @@ void CircleColliderComponent::SolveCollision(const AABBColliderComponent* collid
     Vector2 newPosition = center + penetration;
     mOwner->SetPosition(newPosition);
 }
+
+void CircleColliderComponent::SolveCollision(const CircleColliderComponent* other) {
+    SDL_Log("Ball-Ball Collision");
+
+    // Get positions and radii
+    Vector2 posA = GetCenter();
+    Vector2 posB = other->GetCenter();
+    float radiusA = GetRadius();
+    float radiusB = other->GetRadius();
+
+    // Get velocities
+    Vector2 velA = mOwner->GetComponent<RigidBodyComponent>()->GetVelocity();
+    Vector2 velB = other->mOwner->GetComponent<RigidBodyComponent>()->GetVelocity();
+
+    // 1. Calculate collision normal (direction from B to A)
+    Vector2 collisionNormal = Vector2::Normalize((posA - posB));
+
+    // 2. Calculate relative velocity
+    Vector2 relativeVelocity = velA - velB;
+
+    // 3. Calculate velocity along collision normal
+    float velocityAlongNormal = Vector2::Dot(relativeVelocity, collisionNormal);
+
+    // 4. Don't resolve if separating
+    if (velocityAlongNormal > 0) return;
+
+    // 5. Simplified physics with equal properties
+    const float restitution = 0.8f; // Equal bounciness for both balls
+    const float massFactor = 0.5f;  // Equal mass distribution
+
+    // 6. Calculate impulse
+    float impulse = -(1 + restitution) * velocityAlongNormal * massFactor;
+
+    // 7. Apply impulses (equal and opposite)
+    Vector2 impulseVec = impulse * collisionNormal;
+
+    mOwner->GetComponent<RigidBodyComponent>()->ApplyForce(impulseVec);
+    other->mOwner->GetComponent<RigidBodyComponent>()->ApplyForce(-1 * impulseVec);
+
+    // 8. Simple position correction to prevent sticking
+    Vector2 correction = Vector2::Normalize(posA - posB) *
+                        ((radiusA + radiusB) - (posA - posB).Length()) * 0.5f;
+
+    mOwner->SetPosition(posA + correction);
+    other->mOwner->SetPosition(posB - correction);
+}

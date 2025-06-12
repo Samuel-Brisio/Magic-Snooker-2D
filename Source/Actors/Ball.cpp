@@ -35,7 +35,7 @@ void Ball::OnUpdate(float deltaTime) {
         if (collider != mColliderComponent) {
             bool isCollision = mColliderComponent->Intersect(collider);
 
-            if (isCollision) SDL_Log("Ball-Ball Collision");
+            if (isCollision) mColliderComponent->SolveCollision(collider);
         }
     }
 }
