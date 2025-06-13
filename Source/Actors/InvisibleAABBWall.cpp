@@ -2,9 +2,9 @@
 // Created by samuelbrisio on 6/1/25.
 //
 
-#include "InvisibleCollider.h"
+#include "InvisibleAABBWall.h"
 
-InvisibleCollider::InvisibleCollider(Game *game, SDL_Rect position) :
+InvisibleAABBWall::InvisibleAABBWall(Game *game, SDL_Rect position) :
     Actor(game)
 {
 
@@ -26,7 +26,7 @@ InvisibleCollider::InvisibleCollider(Game *game, SDL_Rect position) :
 
 }
 
-void InvisibleCollider::OnUpdate(float deltaTime) {
+void InvisibleAABBWall::OnUpdate(float deltaTime) {
     // --------------
     // TODO - PARTE 2
     // --------------

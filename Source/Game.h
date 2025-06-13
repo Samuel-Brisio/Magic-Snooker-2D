@@ -37,13 +37,21 @@ public:
     void AddDrawable(class DrawComponent* drawable);
     void RemoveDrawable(class DrawComponent* drawable);
 
-    // Collider functions
+    // AABB Collider methods
     void AddAABBCollider(class AABBColliderComponent* collider);
     void RemoveAABBCollider(class AABBColliderComponent* collider);
+
+    // Circle Collider methods
     void AddCircleCollider(class CircleColliderComponent* collider);
     void RemoveCircleCollider(class CircleColliderComponent* collider);
     std::vector<class AABBColliderComponent*>& GetAABBColliders() { return mAABBColliders; }
     std::vector<class CircleColliderComponent*>& GetCircleColliders() { return mCircleColliders; }
+    std::vector<class OBBColliderComponent*>& GetOBBColliders() { return mOBBColliders; }
+
+
+    // OBB Collider Methods
+    void AddOBBCollider(class OBBColliderComponent* collider);
+    void RemoveOBBCollider(class OBBColliderComponent* collider);
 
     // Vector2& GetCameraPos() { return mCameraPos; };
     // void SetCameraPos(const Vector2& position) { mCameraPos = position; };
@@ -81,6 +89,7 @@ private:
     // All the collision components
     std::vector<class AABBColliderComponent*> mAABBColliders;
     std::vector<class CircleColliderComponent*> mCircleColliders;
+    std::vector<class OBBColliderComponent*> mOBBColliders;
 
     // SDL stuff
     SDL_Window* mWindow;

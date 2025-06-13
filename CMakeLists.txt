@@ -54,10 +54,14 @@ add_executable(${PROJECT_NAME}
         Source/Actors/Table.h
         Source/Actors/Background.cpp
         Source/Actors/Background.h
-        Source/Actors/InvisibleCollider.cpp
-        Source/Actors/InvisibleCollider.h
+        Source/Actors/InvisibleAABBWall.cpp
+        Source/Actors/InvisibleAABBWall.h
         Source/Components/DrawComponents/DrawCircleComponent.cpp
         Source/Components/DrawComponents/DrawCircleComponent.h
+        Source/Components/ColliderComponents/OBBColliderComponent.cpp
+        Source/Components/ColliderComponents/OBBColliderComponent.h
+        Source/Actors/InvisibleOBBWall.cpp
+        Source/Actors/InvisibleOBBWall.h
 )
 
 # Diretórios de inclusão e bibliotecas a linkar

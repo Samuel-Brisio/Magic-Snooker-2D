@@ -11,9 +11,9 @@
 #include "../Components/ColliderComponents/AABBColliderComponent.h"
 
 
-class InvisibleCollider : public Actor {
+class InvisibleAABBWall : public Actor {
 public:
-    explicit InvisibleCollider(Game* game, SDL_Rect position);
+    explicit InvisibleAABBWall(Game* game, SDL_Rect position);
     void OnUpdate(float deltaTime) override;
 private:
     std::vector<Vector2> *mVertices;

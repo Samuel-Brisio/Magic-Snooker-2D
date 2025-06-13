@@ -54,4 +54,12 @@ void Ball::OnUpdate(float deltaTime) {
             if (isCollision) mColliderComponent->SolveCollision(collider);
         }
     }
+
+    auto obbColliders = mGame->GetOBBColliders();
+
+    for (auto collider : obbColliders) {
+        bool isCollision = mColliderComponent->Intersect(collider);
+
+        if (isCollision) mColliderComponent->SolveCollision(collider);
+    }
 }

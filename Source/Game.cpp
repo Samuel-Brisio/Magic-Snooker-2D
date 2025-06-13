@@ -22,7 +22,7 @@
 #include "Actors/Table.h"
 #include "Actors/Background.h"
 #include "Actors/Ball.h"
-#include "Actors/InvisibleCollider.h"
+#include "Actors/InvisibleAABBWall.h"
 #include "Components/DrawComponents/DrawComponent.h"
 #include "Components/ColliderComponents/AABBColliderComponent.h"
 
@@ -106,6 +106,8 @@ void Game::InitializeActors()
     auto ball = new Ball(this, ballRadius, 0.5, BallColor::White);
     ball->SetPosition(Vector2(600, 350));
     ball->GetComponent<RigidBodyComponent>()->ApplyForce(Vector2(-8000, 0));
+
+
 
 }
 
@@ -403,6 +405,16 @@ void Game::RemoveCircleCollider(CircleColliderComponent* collider)
     auto iter = std::find(mCircleColliders.begin(), mCircleColliders.end(), collider);
     mCircleColliders.erase(iter);
 }
+
+void Game::AddOBBCollider(OBBColliderComponent* collider) {
+    mOBBColliders.emplace_back(collider);
+}
+
+void Game::RemoveOBBCollider(OBBColliderComponent* collider) {
+    auto iter = std::find(mOBBColliders.begin(), mOBBColliders.end(), collider);
+    mOBBColliders.erase(iter);
+}
+
 
 void Game::GenerateOutput()
 {

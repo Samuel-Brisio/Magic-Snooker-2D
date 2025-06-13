@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "AABBColliderComponent.h"
+#include "OBBColliderComponent.h"
 
 class CircleColliderComponent : public Component
 {
@@ -22,7 +23,9 @@ public:
 
     bool Intersect(const CircleColliderComponent* b) const;
     bool Intersect(const AABBColliderComponent* b) const;
+    bool Intersect(const OBBColliderComponent* obb) const;
 
+    void SolveCollision(const OBBColliderComponent* obb);
     void SolveCollision(const AABBColliderComponent* b);
     void SolveCollision(const CircleColliderComponent* b);
 
