@@ -47,7 +47,7 @@ bool Game::Initialize()
         return false;
     }
 
-    mWindow = SDL_CreateWindow("TP3: Super Mario Bros", 0, 0, mWindowWidth, mWindowHeight, 0);
+    mWindow = SDL_CreateWindow("Magic Snooker 2D", 50, 50, mWindowWidth, mWindowHeight, 0);
     if (!mWindow)
     {
         SDL_Log("Failed to create window: %s", SDL_GetError());
