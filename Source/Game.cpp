@@ -93,7 +93,7 @@ void Game::InitializeActors()
 
     for (int col = 1; col <= ballRadius; col++) {
         for (int row = col; row < 5; row++) {
-            auto ball = new Ball(this, ballRadius, 0.5);
+            auto ball = new Ball(this, ballRadius, 0.5, (col + row)%2 ? BallColor::Blue : BallColor::Red);
             ball->SetPosition(currentBallPosition);
             currentBallPosition.y += 2*ballRadius + 1;
         }

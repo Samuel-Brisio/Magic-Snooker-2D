@@ -28,11 +28,11 @@ Ball::Ball(Game *game, float radius, float weight, BallColor color)
         32, 32, 200, drawPositionOffset);
     }
     else if (color == BallColor::Red) {
-        mDrawSpriteComponent = new DrawSpriteComponent(this, "../Assets/Sprites/WhiteBall/WhiteBall.png",
+        mDrawSpriteComponent = new DrawSpriteComponent(this, "../Assets/Sprites/RedBall/RedBall.png",
         32, 32, 200, drawPositionOffset);
     }
     else if (color == BallColor::Blue) {
-        mDrawSpriteComponent = new DrawSpriteComponent(this, "../Assets/Sprites/WhiteBall/WhiteBall.png",
+        mDrawSpriteComponent = new DrawSpriteComponent(this, "../Assets/Sprites/BlueBall/BlueBall.png",
         32, 32, 200, drawPositionOffset);
     }
 }
