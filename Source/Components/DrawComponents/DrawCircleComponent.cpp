@@ -25,8 +25,8 @@ void DrawCircleComponent::Draw(SDL_Renderer *renderer)
         float angle = 0.0f;
 
         for (int i = 0; i < mNumVertices; i++) {
-                float x = mRadius * cos(angle);
-                float y = mRadius * sin(angle);
+                float x = mRadius * mOwner->GetScale() * cos(angle);
+                float y = mRadius * mOwner->GetScale() * sin(angle);
                 Vector2 p = Vector2(x, y);
                 vertices.push_back(p);
                 angle += 2*Math::Pi / mNumVertices;

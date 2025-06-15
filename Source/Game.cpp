@@ -88,19 +88,19 @@ void Game::InitializeActors()
 
     // Initialize Balls setup
     int ballRadius = 16;
-    Vector2 initialBallPosition = Vector2(200, 250);
-    Vector2 currentBallPosition = initialBallPosition;
-
-    for (int col = 1; col <= 5; col++) {
-        for (int row = col; row <= 5; row++) {
-            auto ball = new Ball(this, ballRadius, 0.5, (col + row)%2 ? BallColor::Blue : BallColor::Red);
-            ball->SetPosition(currentBallPosition);
-            currentBallPosition.y += 2*ballRadius + 1;
-        }
-        currentBallPosition = initialBallPosition;
-        currentBallPosition.x += 2*col*ballRadius;
-        currentBallPosition.y += col*ballRadius;
-    }
+    // Vector2 initialBallPosition = Vector2(200, 250);
+    // Vector2 currentBallPosition = initialBallPosition;
+    //
+    // for (int col = 1; col <= 5; col++) {
+    //     for (int row = col; row <= 5; row++) {
+    //         auto ball = new Ball(this, ballRadius, 0.5, (col + row)%2 ? BallColor::Blue : BallColor::Red);
+    //         ball->SetPosition(currentBallPosition);
+    //         currentBallPosition.y += 2*ballRadius + 1;
+    //     }
+    //     currentBallPosition = initialBallPosition;
+    //     currentBallPosition.x += 2*col*ballRadius;
+    //     currentBallPosition.y += col*ballRadius;
+    // }
 
     // Initialize White ball
     auto ball = new Ball(this, ballRadius, 0.5, BallColor::White);

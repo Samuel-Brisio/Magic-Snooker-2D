@@ -203,7 +203,12 @@ void Ball::SolveCollision(class InvisibleOBBWall * obbWall) {
 }
 
 void Ball::SolveCollision(class Bucket* bucket) {
-    SDL_Log("Bucket-Ball Collision");
+    float centerDist = (bucket->GetPosition() - GetPosition()).Length();
+    bool isBallIntoBucket = centerDist < bucket->GetColliderComponent()->GetRadius();
+
+    if (isBallIntoBucket) {
+        SDL_Log("Bucket-Ball Collision");
+    }
 }
 
 
