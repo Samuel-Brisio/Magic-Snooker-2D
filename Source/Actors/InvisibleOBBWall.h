@@ -10,6 +10,8 @@
 class InvisibleOBBWall : public Actor  {
 public:
     InvisibleOBBWall(Game* game, Vector2 centerPosition, float width, float height, float rotation);
+    ~InvisibleOBBWall();
+    OBBColliderComponent* GetColliderComponent() {return mOBBColliderComponent;}
 private:
     class DrawPolygonComponent* mDrawComponent;
     class OBBColliderComponent* mOBBColliderComponent;

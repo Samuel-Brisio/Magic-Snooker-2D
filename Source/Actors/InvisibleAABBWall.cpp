@@ -7,6 +7,7 @@
 InvisibleAABBWall::InvisibleAABBWall(Game *game, SDL_Rect position) :
     Actor(game)
 {
+    game->AddInvisibleAABBWall(this);
 
     SetPosition(Vector2(position.x + position.w/2, position.y + position.h/2));
 
@@ -25,6 +26,11 @@ InvisibleAABBWall::InvisibleAABBWall(Game *game, SDL_Rect position) :
     mDrawComponent = new DrawPolygonComponent(this, vertices);
 
 }
+
+InvisibleAABBWall::~InvisibleAABBWall() {
+    mGame->RemoveInvisibleAABBWall(this);
+}
+
 
 void InvisibleAABBWall::OnUpdate(float deltaTime) {
     // --------------

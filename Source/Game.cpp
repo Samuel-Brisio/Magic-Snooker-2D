@@ -88,11 +88,11 @@ void Game::InitializeActors()
 
     // Initialize Balls setup
     int ballRadius = 16;
-    Vector2 initialBallPosition = Vector2(300, 300);
+    Vector2 initialBallPosition = Vector2(200, 250);
     Vector2 currentBallPosition = initialBallPosition;
 
-    for (int col = 1; col <= ballRadius; col++) {
-        for (int row = col; row < 5; row++) {
+    for (int col = 1; col <= 5; col++) {
+        for (int row = col; row <= 5; row++) {
             auto ball = new Ball(this, ballRadius, 0.5, (col + row)%2 ? BallColor::Blue : BallColor::Red);
             ball->SetPosition(currentBallPosition);
             currentBallPosition.y += 2*ballRadius + 1;
@@ -104,8 +104,8 @@ void Game::InitializeActors()
 
     // Initialize White ball
     auto ball = new Ball(this, ballRadius, 0.5, BallColor::White);
-    ball->SetPosition(Vector2(600, 350));
-    ball->GetComponent<RigidBodyComponent>()->ApplyForce(Vector2(-8000, 0));
+    ball->SetPosition(Vector2(tablePos.x + 200, tablePos.y + 200));
+    ball->GetComponent<RigidBodyComponent>()->ApplyForce(Vector2(tablePos.x, tablePos.y) * 100);
 
 
 
@@ -284,30 +284,7 @@ void Game::UpdateGame()
 
     // Update all actors and pending actors
     UpdateActors(deltaTime);
-
-    // Update camera position
-    // UpdateCamera();
 }
-
-// void Game::UpdateCamera()
-// {
-//     // --------------
-//     // TODO - PARTE 2
-//     // --------------
-//
-//     // TODO 1 (~5 linhas): Calcule a posição horizontal da câmera subtraindo metade da largura da janela
-//     //  da posição horizontal do jogador. Isso fará com que a câmera fique sempre centralizada no jogador.
-//     //  No SMB, o jogador não pode voltar no nível, portanto, antes de atualizar
-//     //  a posição da câmera, verifique se a posição horizontal calculada é maior do que a posição horizontal
-//     //  atual da câmera. Além disso, limite a posição horizontal para que a câmera fique entre 0 e o limite
-//     //  horizontal máximo do nível. Para calcular o limite horizontal máximo do nível, utilize as constantes
-//     //  `LEVEL_WIDTH` e `TILE_SIZE`.
-//     auto playPos = mMario->GetPosition();
-//     auto newCameraPos = mMario->GetPosition().x - Game::GetWindowWidth() / 2.0;
-//     if (newCameraPos > GetCameraPos().x && newCameraPos < LEVEL_WIDTH * TILE_SIZE - GetWindowWidth() / 2.0) {
-//         SetCameraPos(Vector2(static_cast<int>(newCameraPos), GetCameraPos().y));
-//     }
-// }
 
 void Game::UpdateActors(float deltaTime)
 {
@@ -414,6 +391,40 @@ void Game::RemoveOBBCollider(OBBColliderComponent* collider) {
     auto iter = std::find(mOBBColliders.begin(), mOBBColliders.end(), collider);
     mOBBColliders.erase(iter);
 }
+
+void Game::AddBall(Ball* ball) {
+    mBalls.emplace_back(ball);
+}
+void Game::RemoveBall(Ball* ball) {
+    auto iter = std::find(mBalls.begin(), mBalls.end(), ball);
+    mBalls.erase(iter);
+}
+
+void Game::AddBucket(Bucket* bucket) {
+    mBuckets.emplace_back(bucket);
+}
+void Game::RemoveBucket(class Bucket* bucket) {
+    auto iter = std::find(mBuckets.begin(), mBuckets.end(), bucket);
+    mBuckets.erase(iter);
+}
+void Game::AddInvisibleOBBWall(class InvisibleOBBWall *obbWall) {
+    mInvisibleOBBWalls.emplace_back(obbWall);
+}
+void Game::RemoveInvisibleOBBWall(class InvisibleOBBWall *obbWall) {
+    auto iter = std::find(mInvisibleOBBWalls.begin(), mInvisibleOBBWalls.end(), obbWall);
+    mInvisibleOBBWalls.erase(iter);
+}
+void Game::AddInvisibleAABBWall(class InvisibleAABBWall *aabbWall) {
+    mInvisibleAABBWalls.emplace_back(aabbWall);
+}
+void Game::RemoveInvisibleAABBWall(class InvisibleAABBWall *aabbWall) {
+    auto iter = std::find(mInvisibleAABBWalls.begin(), mInvisibleAABBWalls.end(), aabbWall);
+    mInvisibleAABBWalls.erase(iter);
+}
+
+
+
+
 
 
 void Game::GenerateOutput()

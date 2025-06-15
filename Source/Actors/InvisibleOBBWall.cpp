@@ -9,6 +9,8 @@
 InvisibleOBBWall::InvisibleOBBWall(Game *game, Vector2 centerPosition, float width, float height, float rotation):
     Actor(game)
 {
+    game->AddInvisibleOBBWall(this);
+
     mOBBColliderComponent = new OBBColliderComponent(this, width, height);
     SetRotation(rotation);
     SetPosition(centerPosition);
@@ -16,3 +18,8 @@ InvisibleOBBWall::InvisibleOBBWall(Game *game, Vector2 centerPosition, float wid
 
     mDrawComponent = new DrawPolygonComponent(this, corners, 200);
 }
+
+InvisibleOBBWall::~InvisibleOBBWall() {
+    mGame->RemoveInvisibleOBBWall(this);
+}
+

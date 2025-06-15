@@ -25,42 +25,17 @@ AABBColliderComponent::~AABBColliderComponent()
 
 Vector2 AABBColliderComponent::GetMin() const
 {
-    // --------------
-    // TODO - PARTE 3
-    // --------------
-
-    // TODO 1.1 (1 linha): Calcule (e retorne) o ponto mínimo dessa AABB. A variável `mOffset`
-    //  define a posição da AABB com relação a posição do objeto dono do componente. Portanto,
-    //  basta somar a posição do objeto dono do componente a esse deslocamento.
     return mOwner->GetPosition() + mOffset;
 }
 
 Vector2 AABBColliderComponent::GetMax() const
 {
-    // --------------
-    // TODO - PARTE 3
-    // --------------
-
-    // TODO 1.2 (1 linha): Calcule (e retorne) o ponto máximo dessa AABB. As variáveis membro
-    //  `mWidth` e `mHeight` definem a altura e a largura da AABB, respectivamente. Portanto,
-    //  basta somar a largura à coordenada x e a altura à coordenada y do ponto mínimo da AABB
-    //  (utilize o método `GetMin` implementado na etapa anterior).
     auto min = GetMin();
     return Vector2(min.x + mWidth, min.y + mHeight);
-
 }
 
 bool AABBColliderComponent::Intersect(const AABBColliderComponent& b) const
 {
-    // --------------
-    // TODO - PARTE 3
-    // --------------
-
-    // TODO 2 (~5 linhas): Verifique se esta AABB está colidindo com a AABB b passada como parâmetro.
-    //  Retorne verdadeiro se estiver e falso caso contrário. Utilize os métodos `GetMin` e `GetMax`
-    //  para acessar os pontos de mínimo e máximo das duas AABBs. É importante destacar que quando os valores
-    //  foram iguais, as AABBs NÃO estão colidindo. Portanto, utilize o operador < para verificar
-    //  se as AABBs estão colidindo.
     auto a_above_b = this->GetMin().y <= b.GetMax().y;
     auto b_above_a = b.GetMin().y <= this->GetMax().y;
     auto a_left_b = this->GetMax().x <= b.GetMin().x;
@@ -75,11 +50,6 @@ bool AABBColliderComponent::Intersect(const AABBColliderComponent& b) const
 
 float AABBColliderComponent::GetMinVerticalOverlap(AABBColliderComponent* b) const
 {
-    // --------------
-    // TODO - PARTE 3
-    // --------------
-
-    // TODO 3.1 (2 linhas): Calcule as interseções verticais (top e down) entre as duas AABBs.
     // A em cima de B
     auto AB = this->GetMin().y - b->GetMax().y;
     auto BA = this->GetMax().y - b->GetMin().y;

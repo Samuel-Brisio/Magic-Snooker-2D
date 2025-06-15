@@ -4,6 +4,7 @@
 
 #include "Table.h"
 
+#include "Bucket.h"
 #include "InvisibleAABBWall.h"
 #include "InvisibleOBBWall.h"
 
@@ -88,4 +89,24 @@ Table::Table(Game *game, SDL_Rect position)
     // Bottom Right Bucket 2
     Vector2 bottomRightBucketPosition2 = tableTopLeftReference + Vector2(position.w, position.h - collidersHeight);
     new InvisibleOBBWall(game, bottomRightBucketPosition2 , 110, 32, -2.3);
+
+
+    // Bucket top left
+    new Bucket(game, Vector2(position.x + collidersHeight/2 + 15, position.y + collidersHeight/2 + 15), 32);
+
+    // Bucket top mid
+    new Bucket(game, Vector2(position.x + position.w/2, position.y + collidersHeight/2), 32);
+
+    // Bucket top right
+    new Bucket(game, Vector2(position.x + position.w - (collidersHeight/2 + 15), position.y + collidersHeight/2 + 15), 32);
+
+
+    // Bucket bottom left
+    new Bucket(game, Vector2(position.x + collidersHeight/2 + 15, position.y + position.h - (collidersHeight/2 + 15)), 32);
+
+    // Bucket bottom mid
+    new Bucket(game, Vector2(position.x + position.w/2, position.y + position.h -(collidersHeight/2)), 32);
+
+    // Bucket bottom right
+    new Bucket(game, Vector2(position.x + position.w - (collidersHeight/2 + 15), position.y + position.h - (collidersHeight/2 + 15)), 32);
 };

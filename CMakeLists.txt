@@ -62,6 +62,8 @@ add_executable(${PROJECT_NAME}
         Source/Components/ColliderComponents/OBBColliderComponent.h
         Source/Actors/InvisibleOBBWall.cpp
         Source/Actors/InvisibleOBBWall.h
+        Source/Actors/Bucket.cpp
+        Source/Actors/Bucket.h
 )
 
 # Diretórios de inclusão e bibliotecas a linkar

@@ -14,7 +14,9 @@
 class InvisibleAABBWall : public Actor {
 public:
     explicit InvisibleAABBWall(Game* game, SDL_Rect position);
+    ~InvisibleAABBWall();
     void OnUpdate(float deltaTime) override;
+    AABBColliderComponent* GetColliderComponent() { return mColliderComponent; }
 private:
     std::vector<Vector2> *mVertices;
     class RigidBodyComponent* mRigidBodyComponent;
