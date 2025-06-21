@@ -16,19 +16,25 @@ enum class BallColor
 class Ball : public Actor
 {
 public:
-    explicit Ball(Game* game, float size = 1500.0f, float weight = 2.0f, BallColor color = BallColor::White);
-    // void OnUpdate(float deltaTime) override;
+    explicit Ball(Game* game, float radius = 32.0f, float weight = 2.0f, BallColor color = BallColor::Blue);
+    ~Ball();
+    void OnUpdate(float deltaTime) override;
+
+    float GetRadius() const;
+
+    void SolveCollision(class Ball*);
+    void SolveCollision(class InvisibleAABBWall*);
+    void SolveCollision(class InvisibleOBBWall*);
+    void SolveCollision(class Bucket*);
 
 private:
-    float mSize;
+    float mRadius;
     float mWeight;
     BallColor mColor;
     bool mIsMoving;
 
-    void ManageAnimations();
-
-    // class Sound
     class RigidBodyComponent* mRigidBodyComponent;
-    class DrawAnimatedComponent* mDrawComponent;
-    class AABBColliderComponent* mColliderComponent;
+    class DrawCircleComponent* mDrawCircleComponent;
+    class DrawSpriteComponent* mDrawSpriteComponent;
+    class CircleColliderComponent* mColliderComponent;
 };

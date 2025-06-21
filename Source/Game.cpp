@@ -21,7 +21,8 @@
 #include "Actors/Spawner.h"
 #include "Actors/Table.h"
 #include "Actors/Background.h"
-#include "Actors/InvisibleCollider.h"
+#include "Actors/Ball.h"
+#include "Actors/InvisibleAABBWall.h"
 #include "Components/DrawComponents/DrawComponent.h"
 #include "Components/ColliderComponents/AABBColliderComponent.h"
 
@@ -46,7 +47,7 @@ bool Game::Initialize()
         return false;
     }
 
-    mWindow = SDL_CreateWindow("TP3: Super Mario Bros", 0, 0, mWindowWidth, mWindowHeight, 0);
+    mWindow = SDL_CreateWindow("Magic Snooker 2D", 50, 50, mWindowWidth, mWindowHeight, 0);
     if (!mWindow)
     {
         SDL_Log("Failed to create window: %s", SDL_GetError());
@@ -72,42 +73,41 @@ bool Game::Initialize()
 
 void Game::InitializeActors()
 {
-    // --------------
-    // TODO - PARTE 1
-    // --------------
-    //
-    // auto block = new Block(this, "../Assets/Sprites/Blocks/BlockA.png");
-    // block->SetPosition(Vector2(5 * TILE_SIZE, 5 * TILE_SIZE));
+    // Background
     auto bg = new Background(this, mWindowWidth, mWindowHeight);
     bg->SetPosition(Vector2(0.0, 0.0));
 
-
+    // Initialize Table
     int table_width = mWindowWidth - 20;
     int table_height = table_width * 0.55;
+    SDL_Rect tablePos = {10, 50, table_width, table_height};
 
-    int const table_y_offset = 50;
-    int const table_x_offset = 10;
-
-    auto table = new Table(this, table_width, table_height, table_x_offset, table_y_offset);
-
-    table->SetPosition(Vector2(table_x_offset, table_y_offset));
+    auto table = new Table(this, tablePos);
+    table->SetPosition(Vector2(tablePos.x, tablePos.y));
 
 
-
-
-    // TODO 7.1 (~1 linha): Utilize a função LoadLevel para carregar o primeiro nível (Level1.txt) do jogo.
-    //  Note que a classe Game tem constantes LEVEL_WIDTH e LEVEL_HEIGHT que definem a largura e altura
-    // auto matrix = LoadLevel("Assets/Levels/Level1-1/level1-1.csv", Game::LEVEL_WIDTH, Game::LEVEL_HEIGHT);
-    // for (int i = 0; i <  Game::LEVEL_HEIGHT; ++i) {
-    //     for (int j = 0; j < Game::LEVEL_WIDTH; ++j) {
-    //         std::cout << matrix[i][j] << " ";
+    // Initialize Balls setup
+    int ballRadius = 16;
+    // Vector2 initialBallPosition = Vector2(200, 250);
+    // Vector2 currentBallPosition = initialBallPosition;
+    //
+    // for (int col = 1; col <= 5; col++) {
+    //     for (int row = col; row <= 5; row++) {
+    //         auto ball = new Ball(this, ballRadius, 0.5, (col + row)%2 ? BallColor::Blue : BallColor::Red);
+    //         ball->SetPosition(currentBallPosition);
+    //         currentBallPosition.y += 2*ballRadius + 1;
     //     }
-    //     std::cout << std::endl;
+    //     currentBallPosition = initialBallPosition;
+    //     currentBallPosition.x += 2*col*ballRadius;
+    //     currentBallPosition.y += col*ballRadius;
     // }
 
-    // TODO 7.2 (~4 linhas): Verifique se a matriz de tiles foi carregada corretamente. Se não, retorne.
-    //  Se foi, chame a função BuildLevel passando a matriz de tiles, a largura e altura do nível.
-    // BuildLevel(matrix, Game::LEVEL_WIDTH, Game::LEVEL_HEIGHT);
+    // Initialize White ball
+    auto ball = new Ball(this, ballRadius, 0.5, BallColor::White);
+    ball->SetPosition(Vector2(tablePos.x + 200, tablePos.y + 200));
+    ball->GetComponent<RigidBodyComponent>()->ApplyForce(Vector2(tablePos.x, tablePos.y) * 100);
+
+
 
 }
 
@@ -284,30 +284,7 @@ void Game::UpdateGame()
 
     // Update all actors and pending actors
     UpdateActors(deltaTime);
-
-    // Update camera position
-    // UpdateCamera();
 }
-
-// void Game::UpdateCamera()
-// {
-//     // --------------
-//     // TODO - PARTE 2
-//     // --------------
-//
-//     // TODO 1 (~5 linhas): Calcule a posição horizontal da câmera subtraindo metade da largura da janela
-//     //  da posição horizontal do jogador. Isso fará com que a câmera fique sempre centralizada no jogador.
-//     //  No SMB, o jogador não pode voltar no nível, portanto, antes de atualizar
-//     //  a posição da câmera, verifique se a posição horizontal calculada é maior do que a posição horizontal
-//     //  atual da câmera. Além disso, limite a posição horizontal para que a câmera fique entre 0 e o limite
-//     //  horizontal máximo do nível. Para calcular o limite horizontal máximo do nível, utilize as constantes
-//     //  `LEVEL_WIDTH` e `TILE_SIZE`.
-//     auto playPos = mMario->GetPosition();
-//     auto newCameraPos = mMario->GetPosition().x - Game::GetWindowWidth() / 2.0;
-//     if (newCameraPos > GetCameraPos().x && newCameraPos < LEVEL_WIDTH * TILE_SIZE - GetWindowWidth() / 2.0) {
-//         SetCameraPos(Vector2(static_cast<int>(newCameraPos), GetCameraPos().y));
-//     }
-// }
 
 void Game::UpdateActors(float deltaTime)
 {
@@ -385,16 +362,70 @@ void Game::RemoveDrawable(class DrawComponent *drawable)
     mDrawables.erase(iter);
 }
 
-void Game::AddCollider(class AABBColliderComponent* collider)
+void Game::AddAABBCollider(class AABBColliderComponent* collider)
 {
-    mColliders.emplace_back(collider);
+    mAABBColliders.emplace_back(collider);
 }
 
-void Game::RemoveCollider(AABBColliderComponent* collider)
+void Game::RemoveAABBCollider(AABBColliderComponent* collider)
 {
-    auto iter = std::find(mColliders.begin(), mColliders.end(), collider);
-    mColliders.erase(iter);
+    auto iter = std::find(mAABBColliders.begin(), mAABBColliders.end(), collider);
+    mAABBColliders.erase(iter);
 }
+void Game::AddCircleCollider(class CircleColliderComponent* collider)
+{
+    mCircleColliders.emplace_back(collider);
+}
+
+void Game::RemoveCircleCollider(CircleColliderComponent* collider)
+{
+    auto iter = std::find(mCircleColliders.begin(), mCircleColliders.end(), collider);
+    mCircleColliders.erase(iter);
+}
+
+void Game::AddOBBCollider(OBBColliderComponent* collider) {
+    mOBBColliders.emplace_back(collider);
+}
+
+void Game::RemoveOBBCollider(OBBColliderComponent* collider) {
+    auto iter = std::find(mOBBColliders.begin(), mOBBColliders.end(), collider);
+    mOBBColliders.erase(iter);
+}
+
+void Game::AddBall(Ball* ball) {
+    mBalls.emplace_back(ball);
+}
+void Game::RemoveBall(Ball* ball) {
+    auto iter = std::find(mBalls.begin(), mBalls.end(), ball);
+    mBalls.erase(iter);
+}
+
+void Game::AddBucket(Bucket* bucket) {
+    mBuckets.emplace_back(bucket);
+}
+void Game::RemoveBucket(class Bucket* bucket) {
+    auto iter = std::find(mBuckets.begin(), mBuckets.end(), bucket);
+    mBuckets.erase(iter);
+}
+void Game::AddInvisibleOBBWall(class InvisibleOBBWall *obbWall) {
+    mInvisibleOBBWalls.emplace_back(obbWall);
+}
+void Game::RemoveInvisibleOBBWall(class InvisibleOBBWall *obbWall) {
+    auto iter = std::find(mInvisibleOBBWalls.begin(), mInvisibleOBBWalls.end(), obbWall);
+    mInvisibleOBBWalls.erase(iter);
+}
+void Game::AddInvisibleAABBWall(class InvisibleAABBWall *aabbWall) {
+    mInvisibleAABBWalls.emplace_back(aabbWall);
+}
+void Game::RemoveInvisibleAABBWall(class InvisibleAABBWall *aabbWall) {
+    auto iter = std::find(mInvisibleAABBWalls.begin(), mInvisibleAABBWalls.end(), aabbWall);
+    mInvisibleAABBWalls.erase(iter);
+}
+
+
+
+
+
 
 void Game::GenerateOutput()
 {

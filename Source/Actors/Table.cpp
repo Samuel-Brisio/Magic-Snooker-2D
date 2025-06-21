@@ -4,58 +4,109 @@
 
 #include "Table.h"
 
-#include "InvisibleCollider.h"
+#include "Bucket.h"
+#include "InvisibleAABBWall.h"
+#include "InvisibleOBBWall.h"
 
-Table::Table(Game *game, const int width, const int height, int table_x_offset, int table_y_offset)
-    : Actor(game), mWidth(width), mHeight(height)
+Table::Table(Game *game, SDL_Rect position)
+    : Actor(game)
 {
-    mDrawComponent = new DrawSpriteComponent(this, "../Assets/Sprites/Table/table_cut.png", mWidth, mHeight);
+    mDrawComponent = new DrawSpriteComponent(this, "../Assets/Sprites/Table/table_cut.png",
+        position.w,position.h, 2);
+
+    int collidersHeight = int(position.h * 0.11);
+    int horizontalWallsWidth = position.w/2 - 2*collidersHeight;
+    int verticalWallsHeight = position.h - 3*collidersHeight;
+    // Top Collision Block 1
+    SDL_Rect topRect1 = {position.x + collidersHeight + 20, position.y, horizontalWallsWidth, collidersHeight};
+    new InvisibleAABBWall(mGame, topRect1);
+
+    // Top Collision Block 2
+    SDL_Rect topRect2 = {position.x + position.w/2 + collidersHeight/2 + 10, position.y, horizontalWallsWidth, collidersHeight};
+    new InvisibleAABBWall(mGame, topRect2);
+
+    // Bottom Collision Block 1
+    SDL_Rect bottomRect1 = {position.x + collidersHeight + 20, position.y + position.h - collidersHeight, horizontalWallsWidth, collidersHeight};
+    new InvisibleAABBWall(mGame, bottomRect1);
+
+    // Bottom Collision Block 2
+    SDL_Rect bottomRect2 = {position.x + position.w/2 + collidersHeight/2 + 10, position.y + position.h - collidersHeight, horizontalWallsWidth, collidersHeight};
+    new InvisibleAABBWall(mGame, bottomRect2);
+
+    // Left Collision Block
+    SDL_Rect leftRect = {position.x - 5, position.y+ collidersHeight + 22, collidersHeight, verticalWallsHeight};
+    new InvisibleAABBWall(mGame, leftRect);
+
+    // Right Collision Block
+    SDL_Rect rightRect = {position.x + position.w - collidersHeight + 5, position.y+ collidersHeight + 22, collidersHeight, verticalWallsHeight};
+    new InvisibleAABBWall(mGame, rightRect);
+
+    Vector2 tableTopLeftReference = Vector2(position.x, position.y);
+    // Top Left Bucket 1
+    Vector2 topLeftBucketPosition1 = tableTopLeftReference + Vector2(collidersHeight, 10);
+    new InvisibleOBBWall(game, topLeftBucketPosition1 , 110, 32, -2.3);
+
+    // Top Left Bucket 2
+    Vector2 topLeftBucketPosition2 = tableTopLeftReference + Vector2(0, collidersHeight);
+    new InvisibleOBBWall(game, topLeftBucketPosition2 , 110, 32, -2.3);
+
+    // Top Mid Bucket 1
+    Vector2 topMidBucketPosition1 = tableTopLeftReference + Vector2(position.w/2 + collidersHeight/3, 5);
+    new InvisibleOBBWall(game, topMidBucketPosition1 , 110, 32, -2.3);
+
+    // Top Mid Bucket 2
+    Vector2 topMidBucketPosition2 = tableTopLeftReference + Vector2(position.w/2 - collidersHeight/3, 5);
+    new InvisibleOBBWall(game, topMidBucketPosition2 , 110, 32, 2.3);
+
+    // Top Right Bucket 1
+    Vector2 topRightBucketPosition1 = tableTopLeftReference + Vector2(position.w - collidersHeight, 10);
+    new InvisibleOBBWall(game, topRightBucketPosition1 , 110, 32, 2.3);
+
+    // Top Right Bucket 2
+    Vector2 topRightBucketPosition2 = tableTopLeftReference + Vector2(position.w, collidersHeight);
+    new InvisibleOBBWall(game, topRightBucketPosition2 , 110, 32, 2.3);
+
+    // Bottom Left Bucket 1
+    Vector2 bottomLeftBucketPosition1 = tableTopLeftReference + Vector2(0,position.h - collidersHeight);
+    new InvisibleOBBWall(game, bottomLeftBucketPosition1 , 110, 32, 2.3);
+
+    // Bottom Left Bucket 2
+    Vector2 bottomLeftBucketPosition2 = tableTopLeftReference + Vector2(collidersHeight, position.h);
+    new InvisibleOBBWall(game, bottomLeftBucketPosition2 , 110, 32, 2.3);
+
+    // Bottom Mid Bucket 1
+    Vector2 bottomMidBucketPosition1 = tableTopLeftReference + Vector2(position.w/2 + collidersHeight/3, position.h);
+    new InvisibleOBBWall(game, bottomMidBucketPosition1 , 110, 32, 2.3);
+
+    // Bottom Mid Bucket 2
+    Vector2 bottomMidBucketPosition2 = tableTopLeftReference + Vector2(position.w/2 - collidersHeight/3, position.h);
+    new InvisibleOBBWall(game, bottomMidBucketPosition2 , 110, 32, -2.3);
+
+    // Bottom Right Bucket 1
+    Vector2 bottomRightBucketPosition1 = tableTopLeftReference + Vector2(position.w - collidersHeight, position.h);
+    new InvisibleOBBWall(game, bottomRightBucketPosition1 , 110, 32, -2.3);
+
+    // Bottom Right Bucket 2
+    Vector2 bottomRightBucketPosition2 = tableTopLeftReference + Vector2(position.w, position.h - collidersHeight);
+    new InvisibleOBBWall(game, bottomRightBucketPosition2 , 110, 32, -2.3);
 
 
-    // Bloco de Colisão da parte superior
-    float top_pos = mHeight * 0.07 + table_y_offset;
-    float bottom_pos = mHeight * 0.11 + table_y_offset;
-    std::vector<Vector2> vertices_top;
-    vertices_top.emplace_back(Vector2(10, top_pos));
-    vertices_top.emplace_back(Vector2(10, bottom_pos));
-    vertices_top.emplace_back(Vector2(10 + mWidth, bottom_pos));
-    vertices_top.emplace_back(Vector2(10 + mWidth, top_pos));
+    // Bucket top left
+    new Bucket(game, Vector2(position.x + collidersHeight/2 + 15, position.y + collidersHeight/2 + 15), 32);
 
-    auto table_top_collider = new InvisibleCollider(mGame, vertices_top);
+    // Bucket top mid
+    new Bucket(game, Vector2(position.x + position.w/2, position.y + collidersHeight/2), 32);
 
-    //  Bloco de Colisão da parte inferior
-    top_pos = mHeight - mHeight * 0.07 + table_y_offset;
-    bottom_pos = mHeight - mHeight * 0.11 + table_y_offset;
-    std::vector<Vector2> vertices_bottom;
-    vertices_bottom.emplace_back(Vector2(10, top_pos));
-    vertices_bottom.emplace_back(Vector2(10, bottom_pos));
-    vertices_bottom.emplace_back(Vector2(10 + mWidth, bottom_pos));
-    vertices_bottom.emplace_back(Vector2(10 + mWidth, top_pos));
-
-    auto table_bottom_collider = new InvisibleCollider(mGame, vertices_bottom);
-
-    //  Bloco de Colisão da parte esquerda
-    auto left_pos = mWidth * 0.03 + table_x_offset;
-    auto right_pos = mWidth * 0.055 + table_x_offset;
-    std::vector<Vector2> vertices_left;
-    vertices_left.emplace_back(Vector2(left_pos, table_y_offset));
-    vertices_left.emplace_back(Vector2(left_pos, table_y_offset + mHeight));
-    vertices_left.emplace_back(Vector2(right_pos, table_y_offset + mHeight));
-    vertices_left.emplace_back(Vector2(right_pos, table_y_offset));
-
-    auto table_left_collider = new InvisibleCollider(mGame, vertices_left);
+    // Bucket top right
+    new Bucket(game, Vector2(position.x + position.w - (collidersHeight/2 + 15), position.y + collidersHeight/2 + 15), 32);
 
 
-    //  Bloco de Colisão da parte direita
-    left_pos = mWidth - mWidth * 0.055  + table_x_offset;
-    right_pos = mWidth - mWidth * 0.03 + table_x_offset;
+    // Bucket bottom left
+    new Bucket(game, Vector2(position.x + collidersHeight/2 + 15, position.y + position.h - (collidersHeight/2 + 15)), 32);
 
-    std::vector<Vector2> vertices_right;
-    vertices_right.emplace_back(Vector2(left_pos, table_y_offset));
-    vertices_right.emplace_back(Vector2(left_pos, table_y_offset + mHeight));
-    vertices_right.emplace_back(Vector2(right_pos, table_y_offset + mHeight));
-    vertices_right.emplace_back(Vector2(right_pos, table_y_offset));
+    // Bucket bottom mid
+    new Bucket(game, Vector2(position.x + position.w/2, position.y + position.h -(collidersHeight/2)), 32);
 
-    auto table_right_collider = new InvisibleCollider(mGame, vertices_right);
-
+    // Bucket bottom right
+    new Bucket(game, Vector2(position.x + position.w - (collidersHeight/2 + 15), position.y + position.h - (collidersHeight/2 + 15)), 32);
 };

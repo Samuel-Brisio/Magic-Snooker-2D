@@ -9,8 +9,10 @@
 #include "../../Actors/Actor.h"
 #include "../../Game.h"
 
-DrawSpriteComponent::DrawSpriteComponent(class Actor* owner, const std::string &texturePath, const int width, const int height, const int drawOrder)
+DrawSpriteComponent::DrawSpriteComponent(class Actor* owner, const std::string &texturePath, const int width,
+    const int height, const int drawOrder,  Vector2 positionOffset)
         :DrawComponent(owner, drawOrder)
+        ,mPositionOffset(positionOffset)
         ,mWidth(width)
         ,mHeight(height)
 {
@@ -39,7 +41,7 @@ void DrawSpriteComponent::Draw(SDL_Renderer *renderer)
     //  Se a rotação for zero, o sprite deve ser desenhado virado à direita. Se for igual a MAth::Pi, deve
     //  ser desenhado à esquerda.
     // const auto relative_pos =  mOwner->GetPosition() - mOwner->GetGame()->GetCameraPos();
-    const auto relative_pos =  mOwner->GetPosition();
+    const auto relative_pos =  mOwner->GetPosition() + mPositionOffset;
     const SDL_Rect destRect = {static_cast<int>(relative_pos.x), static_cast<int>(relative_pos.y), mWidth, mHeight};
     const SDL_RendererFlip flip = mOwner->GetRotation() == Math::Pi ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     SDL_RenderCopyEx(renderer, mSpriteSheetSurface, nullptr, &destRect, 0.0, nullptr, flip );

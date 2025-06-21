@@ -7,13 +7,13 @@ set(PROJECT_NAME "tp3-smb")
 project(${PROJECT_NAME})
 
 find_package(SDL2 2.32.2 EXACT REQUIRED)
-
+find_package(SDL2_image REQUIRED)
 
 # Caminhos manuais para SDL2_image instalado em /opt/SDL2
-set(SDL2_IMAGE_INCLUDE_DIR "/opt/SDL2/include/SDL2")
-set(SDL2_IMAGE_LIBRARY "/opt/SDL2/lib/libSDL2_image.so")
+#set(SDL2_IMAGE_INCLUDE_DIR "/opt/SDL2/include/SDL2")
+#set(SDL2_IMAGE_LIBRARY "/opt/SDL2/lib/libSDL2_image.so")
 
-#find_package(SDL2_image REQUIRED)
+
 
 add_executable(${PROJECT_NAME}
         Source/Main.cpp
@@ -54,14 +54,24 @@ add_executable(${PROJECT_NAME}
         Source/Actors/Table.h
         Source/Actors/Background.cpp
         Source/Actors/Background.h
-        Source/Actors/InvisibleCollider.cpp
-        Source/Actors/InvisibleCollider.h
+        Source/Actors/InvisibleAABBWall.cpp
+        Source/Actors/InvisibleAABBWall.h
+        Source/Components/DrawComponents/DrawCircleComponent.cpp
+        Source/Components/DrawComponents/DrawCircleComponent.h
+        Source/Components/ColliderComponents/OBBColliderComponent.cpp
+        Source/Components/ColliderComponents/OBBColliderComponent.h
+        Source/Actors/InvisibleOBBWall.cpp
+        Source/Actors/InvisibleOBBWall.h
+        Source/Actors/Bucket.cpp
+        Source/Actors/Bucket.h
 )
 
 # Diretórios de inclusão e bibliotecas a linkar
-target_include_directories(${PROJECT_NAME} PRIVATE
-        ${SDL2_INCLUDE_DIRS}
-        ${SDL2_IMAGE_INCLUDE_DIR}
-)
+#target_include_directories(${PROJECT_NAME} PRIVATE
+#        ${SDL2_INCLUDE_DIRS}
+#        ${SDL2_IMAGE_INCLUDE_DIR}
+#)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2 ${SDL2_IMAGE_LIBRARY})
+#target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2 ${SDL2_IMAGE_LIBRARY})
+target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2 SDL2_image::SDL2_image)
+

@@ -7,7 +7,7 @@
 // ----------------------------------------------------------------
 
 #pragma once
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <vector>
 #include <string>
 #include "Math.h"
@@ -37,13 +37,37 @@ public:
     void AddDrawable(class DrawComponent* drawable);
     void RemoveDrawable(class DrawComponent* drawable);
 
-    // Collider functions
-    void AddCollider(class AABBColliderComponent* collider);
-    void RemoveCollider(class AABBColliderComponent* collider);
-    std::vector<class AABBColliderComponent*>& GetColliders() { return mColliders; }
+    // AABB Collider methods
+    void AddAABBCollider(class AABBColliderComponent* collider);
+    void RemoveAABBCollider(class AABBColliderComponent* collider);
 
-    // Vector2& GetCameraPos() { return mCameraPos; };
-    // void SetCameraPos(const Vector2& position) { mCameraPos = position; };
+    // Circle Collider methods
+    void AddCircleCollider(class CircleColliderComponent* collider);
+    void RemoveCircleCollider(class CircleColliderComponent* collider);
+    std::vector<class AABBColliderComponent*>& GetAABBColliders() { return mAABBColliders; }
+    std::vector<class CircleColliderComponent*>& GetCircleColliders() { return mCircleColliders; }
+    std::vector<class OBBColliderComponent*>& GetOBBColliders() { return mOBBColliders; }
+
+    // OBB Collider Methods
+    void AddOBBCollider(class OBBColliderComponent* collider);
+    void RemoveOBBCollider(class OBBColliderComponent* collider);
+
+    // Actor Specific methods
+    void AddBall(class Ball* ball);
+    void RemoveBall(class Ball* ball);
+    std::vector<class Ball*> GetBalls() { return mBalls; }
+
+    void AddInvisibleAABBWall(class InvisibleAABBWall * aabbWall);
+    void RemoveInvisibleAABBWall(class InvisibleAABBWall * aabbWall);
+    std::vector<class InvisibleAABBWall*> GetInvisibleAABBWalls(){ return mInvisibleAABBWalls; }
+
+    void AddInvisibleOBBWall(class InvisibleOBBWall * obbWall);
+    void RemoveInvisibleOBBWall(class InvisibleOBBWall * obbWall);
+    std::vector<class InvisibleOBBWall*> GetInvisibleOBBWalls(){ return mInvisibleOBBWalls; }
+
+    void AddBucket(class Bucket * bucket);
+    void RemoveBucket(class Bucket * bucket);
+    std::vector<class Bucket*> GetBuckets() { return mBuckets; }
 
     // Window functions
     int GetWindowWidth() const { return mWindowWidth; }
@@ -76,7 +100,15 @@ private:
     std::vector<class DrawComponent*> mDrawables;
 
     // All the collision components
-    std::vector<class AABBColliderComponent*> mColliders;
+    std::vector<class AABBColliderComponent*> mAABBColliders;
+    std::vector<class CircleColliderComponent*> mCircleColliders;
+    std::vector<class OBBColliderComponent*> mOBBColliders;
+
+    // Actors specific
+    std::vector<class Ball*> mBalls;
+    std::vector<class InvisibleAABBWall*> mInvisibleAABBWalls;
+    std::vector<class InvisibleOBBWall*> mInvisibleOBBWalls;
+    std::vector<class Bucket*> mBuckets;
 
     // SDL stuff
     SDL_Window* mWindow;
