@@ -5,7 +5,15 @@
 #pragma once
 #include "Actor.h"
 #include "Ball.h"
+#include <cmath>
 #include "../Components/DrawComponents/DrawAnimatedComponent.h"
+
+enum class CueState
+{
+    Moving,
+    Charging,
+    Attacking,
+};
 
 
 class Cue: public Actor {
@@ -23,8 +31,17 @@ private:
     int mWidth;
     int mHeight;
 
+    bool mCharge;
+    float mEnergy;
+    int mEnergyLevel;
+    float mTimeDuration;
+
+    CueState mState;
+
     class Ball* mWhiteBall;
     class DrawSpriteComponent* mDrawComponent;
+
+    float CalculateEnergyLevel(double x);
 };
 
 

@@ -105,4 +105,7 @@ private:
     // Adds component to Actor (this is automatically called
     // in the component constructor)
     void AddComponent(class Component* c);
+    // Removes component from Actor (this is automatically called
+    // in the component destructor)
+    void RemoveComponent(Component* c);
 };

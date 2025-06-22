@@ -92,3 +92,8 @@ void Actor::AddComponent(Component* c)
         return a->GetUpdateOrder() < b->GetUpdateOrder();
     });
 }
+
+void Actor::RemoveComponent(Component* c)
+{
+    mComponents.erase(std::find(mComponents.begin(), mComponents.end(), c));
+}

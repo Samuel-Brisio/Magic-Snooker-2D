@@ -23,6 +23,7 @@ Component::Component(Actor* owner, int updateOrder)
 
 Component::~Component()
 {
+    mOwner->RemoveComponent(this);
 }
 
 void Component::Update(float deltaTime)

@@ -28,10 +28,10 @@ DrawSpriteComponent::DrawSpriteComponent(class Actor* owner, const std::string &
     mSpriteSheetSurface = mOwner->GetGame()->LoadTexture(texturePath);
 }
 
-// DrawSpriteComponent::~DrawSpriteComponent() {
-//     SDL_Log("DrawSpriteComponent deleted");
-//     SDL_DestroyTexture(mSpriteSheetSurface);
-// }
+DrawSpriteComponent::~DrawSpriteComponent() {
+    // SDL_Log("DrawSpriteComponent deleted");
+    SDL_DestroyTexture(mSpriteSheetSurface);
+}
 
 
 void DrawSpriteComponent::Draw(SDL_Renderer *renderer)
@@ -53,5 +53,8 @@ void DrawSpriteComponent::Draw(SDL_Renderer *renderer)
     const SDL_Rect destRect = {static_cast<int>(relative_pos.x), static_cast<int>(relative_pos.y), mWidth, mHeight};
     SDL_RendererFlip flip = mOwner->GetRotation() == Math::Pi ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     if (SDL_FLIP_NONE == mRotationFlip) flip = SDL_FLIP_NONE;
-    SDL_RenderCopyEx(renderer, mSpriteSheetSurface, nullptr, &destRect, mRotation, nullptr, flip );
+
+    // Se tiver rotação o ponto de rotação será a extremidade esquerda
+    SDL_Point rotationCenter = { 0, mHeight / 2 };  // rotaciona a partir do centro da extremidade esquerda
+    SDL_RenderCopyEx(renderer, mSpriteSheetSurface, nullptr, &destRect, mRotation, &rotationCenter, flip );
 }
