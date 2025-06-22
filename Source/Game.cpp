@@ -24,6 +24,7 @@
 #include "Actors/Ball.h"
 #include "Actors/Cue.h"
 #include "Actors/InvisibleAABBWall.h"
+#include "Actors/WhiteBall.h"
 #include "Components/DrawComponents/DrawComponent.h"
 #include "Components/ColliderComponents/AABBColliderComponent.h"
 
@@ -106,7 +107,7 @@ void Game::InitializeActors()
     // }
 
     // Initialize White ball
-    auto ball = new Ball(this, ballRadius, 0.5, BallColor::White);
+    auto ball = new WhiteBall(this, ballRadius, 0.5);
     ball->SetPosition(Vector2(tablePos.x + 200, tablePos.y + 200));
     // ball->GetComponent<RigidBodyComponent>()->ApplyForce(Vector2(tablePos.x, tablePos.y) * 100);
 
@@ -326,7 +327,7 @@ void Game::UpdateActors(float deltaTime)
         if (ball->GetIsMoving()) allBallStopped = false;
     }
 
-    SDL_Log("Game::UpdateActors: allBallStopped=%d", allBallStopped);
+    // SDL_Log("Game::UpdateActors: allBallStopped=%d", allBallStopped);
     if (allBallStopped && mGamePlayState == GamePlayState::Simulating) {
         TogglePlay();
         mCue->SetCueState(CueState::Moving);

@@ -88,8 +88,8 @@ void Cue::OnUpdate(float deltaTime) {
             SetPosition(this->GetPosition() + direction*0.1);
         }
         else {
-            mWhiteBall->GetComponent<RigidBodyComponent>()->ApplyForce(direction * 20 * mEnergyLevel);
-            SDL_Log("Cue::OnUpdate: Cue Hit the Ball");
+            mWhiteBall->GetComponent<RigidBodyComponent>()->ApplyForce(direction * 20 * mEnergyLevel * mEnergyLevel);
+            // SDL_Log("Cue::OnUpdate: Cue Hit the Ball");
             mCueState = CueState::Transition;
             mDelay = 0.3;
         }

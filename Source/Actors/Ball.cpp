@@ -46,7 +46,6 @@ Ball::~Ball() {
 }
 
 void Ball::OnUpdate(float deltaTime) {
-
     auto aabbWalls = mGame->GetInvisibleAABBWalls();
     for (auto aabbWall : aabbWalls) {
         bool isCollision = mColliderComponent->Intersect(aabbWall->GetColliderComponent());
@@ -68,7 +67,6 @@ void Ball::OnUpdate(float deltaTime) {
         if (isCollision) SolveCollision(obbWall);
     }
 
-
     auto buckets = mGame->GetBuckets();
     for (auto bucket : buckets) {
         bool isCollision = mColliderComponent->Intersect(bucket->GetColliderComponent());
@@ -78,7 +76,6 @@ void Ball::OnUpdate(float deltaTime) {
     // Check if the ball is moving
     if (mRigidBodyComponent->GetVelocity().Length() > 0.001) mIsMoving = true;
     else mIsMoving = false;
-    SDL_Log("Ball::OnUpdate : Ball Velocity %f", mRigidBodyComponent->GetVelocity().Length());
 }
 
  float Ball::GetRadius() const

@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Actor.h"
+#include "../Components/ColliderComponents/CircleColliderComponent.h"
 
 enum class BallColor
 {
@@ -28,9 +29,11 @@ public:
     void SolveCollision(class InvisibleOBBWall*);
     void SolveCollision(class Bucket*);
 
+    CircleColliderComponent* GetColliderComponent() const {return mColliderComponent;}
+
     bool GetIsMoving() const {return mIsMoving;};
 
-private:
+protected:
     float mRadius;
     float mWeight;
     BallColor mColor;
