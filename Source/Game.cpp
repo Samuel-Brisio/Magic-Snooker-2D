@@ -66,6 +66,8 @@ bool Game::Initialize()
 
     mTicksCount = SDL_GetTicks();
 
+    SetGamePlayState(GamePlayState::Playing);
+
     // Init all game actors
     InitializeActors();
 
@@ -110,7 +112,7 @@ void Game::InitializeActors()
 
 
     // Initialize Cue
-    auto cue = new Cue(this, ball, 300, 15);
+    mCue = new Cue(this, ball, 300, 15);
 
 
 }
@@ -318,6 +320,17 @@ void Game::UpdateActors(float deltaTime)
     {
         delete actor;
     }
+
+    bool allBallStopped = true;
+    for (auto ball: mBalls) {
+        if (ball->GetIsMoving()) allBallStopped = false;
+    }
+
+    SDL_Log("Game::UpdateActors: allBallStopped=%d", allBallStopped);
+    if (allBallStopped && mGamePlayState == GamePlayState::Simulating) {
+        TogglePlay();
+        mCue->SetCueState(CueState::Moving);
+    }
 }
 
 void Game::AddActor(Actor* actor)
@@ -476,6 +489,43 @@ SDL_Texture* Game::LoadTexture(const std::string& texturePath) {
         return nullptr;
     }
     return texture;
+}
+
+std::string Game::printGamePlayState(Game::GamePlayState state) {
+    switch (state) {
+        case Game::GamePlayState::Playing:
+            return "Playing";
+        case Game::GamePlayState::Paused:
+            return "Paused";
+        case Game::GamePlayState::Simulating:
+            return "Simulating";
+        case Game::GamePlayState::Leaving:
+            return "Leaving";
+        case Game::GamePlayState::GameOver:
+            return "GameOver";
+        case Game::GamePlayState::LevelComplete:
+            return "LevelComplete";
+        default:
+            return "Unknown";
+    }
+}
+
+void Game::ToggleSimulation() {
+    if (mGamePlayState == GamePlayState::Playing)
+        SetGamePlayState(GamePlayState::Simulating);
+    else {
+        SDL_Log("Current Game State %s is not Playing, therefore Cannot toggle simulation", printGamePlayState(mGamePlayState).c_str());
+        exit(0);
+    }
+}
+
+void Game::TogglePlay() {
+    if (mGamePlayState == GamePlayState::Playing) return;
+    if (mGamePlayState == GamePlayState::Simulating) SetGamePlayState(GamePlayState::Playing);
+    else {
+        SDL_Log("Current Game State is not Simulating or Playing, therefore Cannot toggle Playing");
+        exit(0);
+    }
 }
 
 void Game::Shutdown()

@@ -45,8 +45,8 @@ public:
     void SetRotation(float rotation) { mRotation = rotation; }
 
     // State getter/setter
-    ActorState GetState() const { return mState; }
-    void SetState(ActorState state) { mState = state; }
+    ActorState GetState() const { return mCueState; }
+    void SetState(ActorState state) { mCueState = state; }
 
     // Game getter
     class Game* GetGame() { return mGame; }
@@ -86,7 +86,7 @@ protected:
     virtual void OnProcessInput(const Uint8* keyState);
 
     // Actor's state
-    ActorState mState;
+    ActorState mCueState;
 
     // Transform
     Vector2 mPosition;

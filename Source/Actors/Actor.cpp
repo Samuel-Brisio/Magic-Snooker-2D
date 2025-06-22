@@ -12,7 +12,7 @@
 #include <algorithm>
 
 Actor::Actor(Game* game)
-        : mState(ActorState::Active)
+        : mCueState(ActorState::Active)
         , mPosition(Vector2::Zero)
         , mScale(1.0f)
         , mRotation(0.0f)
@@ -35,7 +35,7 @@ Actor::~Actor()
 
 void Actor::Update(float deltaTime)
 {
-    if (mState == ActorState::Active)
+    if (mCueState == ActorState::Active)
     {
         for (auto comp : mComponents)
         {
@@ -69,7 +69,7 @@ void Actor::Kill()
 
 void Actor::ProcessInput(const Uint8* keyState)
 {
-    if (mState == ActorState::Active)
+    if (mCueState == ActorState::Active)
     {
         for (auto comp : mComponents)
         {

@@ -28,6 +28,8 @@ public:
     void SolveCollision(class InvisibleOBBWall*);
     void SolveCollision(class Bucket*);
 
+    bool GetIsMoving() const {return mIsMoving;};
+
 private:
     float mRadius;
     float mWeight;

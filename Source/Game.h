@@ -11,6 +11,7 @@
 #include <vector>
 #include <string>
 #include "Math.h"
+#include "Actors/Ball.h"
 
 class Game
 {
@@ -19,6 +20,16 @@ public:
     // static const int LEVEL_HEIGHT = 15;
     // static const int TILE_SIZE = 32;
     // static const int SPAWN_DISTANCE = 700;
+
+    enum class GamePlayState
+    {
+        Playing,
+        Simulating,
+        Paused,
+        GameOver,
+        LevelComplete,
+        Leaving
+    };
 
     Game(int windowWidth, int windowHeight);
 
@@ -77,8 +88,15 @@ public:
 
     SDL_Texture* LoadTexture(const std::string& texturePath);
 
+    void SetGamePlayState(GamePlayState state) {mGamePlayState = state;};
+    void ToggleSimulation();
+    void TogglePlay();
+    GamePlayState GetGamePlayState() const { return mGamePlayState; }
+
     // Game-specific
     const class Mario* GetMario() { return mMario; }
+    std::string printGamePlayState(GamePlayState state);
+
 
 private:
     void ProcessInput();
@@ -106,6 +124,7 @@ private:
 
     // Actors specific
     std::vector<class Ball*> mBalls;
+    class Cue* mCue;
     std::vector<class InvisibleAABBWall*> mInvisibleAABBWalls;
     std::vector<class InvisibleOBBWall*> mInvisibleOBBWalls;
     std::vector<class Bucket*> mBuckets;
@@ -126,6 +145,9 @@ private:
     bool mUpdatingActors;
 
     Vector2 mCameraPos;
+
+
+    GamePlayState mGamePlayState;
 
     // Game-specific
     class Mario *mMario;

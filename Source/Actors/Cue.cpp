@@ -4,6 +4,8 @@
 
 #include "Cue.h"
 
+#include "../Game.h"
+
 Cue::Cue(Game *game, Ball *whiteBall, int width, int height)
     : Actor(game)
     ,mWhiteBall(whiteBall)
@@ -12,7 +14,7 @@ Cue::Cue(Game *game, Ball *whiteBall, int width, int height)
     ,mCharge(false)
     ,mEnergy(0)
     ,mEnergyLevel(1)
-    ,mState(CueState::Moving)
+    ,mCueState(CueState::Moving)
     ,mTimeDuration(0)
 {
     // Distancia padrão que o taco deve aparecer longe da bola branca
@@ -34,11 +36,11 @@ Cue::Cue(Game *game, Ball *whiteBall, int width, int height)
 
 void Cue::OnUpdate(float deltaTime) {
     // Change State
-    if (mState == CueState::Moving && mCharge == true) mState = CueState::Charging;
-    if (mState == CueState::Charging && mCharge == false) mState = CueState::Attacking;
+    if (mCueState == CueState::Moving && mCharge == true) mCueState = CueState::Charging;
+    if (mCueState == CueState::Charging && mCharge == false) mCueState = CueState::Attacking;
 
 
-    if (mState == CueState::Moving) {
+    if (mCueState == CueState::Moving && mGame->GetGamePlayState() == Game::GamePlayState::Playing) {
         // Update the Cue Rotation
         mRotation += mRotationDirection * mIncreaseRotation * deltaTime;
 
@@ -61,7 +63,7 @@ void Cue::OnUpdate(float deltaTime) {
     }
 
     // Charge the energy meter
-    if (mState == CueState::Charging) {
+    if (mCueState == CueState::Charging && mGame->GetGamePlayState() == Game::GamePlayState::Playing) {
         mTimeDuration += deltaTime;
         mEnergyLevel = static_cast<int>(CalculateEnergyLevel(mTimeDuration));
         // SDL_Log("Energy Level: %i", mEnergyLevel);
@@ -76,7 +78,7 @@ void Cue::OnUpdate(float deltaTime) {
     }
 
     // The Cue hits the white ball
-    if (mState == CueState::Attacking) {
+    if (mCueState == CueState::Attacking && mGame->GetGamePlayState() == Game::GamePlayState::Playing) {
         Vector2 direction = mWhiteBall->GetPosition() - this->GetPosition();
         float actualDistance = direction.Length();
         Vector2::Normalize(direction);
@@ -86,9 +88,22 @@ void Cue::OnUpdate(float deltaTime) {
             SetPosition(this->GetPosition() + direction*0.1);
         }
         else {
-            mWhiteBall->GetComponent<RigidBodyComponent>()->ApplyForce(direction * 10 * mEnergyLevel);
-            SetPosition(Vector2::UnitX*1000);
-            this->SetState(ActorState::Paused);
+            mWhiteBall->GetComponent<RigidBodyComponent>()->ApplyForce(direction * 20 * mEnergyLevel);
+            SDL_Log("Cue::OnUpdate: Cue Hit the Ball");
+            mCueState = CueState::Transition;
+            mDelay = 0.3;
+        }
+    }
+
+    if (mCueState == CueState::Transition) {
+        if (mDelay > 0) mDelay -= deltaTime;
+        else {
+            SetPosition(Vector2::UnitX*2000);
+            mGame->ToggleSimulation();
+            mCueState = CueState::Waiting;
+            mEnergyLevel = 1;
+            mTimeDuration = 0;
+            mEnergy = 0;
         }
     }
 

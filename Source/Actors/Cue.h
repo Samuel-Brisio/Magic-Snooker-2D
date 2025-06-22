@@ -13,6 +13,8 @@ enum class CueState
     Moving,
     Charging,
     Attacking,
+    Transition,
+    Waiting
 };
 
 
@@ -22,6 +24,7 @@ public:
     // ~Cue();
     void OnUpdate(float deltaTime) override;
     void OnProcessInput(const Uint8* keyState) override;
+    void SetCueState(CueState state) {mCueState = state;};
 
 private:
     float mForceLevel;
@@ -35,8 +38,9 @@ private:
     float mEnergy;
     int mEnergyLevel;
     float mTimeDuration;
+    float mDelay;
 
-    CueState mState;
+    CueState mCueState;
 
     class Ball* mWhiteBall;
     class DrawSpriteComponent* mDrawComponent;

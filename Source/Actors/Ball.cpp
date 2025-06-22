@@ -17,6 +17,7 @@ Ball::Ball(Game *game, float radius, float weight, BallColor color)
     ,mRadius(radius)
     ,mWeight(weight)
     ,mColor(color)
+    ,mIsMoving(false)
 {
     game->AddBall(this);
 
@@ -73,6 +74,11 @@ void Ball::OnUpdate(float deltaTime) {
         bool isCollision = mColliderComponent->Intersect(bucket->GetColliderComponent());
         if (isCollision) SolveCollision(bucket);
     }
+
+    // Check if the ball is moving
+    if (mRigidBodyComponent->GetVelocity().Length() > 0.001) mIsMoving = true;
+    else mIsMoving = false;
+    SDL_Log("Ball::OnUpdate : Ball Velocity %f", mRigidBodyComponent->GetVelocity().Length());
 }
 
  float Ball::GetRadius() const
