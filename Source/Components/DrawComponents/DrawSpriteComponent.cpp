@@ -10,11 +10,13 @@
 #include "../../Game.h"
 
 DrawSpriteComponent::DrawSpriteComponent(class Actor* owner, const std::string &texturePath, const int width,
-    const int height, const int drawOrder,  Vector2 positionOffset)
+    const int height, const int drawOrder,  Vector2 positionOffset, float rotation, SDL_RendererFlip flip)
         :DrawComponent(owner, drawOrder)
         ,mPositionOffset(positionOffset)
         ,mWidth(width)
         ,mHeight(height)
+        ,mRotation(rotation)
+        ,mRotationFlip(flip)
 {
     // --------------
     // TODO - PARTE 1
@@ -25,6 +27,12 @@ DrawSpriteComponent::DrawSpriteComponent(class Actor* owner, const std::string &
     //  na variável membro 'mSpriteSheetSurface'.
     mSpriteSheetSurface = mOwner->GetGame()->LoadTexture(texturePath);
 }
+
+// DrawSpriteComponent::~DrawSpriteComponent() {
+//     SDL_Log("DrawSpriteComponent deleted");
+//     SDL_DestroyTexture(mSpriteSheetSurface);
+// }
+
 
 void DrawSpriteComponent::Draw(SDL_Renderer *renderer)
 {
@@ -43,6 +51,7 @@ void DrawSpriteComponent::Draw(SDL_Renderer *renderer)
     // const auto relative_pos =  mOwner->GetPosition() - mOwner->GetGame()->GetCameraPos();
     const auto relative_pos =  mOwner->GetPosition() + mPositionOffset;
     const SDL_Rect destRect = {static_cast<int>(relative_pos.x), static_cast<int>(relative_pos.y), mWidth, mHeight};
-    const SDL_RendererFlip flip = mOwner->GetRotation() == Math::Pi ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-    SDL_RenderCopyEx(renderer, mSpriteSheetSurface, nullptr, &destRect, 0.0, nullptr, flip );
+    SDL_RendererFlip flip = mOwner->GetRotation() == Math::Pi ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    if (SDL_FLIP_NONE == mRotationFlip) flip = SDL_FLIP_NONE;
+    SDL_RenderCopyEx(renderer, mSpriteSheetSurface, nullptr, &destRect, mRotation, nullptr, flip );
 }

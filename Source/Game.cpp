@@ -22,6 +22,7 @@
 #include "Actors/Table.h"
 #include "Actors/Background.h"
 #include "Actors/Ball.h"
+#include "Actors/Cue.h"
 #include "Actors/InvisibleAABBWall.h"
 #include "Components/DrawComponents/DrawComponent.h"
 #include "Components/ColliderComponents/AABBColliderComponent.h"
@@ -105,8 +106,11 @@ void Game::InitializeActors()
     // Initialize White ball
     auto ball = new Ball(this, ballRadius, 0.5, BallColor::White);
     ball->SetPosition(Vector2(tablePos.x + 200, tablePos.y + 200));
-    ball->GetComponent<RigidBodyComponent>()->ApplyForce(Vector2(tablePos.x, tablePos.y) * 100);
+    // ball->GetComponent<RigidBodyComponent>()->ApplyForce(Vector2(tablePos.x, tablePos.y) * 100);
 
+
+    // Initialize Cue
+    auto cue = new Cue(this, ball, 300, 15);
 
 
 }
