@@ -92,28 +92,28 @@ void Game::InitializeActors()
 
     // Initialize Balls setup
     int ballRadius = 16;
-    // Vector2 initialBallPosition = Vector2(200, 250);
-    // Vector2 currentBallPosition = initialBallPosition;
-    //
-    // for (int col = 1; col <= 5; col++) {
-    //     for (int row = col; row <= 5; row++) {
-    //         auto ball = new Ball(this, ballRadius, 0.5, (col + row)%2 ? BallColor::Blue : BallColor::Red);
-    //         ball->SetPosition(currentBallPosition);
-    //         currentBallPosition.y += 2*ballRadius + 1;
-    //     }
-    //     currentBallPosition = initialBallPosition;
-    //     currentBallPosition.x += 2*col*ballRadius;
-    //     currentBallPosition.y += col*ballRadius;
-    // }
+    Vector2 initialBallPosition = Vector2(200, 250);
+    Vector2 currentBallPosition = initialBallPosition;
+
+    for (int col = 1; col <= 5; col++) {
+        for (int row = col; row <= 5; row++) {
+            auto ball = new Ball(this, ballRadius, 0.5, (col + row)%2 ? BallColor::Blue : BallColor::Red);
+            ball->SetPosition(currentBallPosition);
+            currentBallPosition.y += 2*ballRadius + 1;
+        }
+        currentBallPosition = initialBallPosition;
+        currentBallPosition.x += 2*col*ballRadius;
+        currentBallPosition.y += col*ballRadius;
+    }
 
     // Initialize White ball
-    auto ball = new WhiteBall(this, ballRadius, 0.5);
-    ball->SetPosition(Vector2(tablePos.x + 200, tablePos.y + 200));
+    mWhiteBall = new WhiteBall(this, ballRadius, 0.5);
+    mWhiteBall->SetPosition(Vector2(tablePos.x + table_width/2, tablePos.y + 100));
     // ball->GetComponent<RigidBodyComponent>()->ApplyForce(Vector2(tablePos.x, tablePos.y) * 100);
 
 
     // Initialize Cue
-    mCue = new Cue(this, ball, 300, 15);
+    mCue = new Cue(this, mWhiteBall, 300, 15);
 
 
 }
@@ -320,6 +320,10 @@ void Game::UpdateActors(float deltaTime)
     for (auto actor : deadActors)
     {
         delete actor;
+        if (actor == mWhiteBall) {
+            mWhiteBall = nullptr;
+            SDL_Log("White Ball is Destroyed");
+        }
     }
 
     bool allBallStopped = true;

@@ -124,6 +124,7 @@ private:
 
     // Actors specific
     std::vector<class Ball*> mBalls;
+    class WhiteBall* mWhiteBall;
     class Cue* mCue;
     std::vector<class InvisibleAABBWall*> mInvisibleAABBWalls;
     std::vector<class InvisibleOBBWall*> mInvisibleOBBWalls;

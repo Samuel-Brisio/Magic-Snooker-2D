@@ -211,6 +211,7 @@ void Ball::SolveCollision(class Bucket* bucket) {
 
     if (isBallIntoBucket) {
         SDL_Log("Bucket-Ball Collision");
+        this->SetState(ActorState::Destroy);
     }
 }
 

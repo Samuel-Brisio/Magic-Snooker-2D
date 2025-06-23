@@ -26,7 +26,8 @@ Actor::~Actor()
 {
     mGame->RemoveActor(this);
 
-    for(auto component : mComponents)
+    auto componentsCopy = mComponents;  // cópia dos ponteiros
+    for(auto component : componentsCopy)
     {
         delete component;
     }
