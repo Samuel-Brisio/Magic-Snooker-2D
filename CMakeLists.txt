@@ -78,6 +78,8 @@ add_executable(${PROJECT_NAME}
         Source/Actors/Bucket.h
         Source/Actors/Cue.cpp
         Source/Actors/Cue.h
+        Source/Score.cpp
+        Source/Score.h
 )
 
 #target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2 ${SDL2_IMAGE_LIBRARY})

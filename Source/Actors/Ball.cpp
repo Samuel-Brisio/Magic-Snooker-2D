@@ -212,6 +212,8 @@ void Ball::SolveCollision(class Bucket* bucket) {
     if (isBallIntoBucket) {
         SDL_Log("Bucket-Ball Collision");
         this->SetState(ActorState::Destroy);
+        mGame->GetPlayer1Score()->BallFellIntoPocket(mColor);
+        mGame->GetPlayer2Score()->BallFellIntoPocket(mColor);
     }
 }
 

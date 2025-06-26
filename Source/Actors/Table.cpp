@@ -10,11 +10,13 @@
 
 Table::Table(Game *game, SDL_Rect position)
     : Actor(game)
+    , mTablePosDimensions(position)
 {
     mDrawComponent = new DrawSpriteComponent(this, "../Assets/Sprites/Table/table_cut.png",
         position.w,position.h, 2);
 
     int collidersHeight = int(position.h * 0.11);
+    mCollidersHeight = collidersHeight;
     int horizontalWallsWidth = position.w/2 - 2*collidersHeight;
     int verticalWallsHeight = position.h - 3*collidersHeight;
     // Top Collision Block 1
@@ -110,3 +112,16 @@ Table::Table(Game *game, SDL_Rect position)
     // Bucket bottom right
     new Bucket(game, Vector2(position.x + position.w - (collidersHeight/2 + 15), position.y + position.h - (collidersHeight/2 + 15)), 32);
 };
+
+SDL_Rect Table::GetViableArea()
+{
+    // Supondo que você tenha salvo o SDL_Rect position da mesa como membro
+    int collidersHeight = int(mCollidersHeight * 0.11);
+
+    SDL_Rect area;
+    area.x = mTablePosDimensions.x + collidersHeight;
+    area.y = mTablePosDimensions.y + collidersHeight;
+    area.w = mTablePosDimensions.w - 2 * collidersHeight;
+    area.h = mTablePosDimensions.h - 2 * collidersHeight;
+    return area;
+}

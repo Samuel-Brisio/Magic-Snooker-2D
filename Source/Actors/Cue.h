@@ -25,6 +25,9 @@ public:
     void OnUpdate(float deltaTime) override;
     void OnProcessInput(const Uint8* keyState) override;
     void SetCueState(CueState state) {mCueState = state;};
+    void SetWhiteBall(class Ball* whiteBall) {mWhiteBall = whiteBall;};
+    class Ball* GetWhiteBall() {return mWhiteBall;};
+    void RemoveWhiteBall() {mWhiteBall = nullptr;};
 
 private:
     float mForceLevel;

@@ -84,10 +84,10 @@ void Game::InitializeActors()
     // Initialize Table
     int table_width = mWindowWidth - 20;
     int table_height = table_width * 0.55;
-    SDL_Rect tablePos = {10, 50, table_width, table_height};
+    mTablePos = {10, 50, table_width, table_height};
 
-    auto table = new Table(this, tablePos);
-    table->SetPosition(Vector2(tablePos.x, tablePos.y));
+    auto table = new Table(this, mTablePos);
+    table->SetPosition(Vector2(mTablePos.x, mTablePos.y));
 
 
     // Initialize Balls setup
@@ -108,7 +108,7 @@ void Game::InitializeActors()
 
     // Initialize White ball
     mWhiteBall = new WhiteBall(this, ballRadius, 0.5);
-    mWhiteBall->SetPosition(Vector2(tablePos.x + table_width/2, tablePos.y + 100));
+    mWhiteBall->SetPosition(Vector2(mTablePos.x + table_width/2, mTablePos.y + 100));
     // ball->GetComponent<RigidBodyComponent>()->ApplyForce(Vector2(tablePos.x, tablePos.y) * 100);
 
 
@@ -322,7 +322,9 @@ void Game::UpdateActors(float deltaTime)
         delete actor;
         if (actor == mWhiteBall) {
             mWhiteBall = nullptr;
+            mCue->RemoveWhiteBall();
             SDL_Log("White Ball is Destroyed");
+            RespawnWhiteBall();
         }
     }
 
@@ -332,7 +334,7 @@ void Game::UpdateActors(float deltaTime)
     }
 
     // SDL_Log("Game::UpdateActors: allBallStopped=%d", allBallStopped);
-    if (allBallStopped && mGamePlayState == GamePlayState::Simulating) {
+    if (allBallStopped && mGamePlayState == GamePlayState::Simulating && mWhiteBall != nullptr) {
         TogglePlay();
         mCue->SetCueState(CueState::Moving);
     }
@@ -531,6 +533,32 @@ void Game::TogglePlay() {
         SDL_Log("Current Game State is not Simulating or Playing, therefore Cannot toggle Playing");
         exit(0);
     }
+}
+
+
+void Game::RespawnWhiteBall()
+{
+    int ballRadius = 16;
+    Vector2 newPos;
+    bool validPos = false;
+
+    // Tente encontrar uma posição livre
+    for (int attempts = 0; attempts < 100 && !validPos; ++attempts) {
+        // Exemplo: escolha uma posição aleatória na mesa
+        newPos = Vector2(mTablePos.x + 50 + rand() % 400, mTablePos.y + rand() % 200);
+        validPos = true;
+        for (auto ball : mBalls) {
+            if ((ball->GetPosition() - newPos).Length() < 2 * ballRadius) {
+                validPos = false;
+                break;
+            }
+        }
+    }
+
+    // Crie e posicione a nova bola branca
+    mWhiteBall = new WhiteBall(this, ballRadius, 0.5);
+    mWhiteBall->SetPosition(newPos);
+    mCue->SetWhiteBall(mWhiteBall);
 }
 
 void Game::Shutdown()

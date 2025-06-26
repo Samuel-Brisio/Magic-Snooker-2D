@@ -12,6 +12,7 @@
 #include <string>
 #include "Math.h"
 #include "Actors/Ball.h"
+#include "Score.h"
 
 class Game
 {
@@ -92,11 +93,15 @@ public:
     void ToggleSimulation();
     void TogglePlay();
     GamePlayState GetGamePlayState() const { return mGamePlayState; }
+    void RespawnWhiteBall();
 
     // Game-specific
     const class Mario* GetMario() { return mMario; }
     std::string printGamePlayState(GamePlayState state);
 
+    // Score-specific
+    Score* GetPlayer1Score() { return &mPlayer1Score; }
+    Score* GetPlayer2Score() { return &mPlayer2Score; }
 
 private:
     void ProcessInput();
@@ -105,6 +110,7 @@ private:
     void GenerateOutput();
 
     // Game-specific
+    SDL_Rect mTablePos;
 
     // Load the level from a CSV file as a 2D array
     // int **LoadLevel(const std::string& fileName, int width, int height);
@@ -147,6 +153,9 @@ private:
 
     Vector2 mCameraPos;
 
+    // PlayerScore
+    Score mPlayer1Score;
+    Score mPlayer2Score;
 
     GamePlayState mGamePlayState;
 
