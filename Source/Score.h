@@ -3,20 +3,39 @@
 //
 #pragma once
 
+#include <string>
+
 #include "Actors/Ball.h"
+
+enum class PlayerTurn {
+    Player1,
+    Player2,
+};
+
 
 class Score {
 public:
-    Score(BallColor color);
+    explicit Score(BallColor player1BallColor = BallColor::Blue, BallColor player2BallColor = BallColor::Red);
 
-    void IncreaseScore() {mScore++;};
-    void DecreaseScore() {mScore--;};
+    void IncreaseScore();
+    void DecreaseScore();
     void BallFellIntoPocket(BallColor ballColor);
 
-    void ResetScore() {mScore = 0;};
+    void SetFirstHitBall(const Ball* ball) {mFirstHitBallInTurn = ball->GetColor();};
+
+    void ResetScore() {mPlayer1Score = 0; mPlayer2Score = 0;};
+    [[nodiscard]] PlayerTurn GetPlaterTurn() const {return mPlayerTurn;};
+    static std::string PlayerTurnToString(PlayerTurn playerTurn);
+
+    void EndTurn();
 
 private:
-    int mScore;
-    BallColor mBallColor;
+    int mPlayer1Score;
+    int mPlayer2Score;
+    BallColor mPlayer1BallColor;
+    BallColor mPlayer2BallColor;
+    PlayerTurn mPlayerTurn;
+    std::set<BallColor> mBallColors;
+    BallColor mFirstHitBallInTurn;
 };
 

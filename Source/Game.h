@@ -100,8 +100,7 @@ public:
     std::string printGamePlayState(GamePlayState state);
 
     // Score-specific
-    Score* GetPlayer1Score() { return &mPlayer1Score; }
-    Score* GetPlayer2Score() { return &mPlayer2Score; }
+    Score* GetScore() { return &mScore; }
 
 private:
     void ProcessInput();
@@ -154,8 +153,7 @@ private:
     Vector2 mCameraPos;
 
     // PlayerScore
-    Score mPlayer1Score;
-    Score mPlayer2Score;
+    Score mScore;
 
     GamePlayState mGamePlayState;
 

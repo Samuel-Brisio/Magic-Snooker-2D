@@ -37,6 +37,7 @@ Game::Game(int windowWidth, int windowHeight)
         ,mUpdatingActors(false)
         ,mWindowWidth(windowWidth)
         ,mWindowHeight(windowHeight)
+        ,mScore()
 {
 
 }
@@ -335,6 +336,7 @@ void Game::UpdateActors(float deltaTime)
 
     // SDL_Log("Game::UpdateActors: allBallStopped=%d", allBallStopped);
     if (allBallStopped && mGamePlayState == GamePlayState::Simulating && mWhiteBall != nullptr) {
+        mScore.EndTurn();
         TogglePlay();
         mCue->SetCueState(CueState::Moving);
     }

@@ -109,24 +109,48 @@ void Ball::SolveCollision(class Ball * other) {
     if (velocityAlongNormal > 0) return;
 
     // 5. Simplified physics with equal properties
-    const float restitution = 0.8f; // Equal bounciness for both balls
-    const float massFactor = 0.5f;  // Equal mass distribution
+    const float restitution = 0.95f; // Equal bounciness for both balls
+    // const float massFactor = 0.5f;  // Equal mass distribution
+    //
+    // // 6. Calculate impulse
+    // float impulse = -(1 + restitution) * velocityAlongNormal * massFactor;
+    //
+    // // 7. Apply impulses (equal and opposite)
+    // Vector2 impulseVec = impulse * collisionNormal;
+    //
+    // GetComponent<RigidBodyComponent>()->ApplyForce(impulseVec);
+    // other->GetComponent<RigidBodyComponent>()->ApplyForce(-1 * impulseVec);
+    //
+    // // 8. Simple position correction to prevent sticking
+    // Vector2 correction = Vector2::Normalize(posA - posB) *
+    //                     ((radiusA + radiusB) - (posA - posB).Length()) * 0.5f;
+    //
+    // SetPosition(posA + correction);
+    // other->SetPosition(posB - correction);
 
-    // 6. Calculate impulse
-    float impulse = -(1 + restitution) * velocityAlongNormal * massFactor;
 
-    // 7. Apply impulses (equal and opposite)
-    Vector2 impulseVec = impulse * collisionNormal;
+    // Massas
+    float massA = mWeight;
+    float massB = other->mWeight;
 
-    GetComponent<RigidBodyComponent>()->ApplyForce(impulseVec);
-    other->GetComponent<RigidBodyComponent>()->ApplyForce(-1 * impulseVec);
+    // Cálculo do impulso escalar
+    float impulseScalar = -(1 + restitution) * velocityAlongNormal;
+    impulseScalar /= (1 / massA) + (1 / massB);
 
-    // 8. Simple position correction to prevent sticking
-    Vector2 correction = Vector2::Normalize(posA - posB) *
-                        ((radiusA + radiusB) - (posA - posB).Length()) * 0.5f;
+    // Vetor impulso
+    Vector2 impulse = impulseScalar * collisionNormal;
 
-    SetPosition(posA + correction);
-    other->SetPosition(posB - correction);
+    // Atualiza velocidades diretamente (colisão elástica)
+    GetComponent<RigidBodyComponent>()->SetVelocity(velA + impulse * (1 /massA));
+    other->GetComponent<RigidBodyComponent>()->SetVelocity(velB - (impulse * (1 / massB)));
+
+    // Correção de posição para evitar sobreposição
+    float penetration = (radiusA + radiusB) - (posA - posB).Length();
+    if (penetration > 0) {
+        Vector2 correction = collisionNormal * (penetration / (massA + massB));
+        SetPosition(posA + correction * (massB / (massA + massB)));
+        other->SetPosition(posB - correction * (massA / (massA + massB)));
+    }
 }
 
 void Ball::SolveCollision(class InvisibleAABBWall * aabbWall) {
@@ -212,8 +236,7 @@ void Ball::SolveCollision(class Bucket* bucket) {
     if (isBallIntoBucket) {
         SDL_Log("Bucket-Ball Collision");
         this->SetState(ActorState::Destroy);
-        mGame->GetPlayer1Score()->BallFellIntoPocket(mColor);
-        mGame->GetPlayer2Score()->BallFellIntoPocket(mColor);
+        mGame->GetScore()->BallFellIntoPocket(mColor);
     }
 }
 

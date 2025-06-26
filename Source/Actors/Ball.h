@@ -11,7 +11,8 @@ enum class BallColor
 {
     White,
     Blue,
-    Red
+    Red,
+    None,
 };
 
 
@@ -32,6 +33,7 @@ public:
     CircleColliderComponent* GetColliderComponent() const {return mColliderComponent;}
 
     bool GetIsMoving() const {return mIsMoving;};
+    BallColor GetColor() const {return mColor;}
 
 protected:
     float mRadius;
