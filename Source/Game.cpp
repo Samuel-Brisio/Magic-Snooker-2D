@@ -27,6 +27,8 @@
 #include "Actors/WhiteBall.h"
 #include "Components/DrawComponents/DrawComponent.h"
 #include "Components/ColliderComponents/AABBColliderComponent.h"
+#include "UIElements/UIScreen.h"
+#include "HUD.h"
 
 Game::Game(int windowWidth, int windowHeight)
         :mWindow(nullptr)
@@ -37,7 +39,7 @@ Game::Game(int windowWidth, int windowHeight)
         ,mUpdatingActors(false)
         ,mWindowWidth(windowWidth)
         ,mWindowHeight(windowHeight)
-        ,mScore()
+        ,mHUD(nullptr)
 {
 
 }
@@ -64,6 +66,26 @@ bool Game::Initialize()
         return false;
     }
 
+    if (IMG_Init(IMG_INIT_PNG) == 0)
+    {
+        SDL_Log("Unable to initialize SDL_image: %s", SDL_GetError());
+        return false;
+    }
+
+    // Initialize SDL_ttf
+    if (TTF_Init() != 0)
+    {
+        SDL_Log("Failed to initialize SDL_ttf");
+        return false;
+    }
+
+    // // Initialize SDL_mixer
+    // if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) == -1)
+    // {
+    //     SDL_Log("Failed to initialize SDL_mixer");
+    //     return false;
+    // }
+
     Random::Init();
 
     mTicksCount = SDL_GetTicks();
@@ -72,6 +94,9 @@ bool Game::Initialize()
 
     // Init all game actors
     InitializeActors();
+
+    // Initially, change scene to MainMenu
+    ChangeScene();
 
     return true;
 }
@@ -90,6 +115,7 @@ void Game::InitializeActors()
     auto table = new Table(this, mTablePos);
     table->SetPosition(Vector2(mTablePos.x, mTablePos.y));
 
+    new UIScreen(this, "../Assets/Fonts/SMB.ttf");
 
     // Initialize Balls setup
     int ballRadius = 16;
@@ -292,6 +318,31 @@ void Game::UpdateGame()
 
     // Update all actors and pending actors
     UpdateActors(deltaTime);
+
+    // Reinsert UI screens
+    for (auto ui : mUIStack) {
+        if (ui->GetState() == UIScreen::UIState::Active) {
+            ui->Update(deltaTime);
+        }
+    }
+
+    // Delete any UIElements that are closed
+    auto iter = mUIStack.begin();
+    while (iter != mUIStack.end()) {
+        if ((*iter)->GetState() == UIScreen::UIState::Closing) {
+            delete *iter;
+            iter = mUIStack.erase(iter);
+        } else {
+            ++iter;
+        }
+    }
+
+    if (mHUD) {
+        mHUD->SetPlayer1Score(mScore.GetPlayer1Score());
+        mHUD->SetPlayer2Score(mScore.GetPlayer2Score());
+        mHUD->SetCurrentPlayer(Score::GetCurrentPlayerStr(mScore.GetCurrentPlayer()));
+
+    }
 }
 
 void Game::UpdateActors(float deltaTime)
@@ -469,6 +520,13 @@ void Game::GenerateOutput()
         }
     }
 
+    // Draw all UI screens
+    for (auto ui :mUIStack)
+    {
+        ui->Draw(mRenderer);
+    }
+
+
     // Swap front buffer and back buffer
     SDL_RenderPresent(mRenderer);
 }
@@ -561,6 +619,68 @@ void Game::RespawnWhiteBall()
     mWhiteBall = new WhiteBall(this, ballRadius, 0.5);
     mWhiteBall->SetPosition(newPos);
     mCue->SetWhiteBall(mWhiteBall);
+}
+
+void Game::UnloadScene()
+{
+
+    // Delete UI screens
+    for (auto ui : mUIStack) {
+        delete ui;
+    }
+    mUIStack.clear();
+
+    // // Delete background texture
+    // if (mBackgroundTexture) {
+    //     SDL_DestroyTexture(mBackgroundTexture);
+    //     mBackgroundTexture = nullptr;
+    // }
+}
+
+void Game::ChangeScene()
+{
+    // Unload current Scene
+    // UnloadScene();
+
+    // // Reset game timer
+    // mGameTimer = 0.0f;
+
+    // Reset gameplay state
+    // mGamePlayState = GamePlayState::Playing;
+
+    mHUD = new HUD(this, "../Assets/Fonts/SMB.ttf");
+    // mHUD->SetLevelName("Bla Foo");
+}
+
+SDL_Texture* Game::TextureFromSurface(SDL_Surface* surface) {
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(mRenderer, surface);
+    SDL_FreeSurface(surface);
+    return texture;
+}
+
+UIFont* Game::LoadFont(const std::string& fileName)
+{
+    // --------------
+    // TODO - PARTE 1-1
+    // --------------
+
+    // TODO 1.: Verifique se o arquivo de fonte já está carregado no mapa mFonts.
+    //  Se sim, retorne o ponteiro para a fonte carregada.
+    //  Se não, crie um novo objeto UIFont, carregue a fonte do arquivo usando o método Load,
+    //  e se o carregamento for bem-sucedido, adicione a fonte ao mapa mFonts.
+    //  Se o carregamento falhar, descarregue a fonte com Unload e delete o objeto UIFont, retornando nullptr.
+    if (mFonts.count(fileName) == 1) return mFonts[fileName];
+
+    auto *font = new UIFont(mRenderer);
+    bool success = font->Load(fileName);
+    if (success) {
+        mFonts.emplace(fileName, font);
+        return font;
+    }
+    font->Unload();
+    delete font;
+    return nullptr;
+
 }
 
 void Game::Shutdown()

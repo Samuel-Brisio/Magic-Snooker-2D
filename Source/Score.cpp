@@ -3,6 +3,7 @@
 //
 
 #include "Score.h"
+#include <SDL.h>
 
 Score::Score(const BallColor player1BallColor, const BallColor player2BallColor)
     : mPlayer1Score(0)
@@ -44,6 +45,8 @@ void Score::DecreaseScore() {
 }
 
 void Score::EndTurn() {
+    SDL_Log("End Turn: %s", GetCurrentPlayerStr(mPlayerTurn).c_str());
+
     if (mPlayerTurn == PlayerTurn::Player1) {
         if (mFirstHitBallInTurn == mPlayer2BallColor) {
             mPlayerTurn = PlayerTurn::Player2;
@@ -56,7 +59,7 @@ void Score::EndTurn() {
             // Do something
         }
 
-        else if (mFirstHitBallInTurn == mPlayer1BallColor) {
+        else if (mBallColors.count(mPlayer1BallColor) != 0) {
             mPlayerTurn = PlayerTurn::Player1;
         }
 
@@ -77,7 +80,7 @@ void Score::EndTurn() {
             // Do something
         }
 
-        else if (mFirstHitBallInTurn == mPlayer2BallColor) {
+        else if (mBallColors.count(mPlayer2BallColor) != 0) {
             mPlayerTurn = PlayerTurn::Player2;
         }
 
@@ -86,11 +89,13 @@ void Score::EndTurn() {
         }
     }
 
+    SDL_Log("Next Player Turn: %s", GetCurrentPlayerStr(mPlayerTurn).c_str());
+
     mFirstHitBallInTurn = BallColor::None;
     mBallColors.clear();
 };
 
-std::string Score::PlayerTurnToString(const PlayerTurn playerTurn) {
+std::string Score::GetCurrentPlayerStr(const PlayerTurn playerTurn) {
     if (playerTurn == PlayerTurn::Player1) {return "Player1";}
     if (playerTurn == PlayerTurn::Player2) {return "Player2";}
     return "Error: Unknown Player Turn";

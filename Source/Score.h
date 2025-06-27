@@ -24,8 +24,11 @@ public:
     void SetFirstHitBall(const Ball* ball) {mFirstHitBallInTurn = ball->GetColor();};
 
     void ResetScore() {mPlayer1Score = 0; mPlayer2Score = 0;};
-    [[nodiscard]] PlayerTurn GetPlaterTurn() const {return mPlayerTurn;};
-    static std::string PlayerTurnToString(PlayerTurn playerTurn);
+    [[nodiscard]] PlayerTurn GetCurrentPlayer() const {return mPlayerTurn;};
+    static std::string GetCurrentPlayerStr(PlayerTurn playerTurn);
+
+    int GetPlayer1Score() const { return mPlayer1Score; }
+    int GetPlayer2Score() const { return mPlayer2Score; }
 
     void EndTurn();
 

@@ -10,9 +10,12 @@
 #include <SDL.h>
 #include <vector>
 #include <string>
+#include <unordered_map>
 #include "Math.h"
 #include "Actors/Ball.h"
 #include "Score.h"
+
+class HUD;
 
 class Game
 {
@@ -96,11 +99,20 @@ public:
     void RespawnWhiteBall();
 
     // Game-specific
-    const class Mario* GetMario() { return mMario; }
+    // const class Mario* GetMario() { return mMario; }
     std::string printGamePlayState(GamePlayState state);
 
     // Score-specific
     Score* GetScore() { return &mScore; }
+
+    // UI functions
+    SDL_Texture* TextureFromSurface(SDL_Surface* surface);
+    void PushUI(class UIScreen* screen) { mUIStack.emplace_back(screen); }
+    const std::vector<class UIScreen*>& GetUIStack() { return mUIStack; }
+    class UIFont* LoadFont(const std::string& fileName);
+
+    void ChangeScene();
+    void UnloadScene();
 
 private:
     void ProcessInput();
@@ -150,7 +162,7 @@ private:
     bool mIsRunning;
     bool mUpdatingActors;
 
-    Vector2 mCameraPos;
+    // Vector2 mCameraPos;
 
     // PlayerScore
     Score mScore;
@@ -158,7 +170,12 @@ private:
     GamePlayState mGamePlayState;
 
     // Game-specific
-    class Mario *mMario;
+    // class Mario *mMario;
+    class HUD *mHUD;
+
+    // All the UI elements
+    std::vector<class UIScreen*> mUIStack;
+    std::unordered_map<std::string, class UIFont*> mFonts;
 
     // Level data
     int **mLevelData;
