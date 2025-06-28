@@ -44,8 +44,8 @@ void Cue::OnUpdate(float deltaTime) {
         // Update the Cue Rotation
         mRotation += mRotationDirection * mIncreaseRotation * deltaTime;
 
-        mRotation = Math::Clamp(mRotation, -Math::Pi, Math::Pi);
-
+        if (mRotation < - 2*Math::Pi) mRotation = 0;
+        if (mRotation >  2*Math::Pi) mRotation = 0;
 
         // Create a new Sprit with the new Rotation
         delete mDrawComponent;

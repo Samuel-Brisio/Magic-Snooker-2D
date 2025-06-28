@@ -138,6 +138,8 @@ void Game::InitializeActors()
     mWhiteBall->SetPosition(Vector2(mTablePos.x + table_width/2, mTablePos.y + 100));
     // ball->GetComponent<RigidBodyComponent>()->ApplyForce(Vector2(tablePos.x, tablePos.y) * 100);
 
+    auto ball = new Ball(this, ballRadius, 0.5, BallColor::Blue);
+    ball->SetPosition(Vector2(mTablePos.x + table_width/2, mTablePos.y + 80));
 
     // Initialize Cue
     mCue = new Cue(this, mWhiteBall, 300, 15);

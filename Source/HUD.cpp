@@ -20,10 +20,6 @@ HUD::HUD(class Game* game, const std::string& fontName)
     mPlayer2Score = AddText("00", Vector2(700, WORD_HEIGHT), Vector2(CHAR_WIDTH*2, WORD_HEIGHT), POINT_SIZE);
 
 
-    // // TODO 3.: Adicione um texto com a string "World" à esquerda do texto "Time", como no jogo original.
-    // AddText("World", Vector2(550 - CHAR_WIDTH*5 - WORD_OFFSET , 0), Vector2(CHAR_WIDTH*5, WORD_HEIGHT), POINT_SIZE);
-    //
-    //
     // // TODO 4.: Adicione um texto com a string "1-1" logo abaixo do texto "World".
     mPlayerTurn = AddText("Player 1", Vector2(550 - CHAR_WIDTH*5 - WORD_OFFSET + CHAR_WIDTH, WORD_HEIGHT/2), Vector2(CHAR_WIDTH*8, WORD_HEIGHT), POINT_SIZE);
 
