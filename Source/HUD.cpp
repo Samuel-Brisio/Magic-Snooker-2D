@@ -25,7 +25,7 @@ HUD::HUD(class Game* game, const std::string& fontName)
     //
     //
     // // TODO 4.: Adicione um texto com a string "1-1" logo abaixo do texto "World".
-    mPlayerTurn = AddText("Player 1", Vector2(550 - CHAR_WIDTH*5 - WORD_OFFSET + CHAR_WIDTH, WORD_HEIGHT), Vector2(CHAR_WIDTH*8, WORD_HEIGHT), POINT_SIZE);
+    mPlayerTurn = AddText("Player 1", Vector2(550 - CHAR_WIDTH*5 - WORD_OFFSET + CHAR_WIDTH, WORD_HEIGHT/2), Vector2(CHAR_WIDTH*8, WORD_HEIGHT), POINT_SIZE);
 
 
     // TODO 5.: Adicione um texto com a string "Mario" no canto superior esquerdo da tela, como no jogo original.

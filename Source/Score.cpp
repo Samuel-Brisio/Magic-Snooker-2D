@@ -64,11 +64,12 @@ void Score::EndTurn() {
         }
 
         else {
+            SDL_Log("Player1 Turn Ended without hit any ball, Player2 Turn Started");
             mPlayerTurn = PlayerTurn::Player2;
         }
     }
 
-    if (mPlayerTurn == PlayerTurn::Player2) {
+    else if (mPlayerTurn == PlayerTurn::Player2) {
         if (mFirstHitBallInTurn == mPlayer1BallColor) {
             mPlayerTurn = PlayerTurn::Player1;
             // Delete a Player2 Ball
@@ -96,7 +97,7 @@ void Score::EndTurn() {
 };
 
 std::string Score::GetCurrentPlayerStr(const PlayerTurn playerTurn) {
-    if (playerTurn == PlayerTurn::Player1) {return "Player1";}
-    if (playerTurn == PlayerTurn::Player2) {return "Player2";}
+    if (playerTurn == PlayerTurn::Player1) {return "Player 1";}
+    if (playerTurn == PlayerTurn::Player2) {return "Player 2";}
     return "Error: Unknown Player Turn";
 }
