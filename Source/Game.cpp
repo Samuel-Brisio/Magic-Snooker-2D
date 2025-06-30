@@ -126,11 +126,13 @@ void Game::InitializeActors()
     Vector2 initialBallPosition = Vector2(200, 250);
     Vector2 currentBallPosition = initialBallPosition;
 
+    int ball_count = 0;
     for (int col = 1; col <= 5; col++) {
         for (int row = col; row <= 5; row++) {
-            auto ball = new Ball(this, ballRadius, 0.5, (col + row)%2 ? BallColor::Blue : BallColor::Red);
+            auto ball = new Ball(this, ballRadius, 0.5, (ball_count)%2 ? BallColor::Blue : BallColor::Red);
             ball->SetPosition(currentBallPosition);
             currentBallPosition.y += 2*ballRadius + 1;
+            ball_count++;
         }
         currentBallPosition = initialBallPosition;
         currentBallPosition.x += 2*col*ballRadius;
