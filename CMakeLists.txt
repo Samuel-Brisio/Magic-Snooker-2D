@@ -78,6 +78,22 @@ add_executable(${PROJECT_NAME}
         Source/Actors/Bucket.h
         Source/Actors/Cue.cpp
         Source/Actors/Cue.h
+        Source/Score.cpp
+        Source/Score.h
+        Source/UIElements/UIButton.cpp
+        Source/UIElements/UIButton.h
+        Source/UIElements/UIElement.cpp
+        Source/UIElements/UIElement.h
+        Source/UIElements/UIFont.cpp
+        Source/UIElements/UIFont.h
+        Source/UIElements/UIImage.cpp
+        Source/UIElements/UIImage.h
+        Source/UIElements/UIScreen.cpp
+        Source/UIElements/UIScreen.h
+        Source/UIElements/UIText.cpp
+        Source/UIElements/UIText.h
+        Source/HUD.cpp
+        Source/HUD.h
 )
 
 #target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2 ${SDL2_IMAGE_LIBRARY})

@@ -5,12 +5,14 @@
 #pragma once
 
 #include "Actor.h"
+#include "../Components/ColliderComponents/CircleColliderComponent.h"
 
 enum class BallColor
 {
     White,
     Blue,
-    Red
+    Red,
+    None,
 };
 
 
@@ -28,16 +30,19 @@ public:
     void SolveCollision(class InvisibleOBBWall*);
     void SolveCollision(class Bucket*);
 
-    bool GetIsMoving() const {return mIsMoving;};
+    CircleColliderComponent* GetColliderComponent() const {return mColliderComponent;}
 
-private:
+    bool GetIsMoving() const {return mIsMoving;};
+    BallColor GetColor() const {return mColor;}
+
+protected:
     float mRadius;
     float mWeight;
     BallColor mColor;
     bool mIsMoving;
 
     class RigidBodyComponent* mRigidBodyComponent;
-    class DrawCircleComponent* mDrawCircleComponent;
+    // class DrawCircleComponent* mDrawCircleComponent;
     class DrawSpriteComponent* mDrawSpriteComponent;
     class CircleColliderComponent* mColliderComponent;
 };

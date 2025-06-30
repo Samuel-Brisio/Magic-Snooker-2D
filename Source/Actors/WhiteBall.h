@@ -4,16 +4,17 @@
 
 #pragma once
 #include "Ball.h"
-#include "../Components/RigidBodyComponent.h"
-#include "../Components/DrawComponents/DrawAnimatedComponent.h"
+
+
 
 class WhiteBall : public Ball
 {
 public:
-    explicit WhiteBall(Game* game, float size = 1500.0f, float weight = 3.0f);
+    explicit WhiteBall(Game* game, float radius = 32.0f, float weight = 2.0f);
 
     // void OnProcessInput(const Uint8* keyState) override;
-    // void OnUpdate(float deltaTime) override;
+    void OnUpdate(float deltaTime) override;
 
 private:
+    Ball* mFirstHitBall;
 };

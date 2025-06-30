@@ -20,7 +20,7 @@ Cue::Cue(Game *game, Ball *whiteBall, int width, int height)
     // Distancia padrão que o taco deve aparecer longe da bola branca
     mDistance = 80.0f;
     mRotation = 0;
-    mIncreaseRotation = Math::Pi;
+    mIncreaseRotation = Math::Pi/2;
 
     mDrawComponent = new DrawSpriteComponent(this, "../Assets/Sprites/Cue/cue_resize.png",
        mWidth,  height, 2, Vector2::Zero, mRotation * (180 / Math::Pi),  SDL_RendererFlip::SDL_FLIP_NONE);
@@ -44,21 +44,16 @@ void Cue::OnUpdate(float deltaTime) {
         // Update the Cue Rotation
         mRotation += mRotationDirection * mIncreaseRotation * deltaTime;
 
-        mRotation = Math::Clamp(mRotation, -Math::Pi, Math::Pi);
-
+        if (mRotation < - 2*Math::Pi) mRotation = 0;
+        if (mRotation >  2*Math::Pi) mRotation = 0;
 
         // Create a new Sprit with the new Rotation
         delete mDrawComponent;
-        mDrawComponent = new DrawSpriteComponent(this, "../Assets/Sprites/Cue/cue_resize.png",
-       mWidth,  mHeight, 2, Vector2::Zero, mRotation * (180 / Math::Pi), SDL_RendererFlip::SDL_FLIP_NONE);
+        mDrawComponent = new DrawSpriteComponent(this, "../Assets/Sprites/Cue/cue_resize_centralized.png",
+        mWidth,  mHeight, 2, Vector2::Zero, mRotation * (180 / Math::Pi), SDL_RendererFlip::SDL_FLIP_NONE);
 
         // Update Cue Position
-        const auto ballPos = mWhiteBall->GetPosition();
-
-        float deltaX = Math::Cos(mRotation) * mDistance * mEnergyLevel/3.0;
-        float deltaY = Math::Sin(mRotation) * mDistance * mEnergyLevel/3.0;
-
-        this->SetPosition(Vector2(ballPos.x+ deltaX, ballPos.y+ deltaY));
+        UpdateCuePosition();
 
     }
 
@@ -69,17 +64,13 @@ void Cue::OnUpdate(float deltaTime) {
         // SDL_Log("Energy Level: %i", mEnergyLevel);
 
         // Update Cue Position
-        const auto ballPos = mWhiteBall->GetPosition();
-
-        float deltaX = Math::Cos(mRotation) * mDistance * mEnergyLevel/3.0;
-        float deltaY = Math::Sin(mRotation) * mDistance * mEnergyLevel/3.0;
-
-        this->SetPosition(Vector2(ballPos.x+ deltaX, ballPos.y+ deltaY));
+        UpdateCuePosition();
     }
 
     // The Cue hits the white ball
     if (mCueState == CueState::Attacking && mGame->GetGamePlayState() == Game::GamePlayState::Playing) {
-        Vector2 direction = mWhiteBall->GetPosition() - this->GetPosition();
+        Vector2 direction = mWhiteBall->GetPosition() - this->GetCuePosition();
+        // SDL_Log("White Ball Position: (%f, %f) and Cue Position (%f, %f)", mWhiteBall->GetPosition().x, mWhiteBall->GetPosition().y, this->GetCuePosition().x, this->GetCuePosition().y);
         float actualDistance = direction.Length();
         Vector2::Normalize(direction);
 
@@ -88,8 +79,8 @@ void Cue::OnUpdate(float deltaTime) {
             SetPosition(this->GetPosition() + direction*0.1);
         }
         else {
-            mWhiteBall->GetComponent<RigidBodyComponent>()->ApplyForce(direction * 20 * mEnergyLevel);
-            SDL_Log("Cue::OnUpdate: Cue Hit the Ball");
+            mWhiteBall->GetComponent<RigidBodyComponent>()->ApplyForce(direction * 20 * mEnergyLevel * mEnergyLevel);
+            // SDL_Log("Cue::OnUpdate: Cue Hit the Ball");
             mCueState = CueState::Transition;
             mDelay = 0.3;
         }
@@ -113,6 +104,18 @@ float Cue::CalculateEnergyLevel(double x) {
     mEnergy = (-4 * Math::Cos(x) + 2 * Math::Cos(2 * x) - (4.0/9.0) * Math::Cos(3 * x) + 0.25 * Math::Cos(4 * x) + 3) / 1;
     return std::ceil(mEnergy);
 }
+
+void Cue::UpdateCuePosition() {
+
+    // Update Cue Position
+    const auto ballPos = mWhiteBall->GetPosition();
+
+    float deltaX = Math::Cos(mRotation) * mDistance * mEnergyLevel/3.0;
+    float deltaY = Math::Sin(mRotation) * mDistance * mEnergyLevel/3.0;
+
+    this->SetPosition(Vector2(ballPos.x+ deltaX, ballPos.y+ deltaY - mHeight / 2.0f)); // Adjust position to center the cue vertically
+}
+
 
 void Cue::OnProcessInput(const Uint8* keyState) {
     if (keyState[SDL_SCANCODE_LEFT]) {

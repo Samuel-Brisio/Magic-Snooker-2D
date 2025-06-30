@@ -10,8 +10,12 @@
 #include <SDL.h>
 #include <vector>
 #include <string>
+#include <unordered_map>
 #include "Math.h"
 #include "Actors/Ball.h"
+#include "Score.h"
+
+class HUD;
 
 class Game
 {
@@ -28,7 +32,8 @@ public:
         Paused,
         GameOver,
         LevelComplete,
-        Leaving
+        Leaving,
+        Ending,
     };
 
     Game(int windowWidth, int windowHeight);
@@ -66,6 +71,7 @@ public:
     // Actor Specific methods
     void AddBall(class Ball* ball);
     void RemoveBall(class Ball* ball);
+    bool RemoveOneColorBall(BallColor color);
     std::vector<class Ball*> GetBalls() { return mBalls; }
 
     void AddInvisibleAABBWall(class InvisibleAABBWall * aabbWall);
@@ -92,11 +98,23 @@ public:
     void ToggleSimulation();
     void TogglePlay();
     GamePlayState GetGamePlayState() const { return mGamePlayState; }
+    void RespawnWhiteBall();
 
     // Game-specific
-    const class Mario* GetMario() { return mMario; }
+    // const class Mario* GetMario() { return mMario; }
     std::string printGamePlayState(GamePlayState state);
 
+    // Score-specific
+    Score* GetScore() { return &mScore; }
+
+    // UI functions
+    SDL_Texture* TextureFromSurface(SDL_Surface* surface);
+    void PushUI(class UIScreen* screen) { mUIStack.emplace_back(screen); }
+    const std::vector<class UIScreen*>& GetUIStack() { return mUIStack; }
+    class UIFont* LoadFont(const std::string& fileName);
+
+    void ChangeScene();
+    void UnloadScene();
 
 private:
     void ProcessInput();
@@ -105,6 +123,7 @@ private:
     void GenerateOutput();
 
     // Game-specific
+    SDL_Rect mTablePos;
 
     // Load the level from a CSV file as a 2D array
     // int **LoadLevel(const std::string& fileName, int width, int height);
@@ -124,6 +143,7 @@ private:
 
     // Actors specific
     std::vector<class Ball*> mBalls;
+    class WhiteBall* mWhiteBall;
     class Cue* mCue;
     std::vector<class InvisibleAABBWall*> mInvisibleAABBWalls;
     std::vector<class InvisibleOBBWall*> mInvisibleOBBWalls;
@@ -144,13 +164,20 @@ private:
     bool mIsRunning;
     bool mUpdatingActors;
 
-    Vector2 mCameraPos;
+    // Vector2 mCameraPos;
 
+    // PlayerScore
+    Score mScore;
 
     GamePlayState mGamePlayState;
 
     // Game-specific
-    class Mario *mMario;
+    // class Mario *mMario;
+    class HUD *mHUD;
+
+    // All the UI elements
+    std::vector<class UIScreen*> mUIStack;
+    std::unordered_map<std::string, class UIFont*> mFonts;
 
     // Level data
     int **mLevelData;

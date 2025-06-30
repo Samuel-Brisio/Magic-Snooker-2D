@@ -17,7 +17,7 @@ public:
     CircleColliderComponent* GetColliderComponent() {return mColliderComponent;}
 
 private:
-    class DrawCircleComponent* mDrawCircleComponent;
+    // class DrawCircleComponent* mDrawCircleComponent;
     class CircleColliderComponent* mColliderComponent;
 };
 
