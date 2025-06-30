@@ -17,13 +17,14 @@ uma estratégia bem-sucedida.
 1. ⚡ Acelerar a barra de força do oponente
 2. 🎯 Reduzir a bola branca adversária
 
-```warning
-🔨 Trabalho de Progresso 🚧
+> [!NOTE]  
+> 🔨 Trabalho de Progresso 🚧
+>
+> As magias serão implementadas na versão final do Magic Snooker 2D. Nesta entrega focamos em desenvolver os conceitos básicos de uma sinuca.
+>
+> Nesta primeira etapa foi implementado toda a física do jogo e parte das regras base da sinuca, regras essas que foram adaptadas para deixar o jogo mais simples, como o uso de bolas vermelhas e azuis no lugar das bolas enumeradas.
 
-As magias serão implementadas na versão final do Magic Snooker 2D. Nesta entrega focamos em desenvolver os conceitos básicos de uma sinuca.
 
-Nesta primeira etapa foi implementado toda a física do jogo e parte das regras base da sinuca, regras essas que foram adaptadas para deixar o jogo mais simples, como o uso de bolas vermelhas e azuis no lugar das bolas enumeradas.
-```
 
 ---
 ![🖼️ Screenshot 1](docs/image.png)  
