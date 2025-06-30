@@ -13,7 +13,7 @@ public:
     ~InvisibleOBBWall();
     OBBColliderComponent* GetColliderComponent() {return mOBBColliderComponent;}
 private:
-    class DrawPolygonComponent* mDrawComponent;
+    // class DrawPolygonComponent* mDrawComponent;
     class OBBColliderComponent* mOBBColliderComponent;
 };
 

@@ -23,7 +23,7 @@ Ball::Ball(Game *game, float radius, float weight, BallColor color)
 
     mRigidBodyComponent = new RigidBodyComponent(this, weight, 0.3);
     mColliderComponent = new CircleColliderComponent(this, mRadius);
-    mDrawCircleComponent = new DrawCircleComponent(this, 20, mRadius, 100);
+    // mDrawCircleComponent = new DrawCircleComponent(this, 20, mRadius, 100);
 
     Vector2 drawPositionOffset(-radius, -radius);
 

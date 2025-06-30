@@ -17,7 +17,7 @@ HUD::HUD(class Game* game, const std::string& fontName)
     AddText("Player 2 Score", Vector2(700, 0), Vector2(CHAR_WIDTH*14, WORD_HEIGHT), POINT_SIZE);
 
     // TODO 2.: Adicione um texto com a string "000" logo abaixo do texto "Player 2 Score".
-    mPlayer2Score = AddText("00", Vector2(700, WORD_HEIGHT), Vector2(CHAR_WIDTH*2, WORD_HEIGHT), POINT_SIZE);
+    mPlayer2Score = AddText("00", Vector2(700, WORD_HEIGHT), Vector2(CHAR_WIDTH*1, WORD_HEIGHT), POINT_SIZE);
 
 
     // // TODO 4.: Adicione um texto com a string "1-1" logo abaixo do texto "World".
@@ -28,7 +28,7 @@ HUD::HUD(class Game* game, const std::string& fontName)
     AddText("Player 1 Score", Vector2(50, 0), Vector2(CHAR_WIDTH*14, WORD_HEIGHT), POINT_SIZE);
 
     // TODO 6.: Adicione um texto com a string "000" logo abaixo do texto "Player 1 Score".
-    mPlayer1Score = AddText("00", Vector2(50, WORD_HEIGHT), Vector2(CHAR_WIDTH*2, WORD_HEIGHT), POINT_SIZE);
+    mPlayer1Score = AddText("00", Vector2(50, WORD_HEIGHT), Vector2(CHAR_WIDTH*1, WORD_HEIGHT), POINT_SIZE);
 
 }
 

@@ -14,9 +14,9 @@ InvisibleOBBWall::InvisibleOBBWall(Game *game, Vector2 centerPosition, float wid
     mOBBColliderComponent = new OBBColliderComponent(this, width, height);
     SetRotation(rotation);
     SetPosition(centerPosition);
-    std::vector<Vector2> corners = mOBBColliderComponent->GetCorners();
+    // std::vector<Vector2> corners = mOBBColliderComponent->GetCorners();
 
-    mDrawComponent = new DrawPolygonComponent(this, corners, 200);
+    // mDrawComponent = new DrawPolygonComponent(this, corners, 200);
 }
 
 InvisibleOBBWall::~InvisibleOBBWall() {

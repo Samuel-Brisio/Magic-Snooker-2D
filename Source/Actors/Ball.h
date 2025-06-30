@@ -42,7 +42,7 @@ protected:
     bool mIsMoving;
 
     class RigidBodyComponent* mRigidBodyComponent;
-    class DrawCircleComponent* mDrawCircleComponent;
+    // class DrawCircleComponent* mDrawCircleComponent;
     class DrawSpriteComponent* mDrawSpriteComponent;
     class CircleColliderComponent* mColliderComponent;
 };

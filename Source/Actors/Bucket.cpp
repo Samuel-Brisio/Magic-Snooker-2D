@@ -15,7 +15,7 @@ Bucket::Bucket(Game *game, Vector2 position, int radius):
 
     SetPosition(position);
     mColliderComponent = new CircleColliderComponent(this, radius);
-    mDrawCircleComponent = new DrawCircleComponent(this, 20, radius, 200);
+    // mDrawCircleComponent = new DrawCircleComponent(this, 20, radius, 200);
 }
 
 Bucket::~Bucket() {
