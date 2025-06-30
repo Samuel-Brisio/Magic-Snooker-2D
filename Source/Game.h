@@ -179,6 +179,10 @@ private:
     std::vector<class UIScreen*> mUIStack;
     std::unordered_map<std::string, class UIFont*> mFonts;
 
+    // Ending Waiting time
+    float mEndingWaitTime = 5.0f;
+
+
     // Level data
     int **mLevelData;
 };

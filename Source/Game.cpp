@@ -15,6 +15,9 @@
 #include "CSV.h"
 #include "Random.h"
 #include "Game.h"
+
+#include <thread>
+
 #include "Actors/Actor.h"
 #include "Actors/Mario.h"
 #include "Actors/Block.h"
@@ -211,7 +214,16 @@ void Game::UpdateGame()
     mTicksCount = SDL_GetTicks();
 
     // Update all actors and pending actors
-    UpdateActors(deltaTime);
+    if (mGamePlayState != GamePlayState::Ending) {
+        UpdateActors(deltaTime);
+    }
+    else {
+        mEndingWaitTime -= deltaTime;
+        if (mEndingWaitTime <= 0) {
+            Shutdown();
+            exit(0);
+        }
+    }
 
     // Reinsert UI screens
     for (auto ui : mUIStack) {
