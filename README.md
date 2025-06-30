@@ -28,6 +28,8 @@ uma estratégia bem-sucedida.
 
 ---
 ![🖼️ Screenshot 1](docs/InitialGame.jpeg)  
+
+
 ![🖼️ Screenshot 1](docs/endingGame.jpeg)
 ---
 
