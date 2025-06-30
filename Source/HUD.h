@@ -28,6 +28,7 @@ public:
     void SetCurrentPlayer(const std::string& levelName);
     void SetPlayer1Score(int score);
     void SetPlayer2Score(int score);
+    void ShowEndGameScreen(const std::string &message);
 
 private:
     // HUD elements

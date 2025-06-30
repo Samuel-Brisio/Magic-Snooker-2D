@@ -28,6 +28,9 @@ public:
     void SetWhiteBall(class Ball* whiteBall) {mWhiteBall = whiteBall;};
     class Ball* GetWhiteBall() {return mWhiteBall;};
     void RemoveWhiteBall() {mWhiteBall = nullptr;};
+    void SetCuePosition(Vector2& position);
+    void UpdateCuePosition();
+    Vector2 GetCuePosition() const { return Vector2(this->GetPosition().x, this->GetPosition().y + mHeight / 2.0); }
 
 private:
     float mForceLevel;

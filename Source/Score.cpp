@@ -4,9 +4,11 @@
 
 #include "Score.h"
 #include <SDL.h>
+#include "Game.h"
 
-Score::Score(const BallColor player1BallColor, const BallColor player2BallColor)
-    : mPlayer1Score(0)
+Score::Score(Game* game, const BallColor player1BallColor, const BallColor player2BallColor)
+    :mGame(game)
+    ,mPlayer1Score(0)
     ,mPlayer2Score(0)
     ,mPlayer1BallColor(player1BallColor)
     ,mPlayer2BallColor(player2BallColor)
@@ -49,14 +51,15 @@ void Score::EndTurn() {
 
     if (mPlayerTurn == PlayerTurn::Player1) {
         if (mFirstHitBallInTurn == mPlayer2BallColor) {
+            SDL_Log("Player1 Hit Player2 Ball, Player2 Turn Started");
             mPlayerTurn = PlayerTurn::Player2;
-            // Delete a Player2 Ball
+            if (mGame->RemoveOneColorBall(mPlayer2BallColor)) mPlayer2Score++;
         }
 
         // Player Pocket White Ball
         else if (mBallColors.count(BallColor::White) != 0) {
             mPlayerTurn = PlayerTurn::Player2;
-            // Do something
+            if (mGame->RemoveOneColorBall(mPlayer2BallColor)) mPlayer2Score++;
         }
 
         else if (mBallColors.count(mPlayer1BallColor) != 0) {
@@ -72,13 +75,13 @@ void Score::EndTurn() {
     else if (mPlayerTurn == PlayerTurn::Player2) {
         if (mFirstHitBallInTurn == mPlayer1BallColor) {
             mPlayerTurn = PlayerTurn::Player1;
-            // Delete a Player2 Ball
+            if (mGame->RemoveOneColorBall(mPlayer1BallColor)) mPlayer1Score++;
         }
 
         // Player Pocket White Ball
         else if (mBallColors.count(BallColor::White) != 0) {
             mPlayerTurn = PlayerTurn::Player1;
-            // Do something
+            if (mGame->RemoveOneColorBall(mPlayer1BallColor)) mPlayer1Score++;
         }
 
         else if (mBallColors.count(mPlayer2BallColor) != 0) {

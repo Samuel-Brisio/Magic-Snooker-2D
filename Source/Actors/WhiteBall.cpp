@@ -31,12 +31,13 @@ void WhiteBall::OnUpdate(float deltaTime) {
         if (ball != this) {
             bool isCollision = mColliderComponent->Intersect(ball->GetColliderComponent());
 
+
             if (isCollision) {
                 SolveCollision(ball);
-            }
-            if (mFirstHitBall !=nullptr) {
-                mFirstHitBall = ball;
-                mGame->GetScore()->SetFirstHitBall(mFirstHitBall);
+                if (mFirstHitBall ==nullptr) {
+                    mFirstHitBall = ball;
+                    mGame->GetScore()->SetFirstHitBall(mFirstHitBall);
+                }
             }
         }
 

@@ -40,6 +40,7 @@ Game::Game(int windowWidth, int windowHeight)
         ,mWindowWidth(windowWidth)
         ,mWindowHeight(windowHeight)
         ,mHUD(nullptr)
+        ,mScore(this)
 {
 
 }
@@ -135,11 +136,30 @@ void Game::InitializeActors()
 
     // Initialize White ball
     mWhiteBall = new WhiteBall(this, ballRadius, 0.5);
-    mWhiteBall->SetPosition(Vector2(mTablePos.x + table_width/2, mTablePos.y + 100));
-    // ball->GetComponent<RigidBodyComponent>()->ApplyForce(Vector2(tablePos.x, tablePos.y) * 100);
+    mWhiteBall->SetPosition(Vector2(mTablePos.x + table_width - 200, mTablePos.y + table_height/2 - mWhiteBall->GetRadius() / 2));
 
-    auto ball = new Ball(this, ballRadius, 0.5, BallColor::Blue);
-    ball->SetPosition(Vector2(mTablePos.x + table_width/2, mTablePos.y + 80));
+    // // Test 01 -> Hit the opponent ball but also pocket its own ball
+    // // Initialize White ball
+    // mWhiteBall = new WhiteBall(this, ballRadius, 0.5);
+    // mWhiteBall->SetPosition(Vector2(mTablePos.x + table_width/2, mTablePos.y + 180));
+    // // ball->GetComponent<RigidBodyComponent>()->ApplyForce(Vector2(tablePos.x, tablePos.y) * 100);
+    //
+    // auto ball = new Ball(this, ballRadius, 0.5, BallColor::Blue);
+    // ball->SetPosition(Vector2(mTablePos.x + table_width/2, mTablePos.y + 80));
+    //
+    // ball = new Ball(this, ballRadius, 0.5, BallColor::Red);
+    // ball->SetPosition(Vector2(mTablePos.x + table_width/2, mTablePos.y + 120));
+
+    // // Test 02 -> Pocket its own ball but also the white ball
+    // // Initialize White ball
+    // mWhiteBall = new WhiteBall(this, ballRadius, 0.5);
+    // mWhiteBall->SetPosition(Vector2(mTablePos.x + table_width/2, mTablePos.y + 180));
+    // // ball->GetComponent<RigidBodyComponent>()->ApplyForce(Vector2(tablePos.x, tablePos.y) * 100);
+    //
+    // auto ball = new Ball(this, ballRadius, 0.5, BallColor::Blue);
+    // ball->SetPosition(Vector2(mTablePos.x + table_width/2, mTablePos.y + 70));
+    //
+    //
 
     // Initialize Cue
     mCue = new Cue(this, mWhiteBall, 300, 15);
@@ -382,17 +402,41 @@ void Game::UpdateActors(float deltaTime)
         }
     }
 
-    bool allBallStopped = true;
-    for (auto ball: mBalls) {
-        if (ball->GetIsMoving()) allBallStopped = false;
+    bool haveBlueBall = std::any_of(mBalls.begin(), mBalls.end(), [](Ball* ball) {
+    return ball->GetColor() == BallColor::Blue;
+    });
+
+    bool haveRedBall = std::any_of(mBalls.begin(), mBalls.end(), [](Ball* ball) {
+    return ball->GetColor() == BallColor::Red;
+});
+
+    if (mWhiteBall != nullptr and (haveBlueBall and haveRedBall)) {
+        bool allBallStopped = true;
+        for (auto ball: mBalls) {
+            if (ball->GetIsMoving()) allBallStopped = false;
+        }
+
+        // SDL_Log("Game::UpdateActors: allBallStopped=%d", allBallStopped);
+        if (allBallStopped && mGamePlayState == GamePlayState::Simulating && mWhiteBall != nullptr) {
+            mScore.EndTurn();
+            TogglePlay();
+            mCue->SetCueState(CueState::Moving);
+        }
+    }
+    else {
+        if (mScore.GetPlayer1Score() > mScore.GetPlayer2Score()) {
+            mHUD->ShowEndGameScreen("Player 1 Wins!");
+        }
+        else if (mScore.GetPlayer2Score() > mScore.GetPlayer1Score()) {
+            mHUD->ShowEndGameScreen("Player 2 Wins!");
+        }
+        else {
+            mHUD->ShowEndGameScreen("It's a Tie!");
+        }
+        mGamePlayState = GamePlayState::Ending;
     }
 
-    // SDL_Log("Game::UpdateActors: allBallStopped=%d", allBallStopped);
-    if (allBallStopped && mGamePlayState == GamePlayState::Simulating && mWhiteBall != nullptr) {
-        mScore.EndTurn();
-        TogglePlay();
-        mCue->SetCueState(CueState::Moving);
-    }
+
 }
 
 void Game::AddActor(Actor* actor)
@@ -621,6 +665,18 @@ void Game::RespawnWhiteBall()
     mWhiteBall = new WhiteBall(this, ballRadius, 0.5);
     mWhiteBall->SetPosition(newPos);
     mCue->SetWhiteBall(mWhiteBall);
+}
+
+bool Game::RemoveOneColorBall(BallColor color) {
+    auto iter = std::find_if(mBalls.begin(), mBalls.end(), [color](Ball* ball) {
+        return ball->GetColor() == color;
+    });
+    if (iter != mBalls.end()) {
+        delete *iter; // Delete the ball
+        SDL_Log("Removed one %s Ball", (color == BallColor::Red) ? "Red" : "Blue");
+        return true;
+    }
+    return false; // No ball of that color found
 }
 
 void Game::UnloadScene()

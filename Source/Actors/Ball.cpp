@@ -21,7 +21,7 @@ Ball::Ball(Game *game, float radius, float weight, BallColor color)
 {
     game->AddBall(this);
 
-    mRigidBodyComponent = new RigidBodyComponent(this, weight, 0.1);
+    mRigidBodyComponent = new RigidBodyComponent(this, weight, 0.3);
     mColliderComponent = new CircleColliderComponent(this, mRadius);
     mDrawCircleComponent = new DrawCircleComponent(this, 20, mRadius, 100);
 

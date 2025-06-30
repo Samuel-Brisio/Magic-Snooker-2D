@@ -74,5 +74,14 @@ void HUD::SetPlayer2Score(int score) {
 void HUD::SetCurrentPlayer(const std::string &playerName)
 {
     mPlayerTurn->SetText(playerName);
+}
 
+void HUD::ShowEndGameScreen(const std::string& message) {
+    int text_size = message.size();
+    AddText(
+        message.c_str(),
+        Vector2(mGame->GetWindowWidth() / 2 - CHAR_WIDTH * (text_size / 2.0),mGame->GetWindowHeight()/2.0),
+        Vector2(CHAR_WIDTH * text_size, WORD_HEIGHT),
+        POINT_SIZE
+        );
 }

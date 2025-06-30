@@ -32,7 +32,8 @@ public:
         Paused,
         GameOver,
         LevelComplete,
-        Leaving
+        Leaving,
+        Ending,
     };
 
     Game(int windowWidth, int windowHeight);
@@ -70,6 +71,7 @@ public:
     // Actor Specific methods
     void AddBall(class Ball* ball);
     void RemoveBall(class Ball* ball);
+    bool RemoveOneColorBall(BallColor color);
     std::vector<class Ball*> GetBalls() { return mBalls; }
 
     void AddInvisibleAABBWall(class InvisibleAABBWall * aabbWall);

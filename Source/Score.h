@@ -6,6 +6,7 @@
 #include <string>
 
 #include "Actors/Ball.h"
+#include <SDL.h>
 
 enum class PlayerTurn {
     Player1,
@@ -15,13 +16,16 @@ enum class PlayerTurn {
 
 class Score {
 public:
-    explicit Score(BallColor player1BallColor = BallColor::Blue, BallColor player2BallColor = BallColor::Red);
+    explicit Score(Game *game, BallColor player1BallColor = BallColor::Blue, BallColor player2BallColor = BallColor::Red);
 
     void IncreaseScore();
     void DecreaseScore();
     void BallFellIntoPocket(BallColor ballColor);
 
-    void SetFirstHitBall(const Ball* ball) {mFirstHitBallInTurn = ball->GetColor();};
+    void SetFirstHitBall(const Ball* ball) {
+        SDL_Log("SetFirstHitBall: %s", ball->GetColor() == BallColor::Red ? "Red" : "Blue");
+        mFirstHitBallInTurn = ball->GetColor();
+    };
 
     void ResetScore() {mPlayer1Score = 0; mPlayer2Score = 0;};
     [[nodiscard]] PlayerTurn GetCurrentPlayer() const {return mPlayerTurn;};
@@ -33,6 +37,7 @@ public:
     void EndTurn();
 
 private:
+    Game* mGame;
     int mPlayer1Score;
     int mPlayer2Score;
     BallColor mPlayer1BallColor;

@@ -40,11 +40,15 @@ void RigidBodyComponent::Update(float deltaTime)
     mVelocity.x = Math::Clamp<float>(mVelocity.x, -MAX_SPEED_X, MAX_SPEED_X);
     mVelocity.y = Math::Clamp<float>(mVelocity.y, -MAX_SPEED_Y, MAX_SPEED_Y);
 
-    if(Math::NearZero(mVelocity.x, 10.0f)) {
-        mVelocity.x = 0.f;
-    }
-    if(Math::NearZero(mVelocity.y, 10.0f)) {
-        mVelocity.y = 0.f;
+    // if(Math::NearZero(mVelocity.x, 10.0f)) {
+    //     mVelocity.x = 0.f;
+    // }
+    // if(Math::NearZero(mVelocity.y, 10.0f)) {
+    //     mVelocity.y = 0.f;
+    // }
+
+    if (Math::NearZero(mVelocity.Length(), 15.0f)) {
+        mVelocity.Set(0.f, 0.f);
     }
 
     auto collider = mOwner->GetComponent<AABBColliderComponent>();
