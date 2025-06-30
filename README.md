@@ -27,7 +27,7 @@ uma estratégia bem-sucedida.
 
 
 ---
-![🖼️ Screenshot 1](docs/image.png)  
+![🖼️ Screenshot 1](docs/initialGame.png)  
 ---
 
 
