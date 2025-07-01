@@ -32,6 +32,7 @@
 #include "Components/ColliderComponents/AABBColliderComponent.h"
 #include "UIElements/UIScreen.h"
 #include "HUD.h"
+#include <SDL_mixer.h>
 
 Game::Game(int windowWidth, int windowHeight)
         :mWindow(nullptr)
@@ -44,6 +45,7 @@ Game::Game(int windowWidth, int windowHeight)
         ,mWindowHeight(windowHeight)
         ,mHUD(nullptr)
         ,mScore(this)
+        ,mAudio(nullptr)
 {
 
 }
@@ -83,13 +85,15 @@ bool Game::Initialize()
         return false;
     }
 
-    // // Initialize SDL_mixer
-    // if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) == -1)
-    // {
-    //     SDL_Log("Failed to initialize SDL_mixer");
-    //     return false;
-    // }
+    // Initialize SDL_mixer
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) == -1)
+    {
+        SDL_Log("Failed to initialize SDL_mixer");
+        return false;
+    }
 
+    mAudio = new AudioSystem(8);
+    mMusicHandle = mAudio->PlaySound("BlueNightclub.mp3", true);
     Random::Init();
 
     mTicksCount = SDL_GetTicks();

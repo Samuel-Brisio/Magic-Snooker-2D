@@ -14,6 +14,7 @@
 #include "Math.h"
 #include "Actors/Ball.h"
 #include "Score.h"
+#include "AudioSystem.h"
 
 class HUD;
 
@@ -92,6 +93,8 @@ public:
 
     int **GetLevelData() const { return mLevelData; }
 
+    class AudioSystem* GetAudio() { return mAudio; }
+
     SDL_Texture* LoadTexture(const std::string& texturePath);
 
     void SetGamePlayState(GamePlayState state) {mGamePlayState = state;};
@@ -121,6 +124,10 @@ private:
     void UpdateGame();
     // void UpdateCamera();
     void GenerateOutput();
+
+    // Audio
+    AudioSystem* mAudio;
+    SoundHandle mMusicHandle;
 
     // Game-specific
     SDL_Rect mTablePos;

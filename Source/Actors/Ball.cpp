@@ -85,6 +85,7 @@ void Ball::OnUpdate(float deltaTime) {
 
 void Ball::SolveCollision(class Ball * other) {
     // SDL_Log("Ball-Ball Collision");
+    GetGame()->GetAudio()->PlaySound("BallBall.mp3", false);
 
     // Get positions and radii
     Vector2 posA = GetPosition();
@@ -155,6 +156,7 @@ void Ball::SolveCollision(class Ball * other) {
 
 void Ball::SolveCollision(class InvisibleAABBWall * aabbWall) {
     RigidBodyComponent* ownerRigidBody = GetComponent<RigidBodyComponent>();
+    GetGame()->GetAudio()->PlaySound("BallWall.mp3", false);
 
     Vector2 velocity = ownerRigidBody->GetVelocity();
     Vector2 center = GetPosition();
@@ -191,6 +193,7 @@ void Ball::SolveCollision(class InvisibleAABBWall * aabbWall) {
 void Ball::SolveCollision(class InvisibleOBBWall * obbWall) {
     RigidBodyComponent* rigidBody = GetComponent<RigidBodyComponent>();
     if (!rigidBody) return;
+    GetGame()->GetAudio()->PlaySound("BallWall.mp3", false);
 
     Vector2 center = GetPosition();
     Vector2 obbCenter = obbWall->GetColliderComponent()->GetCenter();

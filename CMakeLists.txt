@@ -94,6 +94,8 @@ add_executable(${PROJECT_NAME}
         Source/UIElements/UIText.h
         Source/HUD.cpp
         Source/HUD.h
+        Source/AudioSystem.cpp
+        Source/AudioSystem.h
 )
 
 #target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2 ${SDL2_IMAGE_LIBRARY})
