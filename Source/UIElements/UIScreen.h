@@ -50,6 +50,8 @@ public:
     UIText* AddText(const std::string& name, const Vector2& pos, const Vector2& dims, const int pointSize = 40, const int unsigned wrapLength = 1024);
     class UIImage* AddImage(const std::string& imagePath, const Vector2& pos, const Vector2& dims, const Vector3& color = Color::White);
 
+	void RemoveImage(UIImage* image);
+
 protected:
     // Sets the mouse mode to relative or not
 	class Game* mGame;

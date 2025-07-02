@@ -30,6 +30,8 @@ public:
     void SetPlayer2Score(int score);
     void ShowEndGameScreen(const std::string &message);
 
+    void SetPlayerEnergy(int player1Energy, int player2Energy);
+
 private:
     // HUD elements
     UIText* mScoreCounter;
@@ -38,4 +40,7 @@ private:
     UIText* mTimeText;
     UIText* mPlayer1Score;
     UIText* mPlayer2Score;
+
+    UIImage* mPlayer1EnergyBar;
+    UIImage* mPlayer2EnergyBar;
 };
