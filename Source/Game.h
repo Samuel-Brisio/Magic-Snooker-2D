@@ -25,6 +25,21 @@ public:
     // static const int LEVEL_HEIGHT = 15;
     // static const int TILE_SIZE = 32;
     // static const int SPAWN_DISTANCE = 700;
+    static const int TRANSITION_TIME = 1;
+
+    enum class GameScene
+    {
+        MainMenu,
+        Game,
+    };
+
+    enum class SceneManagerState
+    {
+        None,
+        Entering,
+        Active,
+        Exiting
+    };
 
     enum class GamePlayState
     {
@@ -116,14 +131,27 @@ public:
     const std::vector<class UIScreen*>& GetUIStack() { return mUIStack; }
     class UIFont* LoadFont(const std::string& fileName);
 
-    void ChangeScene();
+    // scenes
+    void SetGameScene(GameScene scene, float transitionTime = .0f);
+    void ResetGameScene(float transitionTime = .0f);
     void UnloadScene();
+    void LoadMainMenu();
 
 private:
     void ProcessInput();
     void UpdateGame();
     // void UpdateCamera();
     void GenerateOutput();
+
+    // Scene Manager
+    void UpdateSceneManager(float deltaTime);
+    void ChangeScene();
+    SceneManagerState mSceneManagerState;
+    float mSceneManagerTimer;
+
+    // Track level state
+    GameScene mGameScene;
+    GameScene mNextScene;
 
     // Audio
     AudioSystem* mAudio;

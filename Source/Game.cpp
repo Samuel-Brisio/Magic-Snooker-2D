@@ -46,6 +46,11 @@ Game::Game(int windowWidth, int windowHeight)
         ,mHUD(nullptr)
         ,mScore(this)
         ,mAudio(nullptr)
+        ,mSceneManagerTimer(0.0f)
+        ,mSceneManagerState(SceneManagerState::None)
+        ,mGameScene(GameScene::MainMenu)
+        ,mNextScene(GameScene::MainMenu)
+        ,mGamePlayState(GamePlayState::Paused)
 {
 
 }
@@ -93,18 +98,11 @@ bool Game::Initialize()
     }
 
     mAudio = new AudioSystem(8);
-    mMusicHandle = mAudio->PlaySound("BlueNightclub.mp3", true);
     Random::Init();
 
     mTicksCount = SDL_GetTicks();
 
-    SetGamePlayState(GamePlayState::Playing);
-
-    // Init all game actors
-    InitializeActors();
-
-    // Initially, change scene to MainMenu
-    ChangeScene();
+    SetGameScene(GameScene::MainMenu);
 
     return true;
 }
@@ -172,8 +170,6 @@ void Game::InitializeActors()
 
     // Initialize Cue
     mCue = new Cue(this, mWhiteBall, 300, 15);
-
-
 }
 
 void Game::RunLoop()
@@ -196,6 +192,11 @@ void Game::ProcessInput()
             case SDL_QUIT:
                 Quit();
                 break;
+            case SDL_KEYDOWN:
+                // Handle key press for UI screens
+                    if (!mUIStack.empty()) {
+                        mUIStack.back()->HandleKeyPress(event.key.keysym.sym);
+                    }
         }
     }
 
@@ -220,16 +221,21 @@ void Game::UpdateGame()
     mTicksCount = SDL_GetTicks();
 
     // Update all actors and pending actors
-    if (mGamePlayState != GamePlayState::Ending) {
+    if(mGamePlayState != GamePlayState::Paused && mGamePlayState != GamePlayState::Ending)
+    {
+        // Reinsert all actors and pending actors
         UpdateActors(deltaTime);
     }
-    else {
+    else if (mGamePlayState == GamePlayState::Ending) {
         mEndingWaitTime -= deltaTime;
         if (mEndingWaitTime <= 0) {
             Shutdown();
             exit(0);
         }
     }
+
+    // Reinsert audio system
+    mAudio->Update(deltaTime);
 
     // Reinsert UI screens
     for (auto ui : mUIStack) {
@@ -249,12 +255,15 @@ void Game::UpdateGame()
         }
     }
 
-    if (mHUD) {
-        mHUD->SetPlayer1Score(mScore.GetPlayer1Score());
-        mHUD->SetPlayer2Score(mScore.GetPlayer2Score());
-        mHUD->SetCurrentPlayer(Score::GetCurrentPlayerStr(mScore.GetCurrentPlayer()));
-
+    if (mGameScene == GameScene::Game) {
+        if (mHUD) {
+            mHUD->SetPlayer1Score(mScore.GetPlayer1Score());
+            mHUD->SetPlayer2Score(mScore.GetPlayer2Score());
+            mHUD->SetCurrentPlayer(Score::GetCurrentPlayerStr(mScore.GetCurrentPlayer()));
+        }
     }
+
+    UpdateSceneManager(deltaTime);
 }
 
 void Game::UpdateActors(float deltaTime)
@@ -435,11 +444,6 @@ void Game::RemoveInvisibleAABBWall(class InvisibleAABBWall *aabbWall) {
     mInvisibleAABBWalls.erase(iter);
 }
 
-
-
-
-
-
 void Game::GenerateOutput()
 {
     // Set draw color to black
@@ -571,33 +575,91 @@ bool Game::RemoveOneColorBall(BallColor color) {
 
 void Game::UnloadScene()
 {
-
+    mAudio->StopAllSounds();
     // Delete UI screens
     for (auto ui : mUIStack) {
         delete ui;
     }
     mUIStack.clear();
 
-    // // Delete background texture
-    // if (mBackgroundTexture) {
-    //     SDL_DestroyTexture(mBackgroundTexture);
-    //     mBackgroundTexture = nullptr;
-    // }
+}
+
+void Game::SetGameScene(Game::GameScene scene, float transitionTime)
+{
+    // --------------
+    // TODO - PARTE 2
+    // --------------
+
+    // TODO 1.: Verifique se o estado do SceneManager mSceneManagerState é SceneManagerState::None.
+    //  Se sim, verifique se a cena passada scene passada como parâmetro é uma das cenas válidas (MainMenu, Level1, Level2).
+    //  Se a cena for válida, defina mNextScene como essa nova cena, mSceneManagerState como SceneManagerState::Entering e
+    //  mSceneManagerTimer como o tempo de transição passado como parâmetro.
+    //  Se a cena for inválida, registre um erro no log e retorne.
+    //  Se o estado do SceneManager não for SceneManagerState::None, registre um erro no log e retorne.
+    if (mSceneManagerState == SceneManagerState::None) {
+        if (scene == GameScene::MainMenu || scene == GameScene::Game) {
+            mNextScene = scene;
+            mSceneManagerState = SceneManagerState::Entering;
+            mSceneManagerTimer = transitionTime;
+        }
+        else {
+            SDL_Log("Invalid scene state");
+        }
+    }
+    else {
+        SDL_Log("Invalid scene state");
+    }
+}
+void Game::UpdateSceneManager(float deltaTime)
+{
+    // --------------
+    // TODO - PARTE 2
+    // --------------
+
+    // TODO 1.: Verifique se o estado do SceneManager é SceneManagerState::Entering. Se sim, decremente o mSceneManagerTimer
+    //  usando o deltaTime. Em seguida, verifique se o mSceneManagerTimer é menor ou igual a 0. Se for, reinicie o
+    //  mSceneManagerTimer para TRANSITION_TIME e mude o estado do SceneManager para SceneManagerState::Active.
+    if (mSceneManagerState == SceneManagerState::Entering) {
+        mSceneManagerTimer -= deltaTime;
+        if (mSceneManagerTimer <= 0) {
+            mSceneManagerTimer = TRANSITION_TIME;
+            mSceneManagerState = SceneManagerState::Active;
+        }
+    }
+
+    // TODO 2.: Verifique se o estado do SceneManager é SceneManagerState::Active. Se sim, decremente o mSceneManagerTimer
+    //  usando o deltaTime. Em seguida, verifique se o mSceneManagerTimer é menor ou igual a 0. Se for, chame ChangeScene()
+    //  e mude o estado do SceneManager para SceneManagerState::None.
+    if (mSceneManagerState == SceneManagerState::Active) {
+        mSceneManagerTimer -= deltaTime;
+        if (mSceneManagerTimer <= 0) {
+            mGameScene = mNextScene;
+            ChangeScene();
+            mSceneManagerState = SceneManagerState::None;
+        }
+    }
+
+    // TODO 3.: Remova a chamada da função ChangeScene() do método Initialize(), pois ela será chamada automaticamente
+    //  durante o UpdateSceneManager() quando o estado do SceneManager for SceneManagerState::Active.
 }
 
 void Game::ChangeScene()
 {
     // Unload current Scene
-    // UnloadScene();
+    UnloadScene();
 
-    // // Reset game timer
-    // mGameTimer = 0.0f;
+    if (mNextScene == GameScene::MainMenu)
+    {
+        // Initialize main menu actors
+        LoadMainMenu();
+    }
+    else if (mNextScene == GameScene::Game) {
+        mHUD = new HUD(this, "../Assets/Fonts/SMB.ttf");
+        SetGamePlayState(GamePlayState::Playing);
 
-    // Reset gameplay state
-    // mGamePlayState = GamePlayState::Playing;
-
-    mHUD = new HUD(this, "../Assets/Fonts/SMB.ttf");
-    // mHUD->SetLevelName("Bla Foo");
+        // Init all game actors
+        InitializeActors();
+    }
 }
 
 SDL_Texture* Game::TextureFromSurface(SDL_Surface* surface) {
@@ -653,4 +715,20 @@ void Game::Shutdown()
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
     SDL_Quit();
+}
+
+void Game::LoadMainMenu()
+{
+    // --------------
+    // TODO - PARTE 1
+    // --------------
+
+    // Esse método será usado para criar uma tela de UI e adicionar os elementos do menu principal.
+    mMusicHandle = mAudio->PlaySound("BlueNightclub.mp3", true);
+    auto mainMenu = new UIScreen(this, "../Assets/Fonts/SMB.ttf");
+    mainMenu->AddText("Magic Snooker 2D", Vector2(mWindowWidth/2 - 275, 75.0f), Vector2(600.0f, 60.0f), 60);
+
+    mainMenu->AddButton("Start Game", Vector2(mWindowWidth/2.0f - 100.0f, 250.0f), Vector2(200.0f, 40.0f),
+                                       [this]() {SetGameScene(GameScene::Game);});
+
 }
