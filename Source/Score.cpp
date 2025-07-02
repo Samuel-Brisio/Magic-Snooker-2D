@@ -96,8 +96,8 @@ void Score::EndTurn(HUD* hud) {
         }
     }
 
-    if (mPlayerTurn == PlayerTurn::Player1) mPlayer1Energy++;
-    else mPlayer2Energy++;
+    if (mPlayerTurn == PlayerTurn::Player1) mPlayer1Energy = Math::Min(mPlayer1Energy + 1, 5);
+    else mPlayer2Energy = Math::Min(mPlayer2Energy + 1, 5);
 
     hud->SetPlayerEnergy(mPlayer1Energy, mPlayer2Energy);
 
