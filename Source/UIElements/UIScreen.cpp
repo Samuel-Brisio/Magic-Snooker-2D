@@ -195,3 +195,8 @@ UIImage* UIScreen::AddImage(const std::string &imagePath, const Vector2 &pos, co
     mImages.push_back(img);
     return img;
 }
+
+void UIScreen::RemoveImage(UIImage *image) {
+    mImages.erase(std::find(mImages.begin(), mImages.end(), image));
+    delete image;
+}

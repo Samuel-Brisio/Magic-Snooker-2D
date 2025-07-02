@@ -30,6 +30,9 @@ HUD::HUD(class Game* game, const std::string& fontName)
     // TODO 6.: Adicione um texto com a string "000" logo abaixo do texto "Player 1 Score".
     mPlayer1Score = AddText("00", Vector2(50, WORD_HEIGHT), Vector2(CHAR_WIDTH*1, WORD_HEIGHT), POINT_SIZE);
 
+
+    // TODO 7.: Carrega as imagens de energia do jogador 1 e 2, e adiciona elas na HUD.
+    SetPlayerEnergy(1, 0);
 }
 
 HUD::~HUD()
@@ -84,4 +87,25 @@ void HUD::ShowEndGameScreen(const std::string& message) {
         Vector2(CHAR_WIDTH * text_size, WORD_HEIGHT),
         POINT_SIZE
         );
+}
+
+void HUD::SetPlayerEnergy(int player1Energy, int player2Energy) {
+    // TODO 7.: Carrega as imagens de energia do jogador 1 e 2, e adiciona elas na HUD.
+
+    if (mPlayer1EnergyBar != nullptr) RemoveImage(mPlayer1EnergyBar);
+    if (mPlayer2EnergyBar != nullptr) RemoveImage(mPlayer2EnergyBar);
+
+    std::string energyImagePath = "../Assets/Sprites/EnergyBar/Energy_" + std::to_string(player1Energy) + ".png";
+    mPlayer1EnergyBar = AddImage(
+        energyImagePath,
+        Vector2(40, mGame->GetWindowHeight() - 50),
+        Vector2(250, WORD_HEIGHT*1.5)
+    );
+
+    energyImagePath = "../Assets/Sprites/EnergyBar/Energy_" + std::to_string(player2Energy) + ".png";
+    mPlayer2EnergyBar = AddImage(
+        energyImagePath,
+        Vector2(mGame->GetWindowWidth()-300, mGame->GetWindowHeight() - 50),
+        Vector2(250, WORD_HEIGHT*1.5)
+    );
 }

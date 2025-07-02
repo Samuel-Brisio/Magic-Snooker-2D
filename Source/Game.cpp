@@ -317,7 +317,7 @@ void Game::UpdateActors(float deltaTime)
 
         // SDL_Log("Game::UpdateActors: allBallStopped=%d", allBallStopped);
         if (allBallStopped && mGamePlayState == GamePlayState::Simulating && mWhiteBall != nullptr) {
-            mScore.EndTurn();
+            mScore.EndTurn(mHUD);
             TogglePlay();
             mCue->SetCueState(CueState::Moving);
         }

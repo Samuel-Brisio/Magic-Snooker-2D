@@ -5,6 +5,7 @@
 #include "Score.h"
 #include <SDL.h>
 #include "Game.h"
+#include "HUD.h"
 
 Score::Score(Game* game, const BallColor player1BallColor, const BallColor player2BallColor)
     :mGame(game)
@@ -14,6 +15,8 @@ Score::Score(Game* game, const BallColor player1BallColor, const BallColor playe
     ,mPlayer2BallColor(player2BallColor)
     ,mPlayerTurn(PlayerTurn::Player1)
     ,mFirstHitBallInTurn(BallColor::None)
+    ,mPlayer1Energy(1)
+    ,mPlayer2Energy(0)
 {
 }
 
@@ -46,7 +49,7 @@ void Score::DecreaseScore() {
     }
 }
 
-void Score::EndTurn() {
+void Score::EndTurn(HUD* hud) {
     SDL_Log("End Turn: %s", GetCurrentPlayerStr(mPlayerTurn).c_str());
 
     if (mPlayerTurn == PlayerTurn::Player1) {
@@ -92,6 +95,11 @@ void Score::EndTurn() {
             mPlayerTurn = PlayerTurn::Player1;
         }
     }
+
+    if (mPlayerTurn == PlayerTurn::Player1) mPlayer1Energy = Math::Min(mPlayer1Energy + 1, 5);
+    else mPlayer2Energy = Math::Min(mPlayer2Energy + 1, 5);
+
+    hud->SetPlayerEnergy(mPlayer1Energy, mPlayer2Energy);
 
     SDL_Log("Next Player Turn: %s", GetCurrentPlayerStr(mPlayerTurn).c_str());
 

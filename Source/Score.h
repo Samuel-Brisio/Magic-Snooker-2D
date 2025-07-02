@@ -8,6 +8,8 @@
 #include "Actors/Ball.h"
 #include <SDL.h>
 
+class HUD;
+
 enum class PlayerTurn {
     Player1,
     Player2,
@@ -34,7 +36,10 @@ public:
     int GetPlayer1Score() const { return mPlayer1Score; }
     int GetPlayer2Score() const { return mPlayer2Score; }
 
-    void EndTurn();
+    int GetPlayer1Energy() const { return mPlayer1Energy; }
+    int GetPlayer2Energy() const { return mPlayer2Energy; }
+
+    void EndTurn(HUD* hud);
 
 private:
     Game* mGame;
@@ -42,6 +47,8 @@ private:
     int mPlayer2Score;
     BallColor mPlayer1BallColor;
     BallColor mPlayer2BallColor;
+    int mPlayer1Energy = 0;
+    int mPlayer2Energy = 0;
     PlayerTurn mPlayerTurn;
     std::set<BallColor> mBallColors;
     BallColor mFirstHitBallInTurn;
