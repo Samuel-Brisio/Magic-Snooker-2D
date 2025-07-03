@@ -31,6 +31,7 @@ public:
     {
         MainMenu,
         Game,
+
     };
 
     enum class SceneManagerState
