@@ -68,32 +68,14 @@ void UIScreen::Update(float deltaTime)
 
 void UIScreen::Draw(SDL_Renderer *renderer)
 {
-      // --------------
-    // TODO - PARTE 1-1
-    // --------------
-
-    // TODO 1.: Percorra a listas de textos (mTexts) e chame o método Draw de cada UIText, passando o renderer
-    //  e a posição da tela (mPos).
+    for (const auto imageUI: mImages ) {
+        imageUI->Draw(renderer, mPos);
+    }
     for (const auto textUI: mTexts) {
         textUI->Draw(renderer, mPos);
     }
-
-    // --------------
-    // TODO - PARTE 1-2
-    // --------------
-
-    // TODO 1.: Percorra a lista de botões (mButtons) e chame o método Draw de cada UIButton, passando o renderer
     for (const auto buttonUI: mButtons ) {
         buttonUI->Draw(renderer, mPos);
-    }
-
-    // --------------
-    // TODO - PARTE 1-3
-    // --------------
-
-    // TODO 1.: Percorra a lista de imagens (mImages) e chame o método Draw de cada UIImage, passando o renderer
-    for (const auto imageUI: mImages ) {
-        imageUI->Draw(renderer, mPos);
     }
 }
 
@@ -197,6 +179,9 @@ UIImage* UIScreen::AddImage(const std::string &imagePath, const Vector2 &pos, co
 }
 
 void UIScreen::RemoveImage(UIImage *image) {
-    mImages.erase(std::find(mImages.begin(), mImages.end(), image));
-    delete image;
+    auto p = std::find(mImages.begin(), mImages.end(), image);
+    if (p != mImages.end()) {
+        mImages.erase(p);
+        delete image;
+    }
 }
