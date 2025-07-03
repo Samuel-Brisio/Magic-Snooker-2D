@@ -39,6 +39,8 @@ public:
     int GetPlayer1Energy() const { return mPlayer1Energy; }
     int GetPlayer2Energy() const { return mPlayer2Energy; }
 
+    bool UsePower(int powerIndex);
+
     void EndTurn(HUD* hud);
 
 private:
@@ -52,5 +54,8 @@ private:
     PlayerTurn mPlayerTurn;
     std::set<BallColor> mBallColors;
     BallColor mFirstHitBallInTurn;
+
+    std::vector<bool> mPlayer1PowersUsed;
+    std::vector<bool> mPlayer2PowersUsed;
 };
 

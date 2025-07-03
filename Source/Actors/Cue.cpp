@@ -5,6 +5,7 @@
 #include "Cue.h"
 
 #include "../Game.h"
+#include "../Score.h"
 
 Cue::Cue(Game *game, Ball *whiteBall, int width, int height)
     : Actor(game)
@@ -32,6 +33,8 @@ Cue::Cue(Game *game, Ball *whiteBall, int width, int height)
     float deltaY = Math::Sin(mRotation) * mDistance;
 
     this->SetPosition(Vector2(ballPos.x+ deltaX, ballPos.y+ deltaY));
+
+    mPowerUsed = -1; // No power used at the beginning
 }
 
 void Cue::OnUpdate(float deltaTime) {
@@ -55,6 +58,11 @@ void Cue::OnUpdate(float deltaTime) {
         // Update Cue Position
         UpdateCuePosition();
 
+
+        // Logic of Power Mechanic
+        if (mPowerUsed != -1) {
+            mGame->GetScore()->UsePower(mPowerUsed);
+        }
     }
 
     // Charge the energy meter
@@ -134,6 +142,16 @@ void Cue::OnProcessInput(const Uint8* keyState) {
     }
     else {
         mCharge = false;
+    }
+
+    if (keyState[SDL_SCANCODE_1]) {
+        mPowerUsed = 1;
+    }
+    else if (keyState[SDL_SCANCODE_2]) {
+        mPowerUsed = 2;
+    }
+    else {
+        mPowerUsed = -1; // No power used
     }
 
 }

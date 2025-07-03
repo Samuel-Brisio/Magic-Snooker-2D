@@ -32,6 +32,11 @@ public:
 
     void SetPlayerEnergy(int player1Energy, int player2Energy);
 
+    void ToggleEnablePowerSprite(int player, int idx);
+    void ToggleDisablePowerSprite(int player, int idx);
+    void EnableAllPowerSprites(int player);
+    void DisableAllPowerSprites(int player);
+
 private:
     // HUD elements
     UIText* mScoreCounter;
@@ -43,4 +48,9 @@ private:
 
     UIImage* mPlayer1EnergyBar;
     UIImage* mPlayer2EnergyBar;
+
+    std::vector<UIImage*> mPlayer1PowerSprite;
+    std::vector<UIImage*> mPlayer2PowerSprite;
+
+    std::vector<std::map<std::string, std::string>> mpowerSprites;
 };

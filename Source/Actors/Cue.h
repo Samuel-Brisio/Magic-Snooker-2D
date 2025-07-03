@@ -51,6 +51,9 @@ private:
     class Ball* mWhiteBall;
     class DrawSpriteComponent* mDrawComponent;
 
+    int mPowerUsed;
+
+
     float CalculateEnergyLevel(double x);
 };
 

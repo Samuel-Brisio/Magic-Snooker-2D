@@ -18,6 +18,10 @@ Score::Score(Game* game, const BallColor player1BallColor, const BallColor playe
     ,mPlayer1Energy(1)
     ,mPlayer2Energy(0)
 {
+    for (int i = 0; i < Game::NUM_POWERS; i++) {
+        mPlayer1PowersUsed.push_back(false);
+        mPlayer2PowersUsed.push_back(false);
+    }
 }
 
 
@@ -96,8 +100,21 @@ void Score::EndTurn(HUD* hud) {
         }
     }
 
-    if (mPlayerTurn == PlayerTurn::Player1) mPlayer1Energy = Math::Min(mPlayer1Energy + 1, 5);
-    else mPlayer2Energy = Math::Min(mPlayer2Energy + 1, 5);
+    if (mPlayerTurn == PlayerTurn::Player1) {
+        mPlayer1Energy = Math::Min(mPlayer1Energy + 1, 5);
+        for (int i = 0; i < Game::NUM_POWERS; i++) {
+            mPlayer1PowersUsed[i] = false;
+        }
+    }
+    else {
+        mPlayer2Energy = Math::Min(mPlayer2Energy + 1, 5);
+        for (int i = 0; i < Game::NUM_POWERS; i++) {
+            mPlayer2PowersUsed[i] = false;
+        }
+    }
+
+    if (mPlayer1Energy > 0 && mPlayerTurn == PlayerTurn::Player1) mGame->GetHUD()->EnableAllPowerSprites(1);
+    if (mPlayer2Energy > 0 && mPlayerTurn == PlayerTurn::Player2) mGame->GetHUD()->EnableAllPowerSprites(2);
 
     hud->SetPlayerEnergy(mPlayer1Energy, mPlayer2Energy);
 
@@ -111,4 +128,38 @@ std::string Score::GetCurrentPlayerStr(const PlayerTurn playerTurn) {
     if (playerTurn == PlayerTurn::Player1) {return "Player 1";}
     if (playerTurn == PlayerTurn::Player2) {return "Player 2";}
     return "Error: Unknown Player Turn";
+}
+
+bool Score::UsePower(int powerIndex) {
+    if (mPlayerTurn == PlayerTurn::Player1 && mPlayer1PowersUsed[powerIndex-1] == false) {
+        if (mPlayer1Energy > 0) {
+            mPlayer1Energy--;
+            mPlayer1PowersUsed[powerIndex-1] = true;
+            mGame->GetHUD()->SetPlayerEnergy(mPlayer1Energy, mPlayer2Energy);
+            mGame->GetHUD()->ToggleDisablePowerSprite(1, powerIndex-1);
+            SDL_Log("Player 1 used power %d, remaining energy: %d", powerIndex, mPlayer1Energy);
+
+            if (mPlayer2Energy ==0) {
+                mGame->GetHUD()->DisableAllPowerSprites(1);
+            }
+            return true;
+        }
+        mGame->GetHUD()->DisableAllPowerSprites(1);
+        return false;
+    }
+    if (mPlayerTurn == PlayerTurn::Player2 && mPlayer2PowersUsed[powerIndex-1] == false) {
+        if (mPlayer2Energy > 0) {
+            mPlayer2Energy--;
+            mPlayer2PowersUsed[powerIndex-1] = true;
+            mGame->GetHUD()->SetPlayerEnergy(mPlayer1Energy, mPlayer2Energy);
+            mGame->GetHUD()->ToggleDisablePowerSprite(2, powerIndex-1);
+            SDL_Log("Player 2 used power %d, remaining energy: %d", powerIndex, mPlayer2Energy);
+
+            if (mPlayer2Energy == 0) {
+                mGame->GetHUD()->DisableAllPowerSprites(2);
+            }
+            return true;
+        }
+    }
+    return false;
 }
