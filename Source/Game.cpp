@@ -447,7 +447,7 @@ void Game::RemoveInvisibleAABBWall(class InvisibleAABBWall *aabbWall) {
 void Game::GenerateOutput()
 {
     // Set draw color to black
-    SDL_SetRenderDrawColor(mRenderer, 107, 140, 255, 255);
+    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
 
     // Clear back buffer
     SDL_RenderClear(mRenderer);
