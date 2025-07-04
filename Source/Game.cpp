@@ -318,6 +318,35 @@ void Game::UpdateActors(float deltaTime)
         // SDL_Log("Game::UpdateActors: allBallStopped=%d", allBallStopped);
         if (allBallStopped && mGamePlayState == GamePlayState::Simulating && mWhiteBall != nullptr) {
             mScore.EndTurn(mHUD);
+            // If Shrink White Ball Power was used, respawn a new white ball
+            if (mScore.HasToApplyShrinkWhiteBallPower() && mWhiteBall != nullptr) {
+                auto whiteBallPos = mWhiteBall->GetPosition();
+                delete mWhiteBall;
+                mCue->RemoveWhiteBall();
+
+                // Crie e posicione a nova bola branca
+                mWhiteBall = new WhiteBall(this, BALL_RADIUS/4.0, 0.5);
+                mWhiteBall->SetPosition(whiteBallPos);
+                mCue->SetWhiteBall(mWhiteBall);
+
+
+                SDL_Log("Game::UpdateActors: Shrink White Ball Power Applied");
+            }
+            else {
+                if (mWhiteBall->GetRadius() != BALL_RADIUS) {
+                    // Reset the white ball radius to the original size
+                    SDL_Log("Game::UpdateActors: Resetting White Ball Radius to %d", BALL_RADIUS);
+                    auto whiteBallPos = mWhiteBall->GetPosition();
+                    delete mWhiteBall;
+                    mCue->RemoveWhiteBall();
+
+                    // Crie e posicione a nova bola branca
+                    mWhiteBall = new WhiteBall(this, BALL_RADIUS, 0.5);
+                    mWhiteBall->SetPosition(whiteBallPos);
+                    mCue->SetWhiteBall(mWhiteBall);
+
+                }
+            }
             TogglePlay();
             mCue->SetCueState(CueState::Moving);
         }
@@ -538,7 +567,6 @@ void Game::TogglePlay() {
 
 void Game::RespawnWhiteBall()
 {
-    int ballRadius = 16;
     Vector2 newPos;
     bool validPos = false;
 
@@ -548,7 +576,7 @@ void Game::RespawnWhiteBall()
         newPos = Vector2(mTablePos.x + 50 + rand() % 400, mTablePos.y + rand() % 200);
         validPos = true;
         for (auto ball : mBalls) {
-            if ((ball->GetPosition() - newPos).Length() < 2 * ballRadius) {
+            if ((ball->GetPosition() - newPos).Length() < 2 * BALL_RADIUS) {
                 validPos = false;
                 break;
             }
@@ -556,7 +584,7 @@ void Game::RespawnWhiteBall()
     }
 
     // Crie e posicione a nova bola branca
-    mWhiteBall = new WhiteBall(this, ballRadius, 0.5);
+    mWhiteBall = new WhiteBall(this, BALL_RADIUS, 0.5);
     mWhiteBall->SetPosition(newPos);
     mCue->SetWhiteBall(mWhiteBall);
 }

@@ -27,6 +27,7 @@ public:
     // static const int SPAWN_DISTANCE = 700;
     static const int TRANSITION_TIME = 1;
     static const int NUM_POWERS = 2;
+    static const int BALL_RADIUS = 16;
 
     enum class GameScene
     {

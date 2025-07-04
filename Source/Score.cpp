@@ -17,6 +17,8 @@ Score::Score(Game* game, const BallColor player1BallColor, const BallColor playe
     ,mFirstHitBallInTurn(BallColor::None)
     ,mPlayer1Energy(1)
     ,mPlayer2Energy(0)
+    ,mUseCueAccelerationPower(false)
+    ,mApplyShrinkWhiteBallPower(false)
 {
     for (int i = 0; i < Game::NUM_POWERS; i++) {
         mPlayer1PowersUsed.push_back(false);
@@ -121,6 +123,10 @@ void Score::EndTurn(HUD* hud) {
                     SDL_Log("Applying Player 2 Power 1 on Player 1");
                     mUseCueAccelerationPower = true;
                 }
+                if (mPlayer2PowersUsed[i] == true && i + 1 == 2) {
+                    SDL_Log("Applying Player 2 Power 2 on Player 1");
+                    mApplyShrinkWhiteBallPower = true;
+                }
             }
         }
 
@@ -138,6 +144,10 @@ void Score::EndTurn(HUD* hud) {
                 if (mPlayer1PowersUsed[i] == true && i + 1 == 1) {
                     SDL_Log("Applying Player 1 Power 1 on Player 2");
                     mUseCueAccelerationPower = true;
+                }
+                if (mPlayer1PowersUsed[i] == true && i + 1 == 2) {
+                    SDL_Log("Applying Player 1 Power 2 on Player 2");
+                    mApplyShrinkWhiteBallPower = true;
                 }
             }
         }
@@ -197,6 +207,14 @@ bool Score::UsePower(int powerIndex) {
 bool Score::HasToApplyCueAccelerationPower() {
     if (mUseCueAccelerationPower) {
         mUseCueAccelerationPower = false;
+        return true;
+    }
+    return false;
+}
+
+bool Score::HasToApplyShrinkWhiteBallPower() {
+    if (mApplyShrinkWhiteBallPower) {
+        mApplyShrinkWhiteBallPower = false;
         return true;
     }
     return false;
