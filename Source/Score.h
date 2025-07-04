@@ -41,6 +41,8 @@ public:
 
     bool UsePower(int powerIndex);
 
+    bool HasToApplyCueAccelerationPower();
+
     void EndTurn(HUD* hud);
 
 private:
@@ -57,5 +59,7 @@ private:
 
     std::vector<bool> mPlayer1PowersUsed;
     std::vector<bool> mPlayer2PowersUsed;
+
+    bool mUseCueAccelerationPower;
 };
 

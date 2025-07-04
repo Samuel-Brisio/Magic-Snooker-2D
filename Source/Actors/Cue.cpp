@@ -17,6 +17,9 @@ Cue::Cue(Game *game, Ball *whiteBall, int width, int height)
     ,mEnergyLevel(1)
     ,mCueState(CueState::Moving)
     ,mTimeDuration(0)
+    ,mIsCueAccelerationPowerUsed(false)
+    ,mRotationDirection(0)
+    ,mDelay(0.3f)
 {
     // Distancia padrão que o taco deve aparecer longe da bola branca
     mDistance = 80.0f;
@@ -58,18 +61,26 @@ void Cue::OnUpdate(float deltaTime) {
         // Update Cue Position
         UpdateCuePosition();
 
-
         // Logic of Power Mechanic
         if (mPowerUsed != -1) {
             mGame->GetScore()->UsePower(mPowerUsed);
+        }
+        if (mGame->GetScore()->HasToApplyCueAccelerationPower()) {
+            mIsCueAccelerationPowerUsed = true;
         }
     }
 
     // Charge the energy meter
     if (mCueState == CueState::Charging && mGame->GetGamePlayState() == Game::GamePlayState::Playing) {
         mTimeDuration += deltaTime;
-        mEnergyLevel = static_cast<int>(CalculateEnergyLevel(mTimeDuration));
-        // SDL_Log("Energy Level: %i", mEnergyLevel);
+        if (mIsCueAccelerationPowerUsed) {
+            // Accelerate the time need to achieve max power in 8 times if the cue acceleration power is used
+            mEnergyLevel = static_cast<int>(CalculateEnergyLevel(mTimeDuration * 8));
+        }
+        else {
+            // Normal time to achieve max power
+            mEnergyLevel = static_cast<int>(CalculateEnergyLevel(mTimeDuration));
+        }
 
         // Update Cue Position
         UpdateCuePosition();
@@ -77,6 +88,8 @@ void Cue::OnUpdate(float deltaTime) {
 
     // The Cue hits the white ball
     if (mCueState == CueState::Attacking && mGame->GetGamePlayState() == Game::GamePlayState::Playing) {
+        mIsCueAccelerationPowerUsed = false; // Reset the power used after applying it
+
         Vector2 direction = mWhiteBall->GetPosition() - this->GetCuePosition();
         // SDL_Log("White Ball Position: (%f, %f) and Cue Position (%f, %f)", mWhiteBall->GetPosition().x, mWhiteBall->GetPosition().y, this->GetCuePosition().x, this->GetCuePosition().y);
         float actualDistance = direction.Length();
