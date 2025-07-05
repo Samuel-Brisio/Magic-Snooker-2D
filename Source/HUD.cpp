@@ -33,6 +33,28 @@ HUD::HUD(class Game* game, const std::string& fontName)
 
     // TODO 7.: Carrega as imagens de energia do jogador 1 e 2, e adiciona elas na HUD.
     SetPlayerEnergy(1, 0);
+
+    // TODO 8.: Carrega o sprite dos poderes
+    std::vector<std::map<std::string, std::string>> powerSprites = {
+        {{"enable", "../Assets/Sprites/Magic/1.png"}, {"disable", "../Assets/Sprites/Magic/1_grayscale.png"}},
+        {{"enable", "../Assets/Sprites/Magic/2.png"}, {"disable", "../Assets/Sprites/Magic/2_grayscale.png"}},
+    };
+    mpowerSprites = powerSprites;
+
+
+    for (int i = 0; i < Game::NUM_POWERS; i++) {
+        mPlayer1PowerSprite.push_back(AddImage(
+        powerSprites[i]["enable"],
+        Vector2(80 + (10+84*0.8)*(i) , mGame->GetWindowHeight() - 150),
+        Vector2(84*0.8, 118*0.8)
+        ));
+
+        mPlayer2PowerSprite.push_back(AddImage(
+         powerSprites[i]["disable"],
+         Vector2(mGame->GetWindowWidth() - 260 + (10+84*0.8)*(i), mGame->GetWindowHeight() - 150),
+         Vector2(84*0.8, 118*0.8)
+        ));
+    }
 }
 
 HUD::~HUD()
@@ -108,4 +130,72 @@ void HUD::SetPlayerEnergy(int player1Energy, int player2Energy) {
         Vector2(mGame->GetWindowWidth()-300, mGame->GetWindowHeight() - 50),
         Vector2(250, WORD_HEIGHT*1.5)
     );
+}
+
+void HUD::ToggleEnablePowerSprite(int player, int idx) {
+    if (player == 1) {
+        if (mPlayer1PowerSprite[idx] != nullptr) {
+            RemoveImage(mPlayer1PowerSprite[idx]);
+        }
+        mPlayer1PowerSprite[idx] = AddImage(
+            mpowerSprites[idx]["enable"],
+            Vector2(80 + (10+84*0.8)*(idx), mGame->GetWindowHeight() - 150),
+            Vector2(84*0.8, 118*0.8)
+        );
+    }
+    else if (player == 2) {
+        if (mPlayer2PowerSprite[idx] != nullptr) {
+            RemoveImage(mPlayer2PowerSprite[idx]);
+        }
+        mPlayer2PowerSprite[idx] = AddImage(
+            mpowerSprites[idx]["enable"],
+            Vector2(mGame->GetWindowWidth()-260 + (10+84*0.8)*(idx), mGame->GetWindowHeight() - 150),
+            Vector2(84*0.8, 118*0.8)
+        );
+    }
+}
+
+void HUD::ToggleDisablePowerSprite(int player, int idx) {
+        if (player == 1) {
+            if (mPlayer1PowerSprite[idx] != nullptr) {
+                RemoveImage(mPlayer1PowerSprite[idx]);
+            }
+            mPlayer1PowerSprite[idx] = AddImage(
+                mpowerSprites[idx]["disable"],
+                Vector2(80 + (10+84*0.8)*(idx), mGame->GetWindowHeight() - 150),
+                Vector2(84*0.8, 118*0.8)
+            );
+        }
+        else if (player == 2) {
+            if (mPlayer2PowerSprite[idx] != nullptr) {
+                RemoveImage(mPlayer2PowerSprite[idx]);
+            }
+            mPlayer2PowerSprite[idx] = AddImage(
+                mpowerSprites[idx]["disable"],
+                Vector2(mGame->GetWindowWidth()-260 + (10+84*0.8)*(idx), mGame->GetWindowHeight() - 150),
+                Vector2(84*0.8, 118*0.8)
+            );
+    }
+}
+
+void HUD::EnableAllPowerSprites(int player) {
+    for (int i = 0; i < mpowerSprites.size() ; i++) {
+        if (player == 1) {
+            ToggleEnablePowerSprite(1, i);
+        }
+        else if (player == 2) {
+            ToggleEnablePowerSprite(2, i);
+        }
+    }
+}
+
+void HUD::DisableAllPowerSprites(int player) {
+    for (int i = 0; i < mpowerSprites.size() ; i++) {
+        if (player == 1) {
+            ToggleDisablePowerSprite(1, i);
+        }
+        else if (player == 2) {
+            ToggleDisablePowerSprite(2, i);
+        }
+    }
 }

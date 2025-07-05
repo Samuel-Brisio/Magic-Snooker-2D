@@ -26,6 +26,8 @@ public:
     // static const int TILE_SIZE = 32;
     // static const int SPAWN_DISTANCE = 700;
     static const int TRANSITION_TIME = 1;
+    static const int NUM_POWERS = 2;
+    static const int BALL_RADIUS = 16;
 
     enum class GameScene
     {
@@ -131,6 +133,8 @@ public:
     void PushUI(class UIScreen* screen) { mUIStack.emplace_back(screen); }
     const std::vector<class UIScreen*>& GetUIStack() { return mUIStack; }
     class UIFont* LoadFont(const std::string& fileName);
+
+    class HUD *GetHUD() {return mHUD;};
 
     // scenes
     void SetGameScene(GameScene scene, float transitionTime = .0f);
