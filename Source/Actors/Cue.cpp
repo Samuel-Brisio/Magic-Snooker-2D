@@ -5,6 +5,7 @@
 #include "Cue.h"
 
 #include "../Game.h"
+#include "../Score.h"
 
 Cue::Cue(Game *game, Ball *whiteBall, int width, int height)
     : Actor(game)
@@ -16,6 +17,9 @@ Cue::Cue(Game *game, Ball *whiteBall, int width, int height)
     ,mEnergyLevel(1)
     ,mCueState(CueState::Moving)
     ,mTimeDuration(0)
+    ,mIsCueAccelerationPowerUsed(false)
+    ,mRotationDirection(0)
+    ,mDelay(0.3f)
 {
     // Distancia padrão que o taco deve aparecer longe da bola branca
     mDistance = 80.0f;
@@ -32,6 +36,8 @@ Cue::Cue(Game *game, Ball *whiteBall, int width, int height)
     float deltaY = Math::Sin(mRotation) * mDistance;
 
     this->SetPosition(Vector2(ballPos.x+ deltaX, ballPos.y+ deltaY));
+
+    mPowerUsed = -1; // No power used at the beginning
 }
 
 void Cue::OnUpdate(float deltaTime) {
@@ -55,13 +61,26 @@ void Cue::OnUpdate(float deltaTime) {
         // Update Cue Position
         UpdateCuePosition();
 
+        // Logic of Power Mechanic
+        if (mPowerUsed != -1) {
+            mGame->GetScore()->UsePower(mPowerUsed);
+        }
+        if (mGame->GetScore()->HasToApplyCueAccelerationPower()) {
+            mIsCueAccelerationPowerUsed = true;
+        }
     }
 
     // Charge the energy meter
     if (mCueState == CueState::Charging && mGame->GetGamePlayState() == Game::GamePlayState::Playing) {
         mTimeDuration += deltaTime;
-        mEnergyLevel = static_cast<int>(CalculateEnergyLevel(mTimeDuration));
-        // SDL_Log("Energy Level: %i", mEnergyLevel);
+        if (mIsCueAccelerationPowerUsed) {
+            // Accelerate the time need to achieve max power in 8 times if the cue acceleration power is used
+            mEnergyLevel = static_cast<int>(CalculateEnergyLevel(mTimeDuration * 8));
+        }
+        else {
+            // Normal time to achieve max power
+            mEnergyLevel = static_cast<int>(CalculateEnergyLevel(mTimeDuration));
+        }
 
         // Update Cue Position
         UpdateCuePosition();
@@ -69,6 +88,8 @@ void Cue::OnUpdate(float deltaTime) {
 
     // The Cue hits the white ball
     if (mCueState == CueState::Attacking && mGame->GetGamePlayState() == Game::GamePlayState::Playing) {
+        mIsCueAccelerationPowerUsed = false; // Reset the power used after applying it
+
         Vector2 direction = mWhiteBall->GetPosition() - this->GetCuePosition();
         // SDL_Log("White Ball Position: (%f, %f) and Cue Position (%f, %f)", mWhiteBall->GetPosition().x, mWhiteBall->GetPosition().y, this->GetCuePosition().x, this->GetCuePosition().y);
         float actualDistance = direction.Length();
@@ -134,6 +155,16 @@ void Cue::OnProcessInput(const Uint8* keyState) {
     }
     else {
         mCharge = false;
+    }
+
+    if (keyState[SDL_SCANCODE_1]) {
+        mPowerUsed = 1;
+    }
+    else if (keyState[SDL_SCANCODE_2]) {
+        mPowerUsed = 2;
+    }
+    else {
+        mPowerUsed = -1; // No power used
     }
 
 }

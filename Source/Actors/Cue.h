@@ -33,7 +33,6 @@ public:
     Vector2 GetCuePosition() const { return Vector2(this->GetPosition().x, this->GetPosition().y + mHeight / 2.0); }
 
 private:
-    float mForceLevel;
     float mDistance;
     float mIncreaseRotation;
     float mRotationDirection;
@@ -50,6 +49,10 @@ private:
 
     class Ball* mWhiteBall;
     class DrawSpriteComponent* mDrawComponent;
+
+    bool mIsCueAccelerationPowerUsed;
+    int mPowerUsed;
+
 
     float CalculateEnergyLevel(double x);
 };
