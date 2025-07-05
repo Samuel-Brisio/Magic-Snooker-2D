@@ -56,7 +56,6 @@ void Ball::OnUpdate(float deltaTime) {
     for (auto ball : balls) {
         if (ball != this) {
             bool isCollision = mColliderComponent->Intersect(ball->mColliderComponent);
-
             if (isCollision) SolveCollision(ball);
         }
     }
@@ -85,7 +84,9 @@ void Ball::OnUpdate(float deltaTime) {
 
 void Ball::SolveCollision(class Ball * other) {
     // SDL_Log("Ball-Ball Collision");
-    GetGame()->GetAudio()->PlaySound("BallBall.mp3", false);
+
+    auto vel = mRigidBodyComponent->GetVelocity().Length();
+    if (vel > 1) GetGame()->GetAudio()->PlaySound("BallBall.mp3", false);
 
     // Get positions and radii
     Vector2 posA = GetPosition();
