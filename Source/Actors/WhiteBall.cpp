@@ -20,6 +20,8 @@ WhiteBall::WhiteBall(Game* game, float radius, float weight)
 }
 
 void WhiteBall::OnUpdate(float deltaTime) {
+    // SDL_Log("WhiteBall::OnUpdate: White Ball Position: (%.2f, %.2f)", GetPosition().x, GetPosition().y);
+
     auto aabbWalls = mGame->GetInvisibleAABBWalls();
     for (auto aabbWall : aabbWalls) {
         bool isCollision = mColliderComponent->Intersect(aabbWall->GetColliderComponent());
