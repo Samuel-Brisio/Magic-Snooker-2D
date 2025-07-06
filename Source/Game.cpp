@@ -261,6 +261,8 @@ void Game::UpdateGame()
             mHUD->SetPlayer2Score(mScore.GetPlayer2Score());
             mHUD->SetCurrentPlayer(Score::GetCurrentPlayerStr(mScore.GetCurrentPlayer()));
         }
+
+
     }
 
     UpdateSceneManager(deltaTime);
