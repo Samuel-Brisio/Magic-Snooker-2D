@@ -44,6 +44,7 @@ private:
     int mEnergyLevel;
     float mTimeDuration;
     float mDelay;
+    Vector2 mDirection;
 
     CueState mCueState;
 

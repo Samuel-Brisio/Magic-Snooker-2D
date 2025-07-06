@@ -20,6 +20,7 @@ Cue::Cue(Game *game, Ball *whiteBall, int width, int height)
     ,mIsCueAccelerationPowerUsed(false)
     ,mRotationDirection(0)
     ,mDelay(0.3f)
+    ,mDirection(Vector2::Zero)
 {
     // Distancia padrão que o taco deve aparecer longe da bola branca
     mDistance = 80.0f;
@@ -84,26 +85,33 @@ void Cue::OnUpdate(float deltaTime) {
 
         // Update Cue Position
         UpdateCuePosition();
+
+        mDirection = mWhiteBall->GetPosition() - this->GetCuePosition();
     }
 
     // The Cue hits the white ball
     if (mCueState == CueState::Attacking && mGame->GetGamePlayState() == Game::GamePlayState::Playing) {
         mIsCueAccelerationPowerUsed = false; // Reset the power used after applying it
 
-        Vector2 direction = mWhiteBall->GetPosition() - this->GetCuePosition();
-        // SDL_Log("White Ball Position: (%f, %f) and Cue Position (%f, %f)", mWhiteBall->GetPosition().x, mWhiteBall->GetPosition().y, this->GetCuePosition().x, this->GetCuePosition().y);
-        float actualDistance = direction.Length();
-        Vector2::Normalize(direction);
+        Vector2 direction_cpy = mWhiteBall->GetPosition() - this->GetCuePosition();
+        float actualDistance = direction_cpy.Length();
+        direction_cpy = Vector2::Normalize(direction_cpy);
+
+        SDL_Log("Cue::OnUpdate: Direction Copy = (%.2f, %.2f)", direction_cpy.x, direction_cpy.y);
 
         if (actualDistance > mDistance) {
             // Update Cue Position
-            SetPosition(this->GetPosition() + direction*0.1);
+            SetPosition(this->GetPosition() + direction_cpy*2);
         }
         else {
-            mWhiteBall->GetComponent<RigidBodyComponent>()->ApplyForce(direction * 20 * mEnergyLevel * mEnergyLevel);
+            mDirection = Vector2::Normalize(mDirection);
+            SDL_Log("Cue::OnUpdate: Direction = (%.2f, %.2f)", mDirection.x, mDirection.y);
+            mWhiteBall->GetComponent<RigidBodyComponent>()->ApplyForce(mDirection * 400 * mEnergyLevel * mEnergyLevel);
             // SDL_Log("Cue::OnUpdate: Cue Hit the Ball");
             mCueState = CueState::Transition;
             mDelay = 0.3;
+
+            mDirection = Vector2::Zero;
         }
     }
 

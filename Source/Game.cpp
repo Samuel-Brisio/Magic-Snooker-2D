@@ -214,7 +214,7 @@ void Game::UpdateGame()
     while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16));
 
     float deltaTime = (SDL_GetTicks() - mTicksCount) / 1000.0f;
-    SDL_Log("Game::UpdateGame: deltaTime = %.6f", deltaTime);
+    // SDL_Log("Game::UpdateGame: deltaTime = %.6f", deltaTime);
     if (deltaTime > 0.05f)
     {
         deltaTime = 0.05f;
