@@ -124,7 +124,7 @@ SoundHandle AudioSystem::PlaySound(const std::string& soundName, bool looping)
 
 	if (availableChannel == -1) {
 		for (auto& entry : mHandleMap) {
-			if (entry.second.mIsLooping) {
+			if (!entry.second.mIsLooping) {
 				StopSound(entry.first);
 				availableChannel = entry.second.mChannel;
 				break;

@@ -27,7 +27,7 @@ Cue::Cue(Game *game, Ball *whiteBall, int width, int height)
     mIncreaseRotation = Math::Pi/2;
 
     mDrawComponent = new DrawSpriteComponent(this, "../Assets/Sprites/Cue/cue_resize.png",
-       mWidth,  height, 2, Vector2::Zero, mRotation * (180 / Math::Pi),  SDL_RendererFlip::SDL_FLIP_NONE);
+       mWidth,  height, 1000, Vector2::Zero, mRotation * (180 / Math::Pi),  SDL_RendererFlip::SDL_FLIP_NONE);
 
     // Define a posição do Taco em torno da bola branca
     const auto ballPos = whiteBall->GetPosition();
@@ -56,7 +56,7 @@ void Cue::OnUpdate(float deltaTime) {
         // Create a new Sprit with the new Rotation
         delete mDrawComponent;
         mDrawComponent = new DrawSpriteComponent(this, "../Assets/Sprites/Cue/cue_resize_centralized.png",
-        mWidth,  mHeight, 2, Vector2::Zero, mRotation * (180 / Math::Pi), SDL_RendererFlip::SDL_FLIP_NONE);
+        mWidth,  mHeight, 1000, Vector2::Zero, mRotation * (180 / Math::Pi), SDL_RendererFlip::SDL_FLIP_NONE);
 
         // Update Cue Position
         UpdateCuePosition();

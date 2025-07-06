@@ -261,6 +261,8 @@ void Game::UpdateGame()
             mHUD->SetPlayer2Score(mScore.GetPlayer2Score());
             mHUD->SetCurrentPlayer(Score::GetCurrentPlayerStr(mScore.GetCurrentPlayer()));
         }
+
+
     }
 
     UpdateSceneManager(deltaTime);
@@ -656,8 +658,6 @@ void Game::ChangeScene()
 {
     // Unload current Scene
     UnloadScene();
-
-    // Reset game state when going back to main menu
     if (mNextScene == GameScene::MainMenu) {
         // Clear all game actors
         while (!mActors.empty()) {
@@ -667,12 +667,10 @@ void Game::ChangeScene()
         mWhiteBall = nullptr;
         mCue = nullptr;
         mScore.ResetScore();
-    }
-
-    if (mNextScene == GameScene::MainMenu) {
         LoadMainMenu();
     }
     else if (mNextScene == GameScene::Game) {
+        mMusicHandle = mAudio->PlaySound("RussianFolkSongKatyusha.mp3", true);
         mHUD = new HUD(this, "../Assets/Fonts/SMB.ttf");
         SetGamePlayState(GamePlayState::Playing);
         InitializeActors();
