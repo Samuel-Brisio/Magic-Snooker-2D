@@ -173,7 +173,7 @@ UIImage* UIScreen::AddImage(const std::string &imagePath, const Vector2 &pos, co
     //  Armazene o ponteiro em uma variável img. A seguir, adicione o UIImage à lista de imagens (mImages) e retorne
     //  o ponteiro img.
     const auto img = new UIImage(mGame, imagePath, pos, dims, color);
-    SDL_Log("Image Loaded: %p", img);
+    // SDL_Log("Image Loaded: %p", img);
     mImages.push_back(img);
     return img;
 }

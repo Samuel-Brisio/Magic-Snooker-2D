@@ -34,7 +34,7 @@ UIImage::UIImage(Game* game, const std::string &imagePath, const Vector2 &pos, c
     }
 
     SDL_Texture* texture = game->TextureFromSurface(surface);
-    SDL_Log("Texture Loaded: %p", texture);
+    // SDL_Log("Texture Loaded: %p", texture);
 
     if (!texture) {
         SDL_Log("Failed to create texture: %s", SDL_GetError());

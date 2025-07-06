@@ -309,64 +309,66 @@ void Game::UpdateActors(float deltaTime)
 
     bool haveRedBall = std::any_of(mBalls.begin(), mBalls.end(), [](Ball* ball) {
     return ball->GetColor() == BallColor::Red;
-});
+    });
 
-    if (mWhiteBall != nullptr and (haveBlueBall and haveRedBall)) {
-        bool allBallStopped = true;
-        for (auto ball: mBalls) {
-            if (ball->GetIsMoving()) allBallStopped = false;
-        }
-
-        // SDL_Log("Game::UpdateActors: allBallStopped=%d", allBallStopped);
-        if (allBallStopped && mGamePlayState == GamePlayState::Simulating && mWhiteBall != nullptr) {
-            mScore.EndTurn(mHUD);
-            // If Shrink White Ball Power was used, respawn a new white ball
-            if (mScore.HasToApplyShrinkWhiteBallPower() && mWhiteBall != nullptr) {
-                auto whiteBallPos = mWhiteBall->GetPosition();
-                delete mWhiteBall;
-                mCue->RemoveWhiteBall();
-
-                // Crie e posicione a nova bola branca
-                mWhiteBall = new WhiteBall(this, BALL_RADIUS/4.0, 0.5);
-                mWhiteBall->SetPosition(whiteBallPos);
-                mCue->SetWhiteBall(mWhiteBall);
-
-
-                SDL_Log("Game::UpdateActors: Shrink White Ball Power Applied");
+    if (mWhiteBall != nullptr) {
+        if (haveBlueBall and haveRedBall) {
+            bool allBallStopped = true;
+            for (auto ball: mBalls) {
+                if (ball->GetIsMoving()) allBallStopped = false;
             }
-            else {
-                if (mWhiteBall->GetRadius() != BALL_RADIUS) {
-                    // Reset the white ball radius to the original size
-                    SDL_Log("Game::UpdateActors: Resetting White Ball Radius to %d", BALL_RADIUS);
+            // SDL_Log("Game::UpdateActors: allBallStopped=%d", allBallStopped);
+            if (allBallStopped && mGamePlayState == GamePlayState::Simulating && mWhiteBall != nullptr) {
+                mScore.EndTurn(mHUD);
+                // If Shrink White Ball Power was used, respawn a new white ball
+                if (mScore.HasToApplyShrinkWhiteBallPower() && mWhiteBall != nullptr) {
                     auto whiteBallPos = mWhiteBall->GetPosition();
                     delete mWhiteBall;
                     mCue->RemoveWhiteBall();
 
                     // Crie e posicione a nova bola branca
-                    mWhiteBall = new WhiteBall(this, BALL_RADIUS, 0.5);
+                    mWhiteBall = new WhiteBall(this, BALL_RADIUS/4.0, 0.5);
                     mWhiteBall->SetPosition(whiteBallPos);
                     mCue->SetWhiteBall(mWhiteBall);
 
+
+                    SDL_Log("Game::UpdateActors: Shrink White Ball Power Applied");
                 }
+                else {
+                    if (mWhiteBall->GetRadius() != BALL_RADIUS) {
+                        // Reset the white ball radius to the original size
+                        SDL_Log("Game::UpdateActors: Resetting White Ball Radius to %d", BALL_RADIUS);
+                        auto whiteBallPos = mWhiteBall->GetPosition();
+                        delete mWhiteBall;
+                        mCue->RemoveWhiteBall();
+
+                        // Crie e posicione a nova bola branca
+                        mWhiteBall = new WhiteBall(this, BALL_RADIUS, 0.5);
+                        mWhiteBall->SetPosition(whiteBallPos);
+                        mCue->SetWhiteBall(mWhiteBall);
+
+                    }
+                }
+                TogglePlay();
+                mCue->SetCueState(CueState::Moving);
             }
-            TogglePlay();
-            mCue->SetCueState(CueState::Moving);
-        }
-    }
-    else {
-        if (mScore.GetPlayer1Score() > mScore.GetPlayer2Score()) {
-            mHUD->ShowEndGameScreen("Player 1 Wins!");
-        }
-        else if (mScore.GetPlayer2Score() > mScore.GetPlayer1Score()) {
-            mHUD->ShowEndGameScreen("Player 2 Wins!");
         }
         else {
-            mHUD->ShowEndGameScreen("It's a Tie!");
+            if (mScore.GetPlayer1Score() > mScore.GetPlayer2Score()) {
+                mHUD->ShowEndGameScreen("Player 1 Wins!");
+            }
+            else if (mScore.GetPlayer2Score() > mScore.GetPlayer1Score()) {
+                mHUD->ShowEndGameScreen("Player 2 Wins!");
+            }
+            else {
+                mHUD->ShowEndGameScreen("It's a Tie!");
+            }
+            mGamePlayState = GamePlayState::Ending;
         }
-        mGamePlayState = GamePlayState::Ending;
     }
-
-
+    if (mWhiteBall == nullptr) {
+        RespawnWhiteBall();
+    }
 }
 
 void Game::AddActor(Actor* actor)
@@ -602,8 +604,15 @@ void Game::RespawnWhiteBall()
         }
     }
 
+    if (!validPos) {
+        SDL_Log("No valid position found for the white ball");
+        return; // No valid position found
+    }
+
     // Crie e posicione a nova bola branca
-    mWhiteBall = new WhiteBall(this, BALL_RADIUS, 0.5);
+    if (mWhiteBall == nullptr) {
+        mWhiteBall = new WhiteBall(this, BALL_RADIUS, 0.5);
+    }
     mWhiteBall->SetPosition(newPos);
     mCue->SetWhiteBall(mWhiteBall);
 }
@@ -617,6 +626,7 @@ bool Game::RemoveOneColorBall(BallColor color) {
         SDL_Log("Removed one %s Ball", (color == BallColor::Red) ? "Red" : "Blue");
         return true;
     }
+    SDL_Log("No %s Ball found to remove", (color == BallColor::Red) ? "Red" : "Blue");
     return false; // No ball of that color found
 }
 
