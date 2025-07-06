@@ -101,7 +101,7 @@ void Cue::OnUpdate(float deltaTime) {
 
         if (actualDistance > mDistance) {
             // Update Cue Position
-            SetPosition(this->GetPosition() + direction_cpy*2);
+            SetPosition(this->GetPosition() + direction_cpy*16);
         }
         else {
             mDirection = Vector2::Normalize(mDirection);

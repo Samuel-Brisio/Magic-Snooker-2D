@@ -38,12 +38,12 @@ Table::Table(Game *game, SDL_Rect position)
     new InvisibleAABBWall(mGame, bottomRect2);
 
     // Left Collision Block
-    SDL_Rect leftRect = {position.x - 5, position.y+ collidersHeight + 22, collidersHeight, verticalWallsHeight};
+    SDL_Rect leftRect = {position.x - 5, position.y+ collidersHeight + 28, collidersHeight, verticalWallsHeight-6};
     new InvisibleAABBWall(mGame, leftRect);
     mViableAreaPosDimensions.x = leftRect.x + leftRect.w + 5;
 
     // Right Collision Block
-    SDL_Rect rightRect = {position.x + position.w - collidersHeight + 5, position.y+ collidersHeight + 22, collidersHeight, verticalWallsHeight};
+    SDL_Rect rightRect = {position.x + position.w - collidersHeight + 5, position.y+ collidersHeight + 28, collidersHeight-6, verticalWallsHeight};
     new InvisibleAABBWall(mGame, rightRect);
     mViableAreaPosDimensions.w = (rightRect.x - 5) - mViableAreaPosDimensions.x;
 

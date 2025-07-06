@@ -23,7 +23,7 @@ InvisibleAABBWall::InvisibleAABBWall(Game *game, SDL_Rect position) :
     vertices.emplace_back(Vector2(position.x, position.y + position.h));
     vertices.emplace_back(Vector2(position.x + position.w, position.y + position.h));
     vertices.emplace_back(Vector2( position.x + position.w,  position.y));
-    mDrawComponent = new DrawPolygonComponent(this, vertices);
+    // mDrawComponent = new DrawPolygonComponent(this, vertices);
 
 }
 
