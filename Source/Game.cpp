@@ -70,8 +70,8 @@ bool Game::Initialize()
         return false;
     }
 
-    // mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
+    mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    // mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
     if (!mRenderer)
     {
         SDL_Log("Failed to create renderer: %s", SDL_GetError());
@@ -211,7 +211,7 @@ void Game::ProcessInput()
 
 void Game::UpdateGame()
 {
-    while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 4));
+    while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16));
 
     float deltaTime = (SDL_GetTicks() - mTicksCount) / 1000.0f;
     SDL_Log("Game::UpdateGame: deltaTime = %.6f", deltaTime);
@@ -329,7 +329,7 @@ void Game::UpdateActors(float deltaTime)
                     mCue->RemoveWhiteBall();
 
                     // Crie e posicione a nova bola branca
-                    mWhiteBall = new WhiteBall(this, BALL_RADIUS*0.6, 0.5);
+                    mWhiteBall = new WhiteBall(this, BALL_RADIUS*1.5, 0.5);
                     mWhiteBall->SetPosition(whiteBallPos);
                     mCue->SetWhiteBall(mWhiteBall);
 
