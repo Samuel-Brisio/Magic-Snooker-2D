@@ -20,6 +20,7 @@ public:
 private:
     DrawSpriteComponent* mDrawComponent;
     SDL_Rect mTablePosDimensions;
+    SDL_Rect mViableAreaPosDimensions;
     int mCollidersHeight;
 };
 

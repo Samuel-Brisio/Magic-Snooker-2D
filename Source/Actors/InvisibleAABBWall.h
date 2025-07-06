@@ -20,7 +20,7 @@ public:
 private:
     std::vector<Vector2> *mVertices;
     class RigidBodyComponent* mRigidBodyComponent;
-    // class DrawPolygonComponent* mDrawComponent;
+    class DrawPolygonComponent* mDrawComponent;
     class AABBColliderComponent* mColliderComponent;
 };
 

@@ -188,6 +188,7 @@ private:
     std::vector<class InvisibleAABBWall*> mInvisibleAABBWalls;
     std::vector<class InvisibleOBBWall*> mInvisibleOBBWalls;
     std::vector<class Bucket*> mBuckets;
+    class Table *mTable;
 
     // SDL stuff
     SDL_Window* mWindow;

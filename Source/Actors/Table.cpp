@@ -22,6 +22,7 @@ Table::Table(Game *game, SDL_Rect position)
     // Top Collision Block 1
     SDL_Rect topRect1 = {position.x + collidersHeight + 20, position.y, horizontalWallsWidth, collidersHeight};
     new InvisibleAABBWall(mGame, topRect1);
+    mViableAreaPosDimensions.y = topRect1.y + topRect1.h + 5;
 
     // Top Collision Block 2
     SDL_Rect topRect2 = {position.x + position.w/2 + collidersHeight/2 + 10, position.y, horizontalWallsWidth, collidersHeight};
@@ -30,6 +31,7 @@ Table::Table(Game *game, SDL_Rect position)
     // Bottom Collision Block 1
     SDL_Rect bottomRect1 = {position.x + collidersHeight + 20, position.y + position.h - collidersHeight, horizontalWallsWidth, collidersHeight};
     new InvisibleAABBWall(mGame, bottomRect1);
+    mViableAreaPosDimensions.h = (bottomRect1.y - 5) - mViableAreaPosDimensions.y;
 
     // Bottom Collision Block 2
     SDL_Rect bottomRect2 = {position.x + position.w/2 + collidersHeight/2 + 10, position.y + position.h - collidersHeight, horizontalWallsWidth, collidersHeight};
@@ -38,10 +40,12 @@ Table::Table(Game *game, SDL_Rect position)
     // Left Collision Block
     SDL_Rect leftRect = {position.x - 5, position.y+ collidersHeight + 22, collidersHeight, verticalWallsHeight};
     new InvisibleAABBWall(mGame, leftRect);
+    mViableAreaPosDimensions.x = leftRect.x + leftRect.w + 5;
 
     // Right Collision Block
     SDL_Rect rightRect = {position.x + position.w - collidersHeight + 5, position.y+ collidersHeight + 22, collidersHeight, verticalWallsHeight};
     new InvisibleAABBWall(mGame, rightRect);
+    mViableAreaPosDimensions.w = (rightRect.x - 5) - mViableAreaPosDimensions.x;
 
     Vector2 tableTopLeftReference = Vector2(position.x, position.y);
     // Top Left Bucket 1
@@ -115,13 +119,9 @@ Table::Table(Game *game, SDL_Rect position)
 
 SDL_Rect Table::GetViableArea()
 {
-    // Supondo que você tenha salvo o SDL_Rect position da mesa como membro
-    int collidersHeight = int(mCollidersHeight * 0.11);
+    // SDL_Log("Table::GetViableArea: Viable Area Position: %d, %d, %d, %d",
+    //        mViableAreaPosDimensions.x, mViableAreaPosDimensions.y,
+    //        mViableAreaPosDimensions.w, mViableAreaPosDimensions.h);
 
-    SDL_Rect area;
-    area.x = mTablePosDimensions.x + collidersHeight;
-    area.y = mTablePosDimensions.y + collidersHeight;
-    area.w = mTablePosDimensions.w - 2 * collidersHeight;
-    area.h = mTablePosDimensions.h - 2 * collidersHeight;
-    return area;
+    return mViableAreaPosDimensions;
 }

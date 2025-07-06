@@ -18,12 +18,12 @@ InvisibleAABBWall::InvisibleAABBWall(Game *game, SDL_Rect position) :
         ColliderLayer::Blocks);
 
     // Desenho o bloco de colisão
-    // std::vector<Vector2> vertices;
-    // vertices.emplace_back(Vector2(position.x, position.y));
-    // vertices.emplace_back(Vector2(position.x, position.y + position.h));
-    // vertices.emplace_back(Vector2(position.x + position.w, position.y + position.h));
-    // vertices.emplace_back(Vector2( position.x + position.w,  position.y));
-    // mDrawComponent = new DrawPolygonComponent(this, vertices);
+    std::vector<Vector2> vertices;
+    vertices.emplace_back(Vector2(position.x, position.y));
+    vertices.emplace_back(Vector2(position.x, position.y + position.h));
+    vertices.emplace_back(Vector2(position.x + position.w, position.y + position.h));
+    vertices.emplace_back(Vector2( position.x + position.w,  position.y));
+    mDrawComponent = new DrawPolygonComponent(this, vertices);
 
 }
 

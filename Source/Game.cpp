@@ -118,8 +118,8 @@ void Game::InitializeActors()
     int table_height = table_width * 0.55;
     mTablePos = {10, 50, table_width, table_height};
 
-    auto table = new Table(this, mTablePos);
-    table->SetPosition(Vector2(mTablePos.x, mTablePos.y));
+    mTable = new Table(this, mTablePos);
+    mTable->SetPosition(Vector2(mTablePos.x, mTablePos.y));
 
     new UIScreen(this, "../Assets/Fonts/SMB.ttf");
 
@@ -569,16 +569,33 @@ void Game::TogglePlay() {
 
 void Game::RespawnWhiteBall()
 {
+    SDL_Rect viableArea = mTable->GetViableArea();
+
+    std::vector<std::pair<int, int>> positions;
+    // Preenche o vetor com todas as posições possíveis
+    for (int i = 0; i < viableArea.w / (BALL_RADIUS*2); ++i) {
+        for (int j = 0; j < viableArea.h / (BALL_RADIUS*2); ++j) {
+            positions.emplace_back(i, j);
+        }
+    }
+
+    // Embaralha o vetor
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(positions.begin(), positions.end(), g);
+
     Vector2 newPos;
     bool validPos = false;
 
-    // Tente encontrar uma posição livre
-    for (int attempts = 0; attempts < 100 && !validPos; ++attempts) {
-        // Exemplo: escolha uma posição aleatória na mesa
-        newPos = Vector2(mTablePos.x + 50 + rand() % 400, mTablePos.y + rand() % 200);
+    for (const auto& pos : positions) {
+        // Calcula a nova posição com base na posição da mesa e no índice
+        newPos = Vector2(viableArea.x + pos.first * (BALL_RADIUS * 2) + BALL_RADIUS,
+                         viableArea.y + pos.second * (BALL_RADIUS * 2) + BALL_RADIUS);
+
+        // Verifica se a nova posição é válida
         validPos = true;
         for (auto ball : mBalls) {
-            if ((ball->GetPosition() - newPos).Length() < 2 * BALL_RADIUS) {
+            if ((ball->GetPosition() - newPos).Length() < 2 * BALL_RADIUS + 2) {
                 validPos = false;
                 break;
             }
